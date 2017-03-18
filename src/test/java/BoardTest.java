@@ -4,26 +4,26 @@ import org.junit.*;
 /**
  * Created by Max on 3/16/17.
  */
-class BoardTest {
+public class BoardTest {
     Board gameBoard;
 
     @Before
-    void boardSetup() {
+    public void boardSetup() {
         gameBoard = new Board();
     }
 
     @After
-    void tearDownBoard() {
+    public void tearDownBoard() {
         gameBoard = null;
     }
 
     @Test
-    void isEmpty() {
+    public void isEmpty() {
         Assert.assertEquals("Empty Board Test", true, gameBoard.isEmpty());
     }
 
     @Test
-    void setHex() {
+    public void setHex() {
         Hex testHex = new Hex(0, Hex.terrainType.Jungle);
         Pair<Integer,Integer> testPair = new Pair(0,0);
         gameBoard.setHex(testHex, testPair);
