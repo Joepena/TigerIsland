@@ -8,7 +8,7 @@ public class Hex {
     private int tileNumber;
     private terrainType terrain;
     private int level;
-    private Pair location;
+    private Pair<Integer,Integer> location;
 
     public enum terrainType {
         Grassland, Jungle, Lake, Rocky, Volcano
@@ -43,7 +43,7 @@ public class Hex {
         this.level = level;
     }
 
-    public Pair getLocation() {
+    public Pair<Integer,Integer> getLocation() {
         return location;
     }
 
