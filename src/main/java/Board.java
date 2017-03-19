@@ -25,13 +25,16 @@ public class Board {
       Integer x = coordinatePair.getKey() + originX;
       Integer y = coordinatePair.getValue() + originY;
 
+
       if(isOriginEmpty()) { //First tile placement
           gameBoard[originX][originY] = hex;
           gameBoardAvailability[originX][originY] = true;
+          hex.setLocation(new Pair<Integer,Integer>(originX, originY));
           return;
       }
       gameBoard[x][y] = hex;
       gameBoardAvailability[x][y] = true;
+      hex.setLocation(new Pair<Integer,Integer> (x, y));
 
     }
 
