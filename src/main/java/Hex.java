@@ -4,14 +4,45 @@ import javafx.util.Pair;
  */
 public class Hex {
 
-    public int tileId;
-    public Terrain.terrainType terrain;
-    public int level;
-    public Pair location;
+    private int tileId;
+    private Terrain.terrainType terrain;
+    private int level;
+    private Pair location;
 
     public Hex(int tileId, Terrain.terrainType terrain) {
         this.tileId = tileId;
         this.terrain = terrain;
     }
 
+  public int getTileId() {
+    return tileId;
+  }
+
+  public void setTileId(int tileId) {
+    this.tileId = tileId;
+  }
+
+  public Terrain.terrainType getTerrain() {
+    return terrain;
+  }
+
+  public void setTerrain(Terrain.terrainType terrain) {
+    this.terrain = terrain;
+  }
+
+  public int getLevel() {
+    return level;
+  }
+
+  public void setLevel(int level) {
+    this.level = level;
+  }
+
+  public Pair getLocation() {
+    return location;
+  }
+
+  public void setLocation(Pair location) {
+    this.location = location;
+  }
 }
