@@ -6,8 +6,8 @@ import javafx.util.Pair;
 public class Hex {
 
     private int tileNumber;
-    private terrainType terrain;
     private int level;
+    private terrainType terrain;
     private Pair location;
 
     public enum terrainType {
@@ -50,5 +50,4 @@ public class Hex {
     public void setLocation(Pair location) {
         this.location = location;
     }
-
 }
