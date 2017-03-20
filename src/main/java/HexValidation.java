@@ -1,5 +1,7 @@
 import javafx.util.Pair;
 
+import static javax.swing.text.html.HTML.Tag.HEAD;
+
 /**
  * Created by WIIZZARD on 3/19/2017.
  */
@@ -18,6 +20,7 @@ public class HexValidation {
         return(!isLocationNull(upLeft, gameBoard) || !isLocationNull(upRight, gameBoard) || !isLocationNull(downLeft, gameBoard) ||
                 !isLocationNull(downRight, gameBoard) || !isLocationNull(left, gameBoard) || !isLocationNull(right, gameBoard));
     }
+
 
     public static boolean terrainValidation(Hex hex, Pair<Integer,Integer> coordinatePair, Board gameBoard){
 

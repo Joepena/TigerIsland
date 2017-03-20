@@ -86,6 +86,7 @@ public class HexValidationTest {
 
         Assert.assertEquals("terrainValidationFailureTest", false, HexValidation.terrainValidation(secondHex, hex2Loc, gameBoard));
 
+
     }
 
 
