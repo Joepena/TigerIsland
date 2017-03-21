@@ -19,7 +19,7 @@ public class BoardTest {
 
     @Test
     public void isEmpty() {
-        Assert.assertEquals("Empty Board Test", true, gameBoard.isEmpty());
+        Assert.assertEquals("Empty Board Test", true, gameBoard.isOriginEmpty());
     }
 
     @Test
@@ -27,7 +27,7 @@ public class BoardTest {
         Hex testHex = new Hex(0, Terrain.terrainType.Jungle);
         Pair<Integer,Integer> testPair = new Pair(0,0);
         gameBoard.setHex(testHex, testPair);
-        Assert.assertEquals("Place Hex Test", false, gameBoard.isEmpty());
+        Assert.assertEquals("Place Hex Test", false, gameBoard.isOriginEmpty());
     }
 
 

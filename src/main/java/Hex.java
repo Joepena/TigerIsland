@@ -4,10 +4,11 @@ import javafx.util.Pair;
  */
 public class Hex {
 
+
     private int tileId;
     private Terrain.terrainType terrain;
     private int level;
-    private Pair location;
+    private Pair<Integer,Integer> location;
 
     public Hex(int tileId, Terrain.terrainType terrain) {
         this.tileId = tileId;
@@ -45,4 +46,5 @@ public class Hex {
   public void setLocation(Pair location) {
     this.location = location;
   }
+
 }
