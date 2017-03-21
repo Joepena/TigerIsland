@@ -38,6 +38,18 @@ public class Board {
 
     }
 
+// commented out place tile for relocation to new gamplay class
+//    void placeTile(Tile tile, Pair<Integer, Integer> coordinatePair) {
+//
+//        int leftXMath = tile.getLeftHexOrientation().getKey() + coordinatePair.getKey();
+//        int leftYMath = tile.getLeftHexOrientation().getValue() + coordinatePair.getValue();
+//        int rightCoordinateMath = tile.getLeftHexOrientation().getKey() + coordinatePair.getKey()
+//        Pair<Integer, Integer> leftHexPair = new Pair<>();
+//        Pair<Integer, Integer> rightHexPair;
+//
+//        setHex(tile.getVolcano(), coordinatePair);
+//        setHex(tile.getLeft(), );
+//    }
 
     public boolean[][] getGameBoardAvailability() {
         return gameBoardAvailability;

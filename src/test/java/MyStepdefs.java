@@ -16,7 +16,7 @@ public class MyStepdefs {
     @Given("^there are no tiles on the board")
     public void setup () throws Throwable {
       testBoard = new Board();
-      firstHex = new Hex(0, Hex.terrainType.Jungle);
+      firstHex = new Hex(0, Terrain.terrainType.Jungle);
       testPair = new Pair(0, 0);
 
     }

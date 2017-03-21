@@ -24,7 +24,7 @@ public class BoardTest {
 
     @Test
     public void setHex() {
-        Hex testHex = new Hex(0, Hex.terrainType.Jungle);
+        Hex testHex = new Hex(0, Terrain.terrainType.Jungle);
         Pair<Integer,Integer> testPair = new Pair(0,0);
         gameBoard.setHex(testHex, testPair);
         Assert.assertEquals("Place Hex Test", false, gameBoard.isOriginEmpty());
