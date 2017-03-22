@@ -12,7 +12,7 @@ public class TileTest {
   public void setUp() throws Exception {
     Terrain.terrainType terrainLeft = Terrain.terrainType.Grassland;
     Terrain.terrainType terrainRight = Terrain.terrainType.Lake;
-    Pair<Integer,Integer> leftOrientation = Orientation.DOWNLEFT;
+    Orientation.Orientations leftOrientation = Orientation.Orientations.downLeft;
 
     testTile = new Tile(1,terrainLeft,terrainRight,leftOrientation);
   }

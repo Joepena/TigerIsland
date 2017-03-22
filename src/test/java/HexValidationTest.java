@@ -26,8 +26,8 @@ public class HexValidationTest {
 
         Integer firstHexLocX = firstHex.getLocation().getKey();
         Integer firstHexLocY = firstHex.getLocation().getValue();
-        Integer secondHexLocX = firstHexLocX + Orientation.UPLEFT.getKey();
-        Integer secondHexLocY = firstHexLocY + Orientation.UPLEFT.getValue();
+        Integer secondHexLocX = firstHexLocX + Orientation.getUpleftValue().getKey();
+        Integer secondHexLocY = firstHexLocY + Orientation.getUpleftValue().getValue();
 
         Pair<Integer, Integer> hex2Loc = new Pair(secondHexLocX, secondHexLocY);
 
@@ -43,8 +43,8 @@ public class HexValidationTest {
 
         Integer firstHexLocX = firstHex.getLocation().getKey();
         Integer firstHexLocY = firstHex.getLocation().getValue();
-        Integer secondHexLocX = firstHexLocX + Orientation.UPLEFT.getKey() + Orientation.UPLEFT.getKey();
-        Integer secondHexLocY = firstHexLocY + Orientation.UPLEFT.getValue() + Orientation.UPLEFT.getValue();
+        Integer secondHexLocX = firstHexLocX + Orientation.getUpleftValue().getKey() + Orientation.getUpleftValue().getKey();
+        Integer secondHexLocY = firstHexLocY + Orientation.getUpleftValue().getValue() + Orientation.getUpleftValue().getValue();
 
         Pair<Integer, Integer> hex2Loc = new Pair(secondHexLocX, secondHexLocY);
 

@@ -14,14 +14,29 @@ public class Board {
     }
 
     public boolean isOriginEmpty() {
-      Integer x = Orientation.ORIGIN.getKey();
-      Integer y = Orientation.ORIGIN.getValue();
+      Integer x = Orientation.getOriginValue().getKey();
+      Integer y = Orientation.getOriginValue().getValue();
       return (gameBoard[x][y] == null) ? true : false;
     }
 
+    void printSectionedBoard() {
+        // This will print out a 30x30 rectangle around the origin location
+        for(int i = 173; i < 204; i++) {
+            System.out.println();
+            for (int j = 173; j < 204; j++) {
+                if(gameBoard[i][j] == null) {
+                    System.out.print("- ");
+                }
+                else {
+                    System.out.print(gameBoard[i][j].getTileId()+ " ");
+                }
+            }
+        }
+    }
+
     void setHex (Hex hex, Pair<Integer,Integer> coordinatePair) {
-      Integer originX = Orientation.ORIGIN.getKey();
-      Integer originY = Orientation.ORIGIN.getValue();
+      Integer originX = Orientation.getOriginValue().getKey();
+      Integer originY = Orientation.getOriginValue().getValue();
       Integer x = coordinatePair.getKey() + originX;
       Integer y = coordinatePair.getValue() + originY;
 
@@ -41,18 +56,6 @@ public class Board {
         return gameBoard[hexLocation.getKey()][hexLocation.getValue()];
     }
 
-// commented out place tile for relocation to new gamplay class
-//    void placeTile(Tile tile, Pair<Integer, Integer> coordinatePair) {
-//
-//        int leftXMath = tile.getLeftHexOrientation().getKey() + coordinatePair.getKey();
-//        int leftYMath = tile.getLeftHexOrientation().getValue() + coordinatePair.getValue();
-//        int rightCoordinateMath = tile.getLeftHexOrientation().getKey() + coordinatePair.getKey()
-//        Pair<Integer, Integer> leftHexPair = new Pair<>();
-//        Pair<Integer, Integer> rightHexPair;
-//
-//        setHex(tile.getVolcano(), coordinatePair);
-//        setHex(tile.getLeft(), );
-//    }
 
     public boolean[][] getGameBoardAvailability() {
         return gameBoardAvailability;
