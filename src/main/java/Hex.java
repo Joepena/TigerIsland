@@ -8,7 +8,7 @@ public class Hex {
     private int tileId;
     private Terrain.terrainType terrain;
     private int level;
-    private Pair location;
+    private Pair<Integer,Integer> location;
 
     public Hex(int tileId, Terrain.terrainType terrain) {
         this.tileId = tileId;
@@ -39,7 +39,7 @@ public class Hex {
     this.level = level;
   }
 
-  public Pair getLocation() {
+  public Pair<Integer, Integer> getLocation() {
     return location;
   }
 
