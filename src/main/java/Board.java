@@ -25,10 +25,12 @@ public class Board {
             System.out.println();
             for (int j = 173; j < 204; j++) {
                 if(gameBoard[i][j] == null) {
-                    System.out.print("- ");
+                    System.out.print("\t");
                 }
                 else {
-                    System.out.print(gameBoard[i][j].getTileNumber()+ " ");
+                    System.out.print(gameBoard[i][j].getTileId());
+                    System.out.print(gameBoard[i][j].getTerrainForVisualization());
+                    System.out.print(gameBoard[i][j].getLevel() + "\t");
                 }
             }
         }
