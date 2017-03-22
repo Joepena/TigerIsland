@@ -18,13 +18,26 @@ public class HexValidation {
         Pair<Integer,Integer> right = Orientation.leftOf(coordinatePair);
 
         return(!isLocationNull(upLeft, gameBoard) || !isLocationNull(upRight, gameBoard) || !isLocationNull(downLeft, gameBoard) ||
-                !isLocationNull(downRight, gameBoard) || !isLocationNull(left, gameBoard) || !isLocationNull(right, gameBoard));
+                !isLocationNull(downRight, gameBoard) || !isLocationNull(left, gameBoard) || !isLocationNull(right, gameBoard)
+                || !isLocationNull(coordinatePair, gameBoard));
     }
 
 
     public static boolean terrainValidation(Hex hex, Pair<Integer,Integer> coordinatePair, Board gameBoard){
+        Hex presentHex = gameBoard.getHex(coordinatePair);
 
-        return false;
+        if(hex.getTerrain() == Terrain.terrainType.Volcano){
+            if(presentHex.getTerrain() == Terrain.terrainType.Volcano)
+                return true;
+            else
+                return false;
+        }
+        else{
+            if(presentHex.getTerrain() == Terrain.terrainType.Volcano)
+                return false;
+            else
+                return true;
+        }
     }
 
 

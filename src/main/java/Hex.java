@@ -39,7 +39,7 @@ public class Hex {
     this.level = level;
   }
 
-  public Pair getLocation() {
+  public Pair<Integer, Integer> getLocation() {
     return location;
   }
 

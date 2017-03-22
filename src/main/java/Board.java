@@ -25,7 +25,6 @@ public class Board {
       Integer x = coordinatePair.getKey() + originX;
       Integer y = coordinatePair.getValue() + originY;
 
-
       if(isOriginEmpty()) { //First tile placement
           gameBoard[originX][originY] = hex;
           gameBoardAvailability[originX][originY] = true;
@@ -36,6 +35,10 @@ public class Board {
       gameBoardAvailability[x][y] = true;
       hex.setLocation(new Pair<Integer,Integer> (x, y));
 
+    }
+
+    Hex getHex (Pair<Integer, Integer> hexLocation){
+        return gameBoard[hexLocation.getKey()][hexLocation.getValue()];
     }
 
 // commented out place tile for relocation to new gamplay class
