@@ -123,6 +123,14 @@ public class HexValidationTest {
 
     }
 
+    @Test
+    public void hexGamePiecesGetterTest() {
+        Hex hex = new Hex(0, Terrain.terrainType.Jungle);
+        hex.setOccupiedBy(Hex.gamePieces.Meeple);
+
+        Assert.assertEquals("OccupiedByValidationSuccess", Hex.gamePieces.Meeple, hex.getOccupiedBy());
+    }
+
 
 
 }
