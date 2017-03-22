@@ -37,14 +37,14 @@ public class BoardTest {
 
     @Test
     public void isEmpty() {
-        Assert.assertEquals("Empty Board Test", true, gameBoard.isEmpty());
+        Assert.assertEquals("Empty Board Test", true, gameBoard.isOriginEmpty());
     }
 
     @Test
     public void setHex() {
         Pair<Integer,Integer> testPair = new Pair(0,0);
         gameBoard.setHex(testHex, testPair);
-        Assert.assertEquals("Place Hex Test", false, gameBoard.isEmpty());
+        Assert.assertEquals("Place Hex Test", false, gameBoard.isOriginEmpty());
     }
 
 

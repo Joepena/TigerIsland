@@ -1,53 +1,49 @@
 import javafx.util.Pair;
-
 /**
  * Created by Max on 3/16/17.
  */
 public class Hex {
 
-    private int tileNumber;
+    private int tileId;
+    private Terrain.terrainType terrain;
     private int level;
-    private terrainType terrain;
-    private Pair location;
+    private Pair<Integer,Integer> location;
 
-    public enum terrainType {
-        Grassland, Jungle, Lake, Rocky, Volcano
-    }
-
-    public Hex(int tileNumber, terrainType terrain) {
-        this.tileNumber = tileNumber;
+    public Hex(int tileId, Terrain.terrainType terrain) {
+        this.tileId = tileId;
         this.terrain = terrain;
     }
 
-    public int getTileNumber() {
-        return tileNumber;
-    }
+  public int getTileId() {
+    return tileId;
+  }
 
-    public void setTileNumber(int tileNumber) {
-        this.tileNumber = tileNumber;
-    }
+  public void setTileId(int tileId) {
+    this.tileId = tileId;
+  }
 
-    public terrainType getTerrain() {
-        return terrain;
-    }
+  public Terrain.terrainType getTerrain() {
+    return terrain;
+  }
 
-    public void setTerrain(terrainType terrain) {
-        this.terrain = terrain;
-    }
+  public void setTerrain(Terrain.terrainType terrain) {
+    this.terrain = terrain;
+  }
 
-    public int getLevel() {
-        return level;
-    }
+  public int getLevel() {
+    return level;
+  }
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
+  public void setLevel(int level) {
+    this.level = level;
+  }
 
-    public Pair getLocation() {
-        return location;
-    }
+  public Pair<Integer, Integer> getLocation() {
+    return location;
+  }
 
-    public void setLocation(Pair location) {
-        this.location = location;
-    }
+  public void setLocation(Pair location) {
+    this.location = location;
+  }
+
 }
