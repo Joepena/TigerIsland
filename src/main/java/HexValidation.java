@@ -9,7 +9,7 @@ public class HexValidation {
 
 
 
-    public static boolean adjacencyValidation(Pair<Integer,Integer> coordinatePair, Board gameBoard) {
+    public static boolean existsAdjacentHex(Pair<Integer,Integer> coordinatePair, Board gameBoard) {
         Pair<Integer,Integer> upLeft = Orientation.upLeftOf(coordinatePair);
         Pair<Integer,Integer> upRight = Orientation.upRightOf(coordinatePair);
         Pair<Integer,Integer> downLeft = Orientation.downLeftOf(coordinatePair);
@@ -23,7 +23,7 @@ public class HexValidation {
     }
 
 
-    public static boolean terrainValidation(Hex hex, Pair<Integer,Integer> coordinatePair, Board gameBoard){
+    public static boolean isValidVolcanoPlacement(Hex hex, Pair<Integer,Integer> coordinatePair, Board gameBoard){
         Hex presentHex = gameBoard.getHex(coordinatePair);
 
         if(hex.getTerrain() == Terrain.terrainType.Volcano){
@@ -32,12 +32,7 @@ public class HexValidation {
             else
                 return false;
         }
-        else{
-            if(presentHex.getTerrain() == Terrain.terrainType.Volcano)
-                return false;
-            else
-                return true;
-        }
+        else return true;
     }
 
 
