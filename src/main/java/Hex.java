@@ -4,7 +4,6 @@ import javafx.util.Pair;
  */
 public class Hex {
 
-
     private int tileId;
     private Terrain.terrainType terrain;
     private int level;

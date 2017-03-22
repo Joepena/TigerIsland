@@ -6,15 +6,33 @@ import org.junit.*;
  */
 public class BoardTest {
     Board gameBoard;
+    Hex testHex;
 
     @Before
     public void boardSetup() {
         gameBoard = new Board();
+        testHex = new Hex(0, Hex.terrainType.Jungle);
     }
 
     @After
     public void tearDownBoard() {
         gameBoard = null;
+        testHex = null;
+    }
+
+    @Test
+    public void createHexObject() {
+        Assert.assertTrue(testHex instanceof Hex);
+    }
+
+    @Test
+    public void createBoard() {
+        Assert.assertTrue(gameBoard instanceof Board);
+    }
+
+    @Test
+    public void validateTerrain() {
+        Assert.assertEquals(Hex.terrainType.Jungle, testHex.getTerrain());
     }
 
     @Test
@@ -24,7 +42,6 @@ public class BoardTest {
 
     @Test
     public void setHex() {
-        Hex testHex = new Hex(0, Terrain.terrainType.Jungle);
         Pair<Integer,Integer> testPair = new Pair(0,0);
         gameBoard.setHex(testHex, testPair);
         Assert.assertEquals("Place Hex Test", false, gameBoard.isOriginEmpty());
