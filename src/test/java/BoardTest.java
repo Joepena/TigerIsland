@@ -11,7 +11,7 @@ public class BoardTest {
     @Before
     public void boardSetup() {
         gameBoard = new Board();
-        testHex = new Hex(0, Hex.terrainType.Jungle);
+        testHex = new Hex(0, Terrain.terrainType.Jungle);
     }
 
     @After
@@ -32,7 +32,7 @@ public class BoardTest {
 
     @Test
     public void validateTerrain() {
-        Assert.assertEquals(Hex.terrainType.Jungle, testHex.getTerrain());
+        Assert.assertEquals(Terrain.terrainType.Jungle, testHex.getTerrain());
     }
 
     @Test
