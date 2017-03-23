@@ -1,5 +1,3 @@
-import javafx.util.Pair;
-
 /**
  * Created by Joe & Troy on 3/19/17.
  */
@@ -7,10 +5,10 @@ public class Tile {
   private Hex volcano;
   private Hex left;
   private Hex right;
-  private Pair<Integer,Integer> leftHexOrientation;
+  private Orientation.Orientations leftHexOrientation;
   private int tileId;
 
-  public Tile(int tileId, Terrain.terrainType leftTerr, Terrain.terrainType rightTerr, Pair<Integer, Integer> leftHexOrientation) {
+  public Tile(int tileId, Terrain.terrainType leftTerr, Terrain.terrainType rightTerr, Orientation.Orientations leftHexOrientation) {
     this.tileId = tileId;
     volcano = new Hex(tileId, Terrain.terrainType.Volcano);
     left = new Hex(tileId, leftTerr);
@@ -34,7 +32,7 @@ public class Tile {
     return right;
   }
 
-  public Pair<Integer, Integer> getLeftHexOrientation() {
+  public Orientation.Orientations getLeftHexOrientation() {
     return leftHexOrientation;
   }
 }
