@@ -26,6 +26,25 @@ public class Hex {
     return terrain;
   }
 
+  public char getTerrainForVisualization() {
+        Terrain.terrainType terrain = getTerrain();
+        if(terrain == Terrain.terrainType.Grassland) {
+            return 'G';
+        }
+        else if(terrain == Terrain.terrainType.Jungle) {
+            return 'J';
+        }
+        else if(terrain == Terrain.terrainType.Lake) {
+            return 'L';
+        }
+        else if(terrain == Terrain.terrainType.Rocky) {
+            return 'R';
+        }
+        else {
+            return 'V';
+        }
+  }
+
   public void setTerrain(Terrain.terrainType terrain) {
     this.terrain = terrain;
   }
