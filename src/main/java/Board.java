@@ -37,6 +37,21 @@ public class Board {
         }
     }
 
+    void printSectionedBoard() {
+        // This will print out a 30x30 rectangle around the origin location
+        for(int i = 173; i < 204; i++) {
+            System.out.println();
+            for (int j = 173; j < 204; j++) {
+                if(gameBoard[i][j] == null) {
+                    System.out.print("- ");
+                }
+                else {
+                    System.out.print(gameBoard[i][j].getTileNumber()+ " ");
+                }
+            }
+        }
+    }
+
     void setHex (Hex hex, Pair<Integer,Integer> coordinatePair) {
       Integer originX = Orientation.getOriginValue().getKey();
       Integer originY = Orientation.getOriginValue().getValue();
