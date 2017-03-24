@@ -118,7 +118,7 @@ public class MyStepdefs {
         secondHexLocY -= Orientation.getOriginValue().getValue();
         Pair<Integer, Integer> pairToPlace = new Pair(secondHexLocX, secondHexLocY);
 
-        if(validate.adjacencyValidation(hex2Loc, testBoard))
+        if(validate.existsAdjacentHex(hex2Loc, testBoard))
             testBoard.setHex(hexToPlace, pairToPlace);
     }
 
@@ -148,7 +148,7 @@ public class MyStepdefs {
         secondHexLocY -= Orientation.getOriginValue().getValue();
         Pair<Integer, Integer> pairToPlace = new Pair(secondHexLocX, secondHexLocY);
 
-        if(validate.adjacencyValidation(hex2Loc, testBoard))
+        if(validate.existsAdjacentHex(hex2Loc, testBoard))
             testBoard.setHex(hexToPlace, pairToPlace);
     }
 
