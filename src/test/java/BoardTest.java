@@ -11,7 +11,7 @@ public class BoardTest {
     @Before
     public void boardSetup() {
         gameBoard = new Board();
-        testHex = new Hex(0, Hex.terrainType.Jungle);
+        testHex = new Hex(0, Terrain.terrainType.Jungle);
     }
 
     @After
@@ -32,7 +32,7 @@ public class BoardTest {
 
     @Test
     public void validateTerrain() {
-        Assert.assertEquals(Hex.terrainType.Jungle, testHex.getTerrain());
+        Assert.assertEquals(Terrain.terrainType.Jungle, testHex.getTerrain());
     }
 
     @Test
@@ -46,6 +46,47 @@ public class BoardTest {
         gameBoard.setHex(testHex, testPair);
         Assert.assertEquals("Place Hex Test", false, gameBoard.isOriginEmpty());
     }
+
+    @Test
+    public void setHexLevel() {
+        Pair<Integer,Integer> testPair = new Pair(0,0);
+        gameBoard.setHex(testHex, testPair);
+        Assert.assertEquals("Place Hex Test", 1, testHex.getLevel());
+    }
+
+    @Test
+    public void setHexOnOtherHexUpdateTerrainTest() {
+        gameBoard.setHex(testHex, new Pair<>(0,0));
+        gameBoard.setHex(new Hex(1, Terrain.terrainType.Jungle), new Pair<>(0,0));
+
+        Hex updatedHex = gameBoard.getHex(Orientation.getOriginValue());
+        boolean valid = (updatedHex.getTerrain() == Terrain.terrainType.Jungle);
+
+        Assert.assertEquals("Place Hex on top of another Hex and update terrain", true, valid);
+    }
+
+    @Test
+    public void setHexOnOtherHexUpdateTileIdTest() {
+        gameBoard.setHex(testHex, new Pair<>(0,0));
+        gameBoard.setHex(new Hex(1, Terrain.terrainType.Jungle), new Pair<>(0,0));
+
+        Hex updatedHex = gameBoard.getHex(Orientation.getOriginValue());
+        boolean valid = (updatedHex.getTileId() == 1);
+
+        Assert.assertEquals("Place Hex on top of another Hex and update tile ID", true, valid);
+    }
+
+    @Test
+    public void setHexOnOtherHexUpdateLevelTest() {
+        gameBoard.setHex(testHex, new Pair<>(0,0));
+        gameBoard.setHex(new Hex(1, Terrain.terrainType.Jungle), new Pair<>(0,0));
+
+        Hex updatedHex = gameBoard.getHex(Orientation.getOriginValue());
+        boolean valid = (updatedHex.getLevel() == 2);
+
+        Assert.assertEquals("Place Hex on top of another Hex and increase level by 1", true, valid);
+    }
+
 
 
 }

@@ -5,45 +5,98 @@ import javafx.util.Pair;
 public class Hex {
 
     private int tileId;
-    private Terrain.terrainType terrain;
     private int level;
-    private Pair<Integer,Integer> location;
+    private Terrain.terrainType terrain;
+    private Pair<Integer, Integer> location;
+    private gamePieces occupiedBy;
+    private Team team;
 
     public Hex(int tileId, Terrain.terrainType terrain) {
         this.tileId = tileId;
         this.terrain = terrain;
+        this.level = 0;
+        this.team = Team.Neutral;
+        this.occupiedBy = gamePieces.empty;
     }
 
-  public int getTileId() {
-    return tileId;
+    public static enum gamePieces {
+        Meeple, Totoro, Tiger, empty;
+    }
+
+    public static enum Team {
+        Black, White, Neutral;
+    }
+
+    public int getTileId() {
+        return tileId;
+    }
+
+    public void setTileId(int tileId) {
+        this.tileId = tileId;
+    }
+
+    public Terrain.terrainType getTerrain() {
+        return terrain;
+    }
+
+    public Pair<Integer, Integer>  getLocation() {
+        return location;
+    }
+
+
+    public void setTerrain(Terrain.terrainType terrain) {
+        this.terrain = terrain;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public void incrementLevel() {
+        this.level = this.level + 1;
+    }
+
+  public char getTerrainForVisualization() {
+        Terrain.terrainType terrain = getTerrain();
+        if(terrain == Terrain.terrainType.Grassland) {
+            return 'G';
+        }
+        else if(terrain == Terrain.terrainType.Jungle) {
+            return 'J';
+        }
+        else if(terrain == Terrain.terrainType.Lake) {
+            return 'L';
+        }
+        else if(terrain == Terrain.terrainType.Rocky) {
+            return 'R';
+        }
+        else {
+            return 'V';
+        }
   }
 
-  public void setTileId(int tileId) {
-    this.tileId = tileId;
-  }
+    public void setLocation(Pair location) {
+        this.location = location;
+    }
 
-  public Terrain.terrainType getTerrain() {
-    return terrain;
-  }
+    public gamePieces getOccupiedBy() {
+        return occupiedBy;
+    }
 
-  public void setTerrain(Terrain.terrainType terrain) {
-    this.terrain = terrain;
-  }
+    public void setOccupiedBy(gamePieces occupiedBy) {
+        this.occupiedBy = occupiedBy;
+    }
 
-  public int getLevel() {
-    return level;
-  }
+    public Team getTeam() {
+        return team;
+    }
 
-  public void setLevel(int level) {
-    this.level = level;
-  }
-
-  public Pair<Integer, Integer> getLocation() {
-    return location;
-  }
-
-  public void setLocation(Pair location) {
-    this.location = location;
-  }
+    public void setTeam(Team team) {
+        this.team = team;
+    }
 
 }
