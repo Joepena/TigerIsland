@@ -32,6 +32,9 @@ public class Hex {
     public Hex(int tileId, Terrain.terrainType terrain) {
         this.tileId = tileId;
         this.terrain = terrain;
+        this.level = 0;
+        this.team = Team.Neutral;
+        this.occupiedBy = gamePieces.empty;
     }
 
     public static enum gamePieces{
@@ -64,6 +67,10 @@ public class Hex {
   public void setLevel(int level) {
     this.level = level;
   }
+
+  public void incrementLevel() {
+        this.level = this.level + 1;
+    }
 
   public Pair<Integer, Integer> getLocation() {
     return location;

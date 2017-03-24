@@ -5,7 +5,7 @@ import javafx.util.Pair;
  */
 public class GameAPI {
 
-    private Board gameBoard;
+    protected Board gameBoard;
     private int villagerCount;
     private int totoroCount;
     private int tigerCount;

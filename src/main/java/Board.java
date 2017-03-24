@@ -16,7 +16,7 @@ public class Board {
     public boolean isOriginEmpty() {
       Integer x = Orientation.getOriginValue().getKey();
       Integer y = Orientation.getOriginValue().getValue();
-      return (gameBoard[x][y] == null) ? true : false;
+      return (gameBoard[x][y] == null);
     }
 
     void printSectionedBoard() {
@@ -39,16 +39,26 @@ public class Board {
       Integer originY = Orientation.getOriginValue().getValue();
       Integer x = coordinatePair.getKey() + originX;
       Integer y = coordinatePair.getValue() + originY;
+      Pair<Integer, Integer> placementLocation = new Pair<>(x, y);
 
       if(isOriginEmpty()) { //First tile placement
           gameBoard[originX][originY] = hex;
           gameBoardAvailability[originX][originY] = true;
           hex.setLocation(new Pair<Integer,Integer>(originX, originY));
-          return;
+          hex.incrementLevel();
       }
-      gameBoard[x][y] = hex;
-      gameBoardAvailability[x][y] = true;
-      hex.setLocation(new Pair<Integer,Integer> (x, y));
+      else if(!HexValidation.isLocationNull(placementLocation, this)){
+          Hex presentHex = this.getHex(placementLocation);
+          presentHex.incrementLevel();
+          presentHex.setTerrain(hex.getTerrain());
+          presentHex.setTileId(hex.getTileId());
+      }
+      else {
+          gameBoard[x][y] = hex;
+          gameBoardAvailability[x][y] = true;
+          hex.setLocation(placementLocation);
+          hex.incrementLevel();
+      }
 
     }
 
