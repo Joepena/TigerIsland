@@ -97,7 +97,7 @@ public class HexValidationTest {
         Integer secondHexLocX = firstHex.getLocation().getKey();
         Integer secondHexLocY = firstHex.getLocation().getValue();
 
-        Pair<Integer, Integer> hex2Loc = new Pair(secondHexLocX, secondHexLocY);
+        Pair<Integer, Integer> hex2Loc = new Pair<>(secondHexLocX, secondHexLocY);
 
         Hex secondHex = new Hex(0, Terrain.terrainType.Volcano);
 
@@ -139,8 +139,7 @@ public class HexValidationTest {
         gameBoard.getHex(Orientation.addPairByOrientation(testingLocation, Orientation.Orientations.downLeft)).setTeam(Hex.Team.Black);
 
 
-
-        Assert.assertEquals("Nuke a meeple that is connected to another meeple of the same team", true, HexValidation.eruptionValidation(testingLocation, gameBoard));
+        Assert.assertEquals("Nuke a meeple that is connected to another meeple of the same team", true, HexValidation.isValidEruption(testingLocation, gameBoard));
     }
 
     @Test
@@ -155,9 +154,9 @@ public class HexValidationTest {
         gameBoard.getHex(Orientation.addPairByOrientation(testingLocation, Orientation.Orientations.downLeft)).setOccupiedBy(Hex.gamePieces.Meeple);
         gameBoard.getHex(Orientation.addPairByOrientation(testingLocation, Orientation.Orientations.downLeft)).setTeam(Hex.Team.White);
 
+        gameBoard.printSectionedBoard();
 
-
-        Assert.assertEquals("Nuke a meeple that is NOT connected to another meeple of the same team", false, HexValidation.eruptionValidation(testingLocation, gameBoard));
+        Assert.assertEquals("Nuke a meeple that is NOT connected to another meeple of the same team", false, HexValidation.isValidEruption(testingLocation, gameBoard));
     }
 
 }

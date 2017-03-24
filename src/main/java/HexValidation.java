@@ -1,7 +1,5 @@
 import javafx.util.Pair;
 
-import static javax.swing.text.html.HTML.Tag.HEAD;
-
 /**
  * Created by WIIZZARD on 3/19/2017.
  */
@@ -44,7 +42,7 @@ public class HexValidation {
     }
 
 
-    public static boolean eruptionValidation(Pair<Integer, Integer> testingLocation, Board gameBoard) {
+    public static boolean isValidEruption(Pair<Integer, Integer> testingLocation, Board gameBoard) {
         Hex targetHex = gameBoard.getHex(testingLocation);
         if(targetHex.getOccupiedBy() == Hex.gamePieces.Totoro || targetHex.getOccupiedBy() == Hex.gamePieces.Tiger){
             return false;
@@ -53,11 +51,11 @@ public class HexValidation {
             return true;
         }
         else{
-            return neighborHexHasSameTeamPiece(testingLocation, gameBoard);
+            return existsAdjacentTeamPiece(testingLocation, gameBoard);
         }
     }
 
-    public static boolean neighborHexHasSameTeamPiece(Pair<Integer, Integer> testingLocation, Board gameBoard){
+    public static boolean existsAdjacentTeamPiece(Pair<Integer, Integer> testingLocation, Board gameBoard){
         Hex targetHex = gameBoard.getHex(testingLocation);
         Hex.Team team = targetHex.getTeam();
 
@@ -68,7 +66,7 @@ public class HexValidation {
         Hex hexDownLeftOf =  gameBoard.getHex(Orientation.downLeftOf(testingLocation));
         Hex hexDownRightOf =  gameBoard.getHex(Orientation.downRightOf(testingLocation));
 
-        boolean valid = hexLeftOf.getOccupiedBy() != Hex.gamePieces.empty && hexLeftOf.getTeam() == team;
+        boolean valid = (hexLeftOf.getOccupiedBy() != Hex.gamePieces.empty) && (hexLeftOf.getTeam() == team);
         valid = valid || hexRightOf.getOccupiedBy() != Hex.gamePieces.empty && hexRightOf.getTeam() == team;
         valid = valid || hexUpLeftOf.getOccupiedBy() != Hex.gamePieces.empty && hexUpLeftOf.getTeam() == team;
         valid = valid || hexUpRightOf.getOccupiedBy() != Hex.gamePieces.empty && hexUpRightOf.getTeam() == team;
@@ -76,6 +74,5 @@ public class HexValidation {
         valid = valid || hexDownRightOf.getOccupiedBy() != Hex.gamePieces.empty && hexDownRightOf.getTeam() == team;
 
         return valid;
-
     }
 }
