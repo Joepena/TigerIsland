@@ -42,12 +42,12 @@ public class HexValidation {
     }
 
 
-    public static boolean isValidEruption(Pair<Integer, Integer> testingLocation, Board gameBoard) {
+    public static boolean isValidHexEruption(Pair<Integer, Integer> testingLocation, Board gameBoard) {
         Hex targetHex = gameBoard.getHex(testingLocation);
-        if(targetHex.getOccupiedBy() == Hex.gamePieces.Totoro || targetHex.getOccupiedBy() == Hex.gamePieces.Tiger){
+        if(TempHexHelpers.hasTigerTotoro(targetHex)){
             return false;
         }
-        else if(targetHex.getOccupiedBy() == Hex.gamePieces.empty){
+        else if(TempHexHelpers.isEmpty(targetHex)){
             return true;
         }
         else{
@@ -66,12 +66,12 @@ public class HexValidation {
         Hex hexDownLeftOf =  gameBoard.getHex(Orientation.downLeftOf(testingLocation));
         Hex hexDownRightOf =  gameBoard.getHex(Orientation.downRightOf(testingLocation));
 
-        boolean valid = (hexLeftOf.getOccupiedBy() != Hex.gamePieces.empty) && (hexLeftOf.getTeam() == team);
-        valid = valid || hexRightOf.getOccupiedBy() != Hex.gamePieces.empty && hexRightOf.getTeam() == team;
-        valid = valid || hexUpLeftOf.getOccupiedBy() != Hex.gamePieces.empty && hexUpLeftOf.getTeam() == team;
-        valid = valid || hexUpRightOf.getOccupiedBy() != Hex.gamePieces.empty && hexUpRightOf.getTeam() == team;
-        valid = valid || hexDownLeftOf.getOccupiedBy() != Hex.gamePieces.empty && hexDownLeftOf.getTeam() == team;
-        valid = valid || hexDownRightOf.getOccupiedBy() != Hex.gamePieces.empty && hexDownRightOf.getTeam() == team;
+        boolean valid = TempHexHelpers.isSameTeam(hexLeftOf, targetHex);
+        valid = valid || TempHexHelpers.isSameTeam(hexRightOf, targetHex);
+        valid = valid || TempHexHelpers.isSameTeam(hexUpLeftOf, targetHex);
+        valid = valid || TempHexHelpers.isSameTeam(hexUpRightOf, targetHex);
+        valid = valid || TempHexHelpers.isSameTeam(hexDownLeftOf, targetHex);
+        valid = valid || TempHexHelpers.isSameTeam(hexDownRightOf, targetHex);
 
         return valid;
     }
