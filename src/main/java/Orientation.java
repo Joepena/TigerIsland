@@ -18,13 +18,13 @@ public class Orientation {
         downLeft
     }
 
-    private static final Pair<Integer, Integer> ORIGIN = new Pair(188,188);
-    private static final Pair<Integer, Integer> UPRIGHT = new Pair(2,1);
-    private static final Pair<Integer, Integer> UPLEFT = new Pair(2,-1);
-    private static final Pair<Integer, Integer> RIGHT = new Pair(0,2);
-    private static final Pair<Integer, Integer> LEFT = new Pair(0,-2);
-    private static final Pair<Integer, Integer> DOWNRIGHT = new Pair(-2,1);
-    private static final Pair<Integer, Integer> DOWNLEFT = new Pair(-2,-1);
+    private static final Pair<Integer, Integer> ORIGIN = new Pair<>(188,188);
+    private static final Pair<Integer, Integer> UPRIGHT = new Pair<>(2,1);
+    private static final Pair<Integer, Integer> UPLEFT = new Pair<>(2,-1);
+    private static final Pair<Integer, Integer> RIGHT = new Pair<>(0,2);
+    private static final Pair<Integer, Integer> LEFT = new Pair<>(0,-2);
+    private static final Pair<Integer, Integer> DOWNRIGHT = new Pair<>(-2,1);
+    private static final Pair<Integer, Integer> DOWNLEFT = new Pair<>(-2,-1);
 
     public static Pair<Integer, Integer> getOriginValue() {
         return ORIGIN;
