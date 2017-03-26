@@ -1,11 +1,14 @@
+import javafx.util.Pair;
+
 /**
  * Created by Joe on 3/26/17.
  */
 public class SettlementDataFrame {
   private int settlementlevel;
-  private int settlementStartingLocation;
+  private Pair<Integer,Integer> settlementStartingLocation;
 
-  public SettlementDataFrame(int settlementlevel, int settlementStartingLocation) {
+  public SettlementDataFrame(int settlementlevel,
+    Pair<Integer, Integer> settlementStartingLocation) {
     this.settlementlevel = settlementlevel;
     this.settlementStartingLocation = settlementStartingLocation;
   }
@@ -14,7 +17,7 @@ public class SettlementDataFrame {
     return settlementlevel;
   }
 
-  public int getSettlementStartingLocation() {
+  public Pair<Integer, Integer> getSettlementStartingLocation() {
     return settlementStartingLocation;
   }
 }
