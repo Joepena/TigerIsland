@@ -109,14 +109,10 @@ public class MyStepdefs {
     @When("^a player tries to place another hex in a valid placement position")
     public void place_hex_in_valid_position () throws Throwable {
         Hex hexToPlace = new Hex(1, Terrain.terrainType.Lake);
-        Integer firstHexLocX = testHex.getLocation().getKey();
-        Integer firstHexLocY = testHex.getLocation().getValue();
-        Integer secondHexLocX = firstHexLocX + Orientation.getUpleftValue().getKey();
-        Integer secondHexLocY = firstHexLocY + Orientation.getUpleftValue().getValue();
-        Pair<Integer, Integer> hex2Loc = new Pair(secondHexLocX, secondHexLocY);
-        secondHexLocX -= Orientation.getOriginValue().getKey();
-        secondHexLocY -= Orientation.getOriginValue().getValue();
-        Pair<Integer, Integer> pairToPlace = new Pair(secondHexLocX, secondHexLocY);
+
+        Pair firstHexLoc = new Pair(testHex.getLocation().getKey(), testHex.getLocation().getValue());
+        Pair hex2Loc = Orientation.addPairs(firstHexLoc, Orientation.getUpleftValue());
+        Pair pairToPlace = Orientation.subtractPairs(hex2Loc, Orientation.getOriginValue());
 
         if(validate.existsAdjacentHex(hex2Loc, testBoard))
             testBoard.setHex(hexToPlace, pairToPlace);
@@ -139,17 +135,14 @@ public class MyStepdefs {
     @When("^a player tries to place another hex in a invalid placement position")
     public void place_hex_in_invalid_position () throws Throwable {
         Hex hexToPlace = new Hex(1, Terrain.terrainType.Lake);
-        Integer firstHexLocX = testHex.getLocation().getKey();
-        Integer firstHexLocY = testHex.getLocation().getValue();
-        Integer secondHexLocX = firstHexLocX + Orientation.getUpleftValue().getKey() + Orientation.getUpleftValue().getKey();
-        Integer secondHexLocY = firstHexLocY + Orientation.getUpleftValue().getValue() + Orientation.getUpleftValue().getValue();
-        Pair<Integer, Integer> hex2Loc = new Pair(secondHexLocX, secondHexLocY);
-        secondHexLocX -= Orientation.getOriginValue().getKey();
-        secondHexLocY -= Orientation.getOriginValue().getValue();
-        Pair<Integer, Integer> pairToPlace = new Pair(secondHexLocX, secondHexLocY);
+
+        Pair firstHexLoc = new Pair(testHex.getLocation().getKey(), testHex.getLocation().getValue());
+        Pair hex2Loc = Orientation.addPairs(firstHexLoc, Orientation.addPairs(Orientation.getUpleftValue(), Orientation.getUpleftValue()));
+        Pair pairToPlace = Orientation.subtractPairs(hex2Loc, Orientation.getOriginValue());
 
         if(validate.existsAdjacentHex(hex2Loc, testBoard))
             testBoard.setHex(hexToPlace, pairToPlace);
+
     }
 
     @Then("^the hex will be not placed on the board")

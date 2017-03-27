@@ -103,6 +103,17 @@ public class Orientation {
 
     }
 
+    public static  Pair<Integer,Integer> subtractPairs (Pair<Integer,Integer> pair1, Pair<Integer,Integer> pair2){
+        Integer pair1X = pair1.getKey();
+        Integer pair1Y = pair1.getValue();
+
+        Integer pair2X = pair2.getKey();
+        Integer pair2Y = pair2.getValue();
+
+        return new Pair<Integer,Integer> (pair1X - pair2X, pair1Y - pair2Y);
+
+    }
+
     public static Pair<Integer,Integer> upLeftOf(Pair<Integer,Integer> startCoordinates){
 
         Integer resultLocationX = startCoordinates.getKey() + Orientation.UPLEFT.getKey();
