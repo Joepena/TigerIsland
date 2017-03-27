@@ -76,16 +76,45 @@ public class GameAPI {
         return null;
     }
 
-    boolean isValidNukingCoordinates(Pair<Integer, Integer> volcanoCoordinates){
+    private boolean isValidNukingCoordinates(Pair<Integer, Integer> volcanoCoordinates){
         Orientation.Orientations leftHexOrientation = Orientation.Orientations.upLeft;
 
         return isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, leftHexOrientation));
     }
 
-    boolean isValidTileNukingPosition(TilePositionCoordinates tilePositionCoordinates){
-        if(!HexValidation.isValidVolcanoPlacement(tilePositionCoordinates.getVolcanoCoordinates(), gameBoard)){
+    private boolean isValidTileNukingPosition(TilePositionCoordinates tilePositionCoordinates){
+
+        Hex hexUnderVolcano = gameBoard.getHex(tilePositionCoordinates.getVolcanoCoordinates());
+        Hex hexUnderLeft = gameBoard.getHex(tilePositionCoordinates.getLeftHexCoordinates());
+        Hex hexUnderRight = gameBoard.getHex(tilePositionCoordinates.getRightHexCoordinates());
+
+        int settlementPiecesNuked = 0;
+        int settlementSize = 3;
+
+        if(!HexValidation.isValidVolcanoPlacement(tilePositionCoordinates.getVolcanoCoordinates(), gameBoard))
             return false;
+
+        if(hexUnderVolcano.getLevel() != hexUnderLeft.getLevel() || hexUnderLeft.getLevel() != hexUnderRight.getLevel())
+            return false;
+
+        if(hexUnderVolcano.getOccupiedBy() != Hex.gamePieces.empty){
+            settlementPiecesNuked++;
+            if(!HexValidation.isValidHexEruption(tilePositionCoordinates.getVolcanoCoordinates(), gameBoard))
+                return false;
         }
+        if(hexUnderLeft.getOccupiedBy() != Hex.gamePieces.empty){
+            settlementPiecesNuked++;
+            if(!HexValidation.isValidHexEruption(tilePositionCoordinates.getLeftHexCoordinates(), gameBoard))
+                return false;
+        }
+        if(hexUnderRight.getOccupiedBy() != Hex.gamePieces.empty){
+            settlementPiecesNuked++;
+            if(!HexValidation.isValidHexEruption(tilePositionCoordinates.getRightHexCoordinates(), gameBoard))
+                return false;
+            }
+
+        if(settlementPiecesNuked == settlementSize)
+            return false;
 
 
         return true;
