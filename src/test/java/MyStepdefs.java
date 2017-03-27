@@ -90,13 +90,6 @@ public class MyStepdefs {
         Assert.assertTrue(testAPI.gameBoard.getGameBoardAvailability()[186][189]);
     }
 
-    /*
-     *   TODO
-     *
-     *   Refactor these tests to not contain duplicate code and put much of these implementations
-     *   into methods
-     */
-
     @Given("^there is already a hex on the board")
     public void setupBoardForHexValidationPassingTest () throws Throwable {
         testBoard = new Board();
