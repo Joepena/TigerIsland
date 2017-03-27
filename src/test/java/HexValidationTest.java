@@ -66,28 +66,10 @@ public class HexValidationTest {
         Hex secondHex = new Hex(0, Terrain.terrainType.Volcano);
 
 
-        Assert.assertEquals("isValidVolcanoPlacementSuccessTest", true, HexValidation.isValidVolcanoPlacement(secondHex, hex2Loc, gameBoard));
+        Assert.assertEquals("isValidVolcanoPlacementSuccessTest", true, HexValidation.isValidVolcanoPlacement(hex2Loc, gameBoard));
 
     }
 
-
-    @Test
-    public void isValidVolcanoPlacementGenericSuccessTest() {
-        Hex firstHex = new Hex(0, Terrain.terrainType.Jungle);
-        Pair<Integer, Integer> hex1Loc = new Pair(0, 0);
-        gameBoard.setHex(firstHex, hex1Loc);
-
-        Integer secondHexLocX = firstHex.getLocation().getKey();
-        Integer secondHexLocY = firstHex.getLocation().getValue();
-
-        Pair<Integer, Integer> hex2Loc = new Pair(secondHexLocX, secondHexLocY);
-
-        Hex secondHex = new Hex(0, Terrain.terrainType.Rocky);
-
-
-        Assert.assertEquals("isValidVolcanoPlacementGenericSuccessTest", true, HexValidation.isValidVolcanoPlacement(secondHex, hex2Loc, gameBoard));
-
-    }
     @Test
     public void isValidVolcanoPlacementGenericTerrainFailureTest() {
         Hex firstHex = new Hex(0, Terrain.terrainType.Jungle);
@@ -102,7 +84,7 @@ public class HexValidationTest {
         Hex secondHex = new Hex(0, Terrain.terrainType.Volcano);
 
 
-        Assert.assertEquals("isValidVolcanoPlacementGenericTerrainFailureTest", false, HexValidation.isValidVolcanoPlacement(secondHex, hex2Loc, gameBoard));
+        Assert.assertEquals("isValidVolcanoPlacementGenericTerrainFailureTest", false, HexValidation.isValidVolcanoPlacement(hex2Loc, gameBoard));
 
     }
 

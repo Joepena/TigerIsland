@@ -1,5 +1,7 @@
 import javafx.util.Pair;
 
+import java.util.ArrayList;
+
 /**
  * Created by Troy on 3/22/17.
  */
@@ -63,8 +65,31 @@ public class GameAPI {
         gameBoard.setHex(tile.getRight(), Orientation.addPairByOrientation(coordinatePair, rightOrient));
     }
 
-    //TOMAS DO THIS
+
     //ArrayList<Pair<Integer, Integer>> getValidTileLocations() {}
+
+
+    ArrayList<Pair<Integer,Integer>> getValidNukingLocations() {
+        if(gameBoard.isOriginEmpty()){
+            return null;
+        }
+        return null;
+    }
+
+    boolean isValidNukingCoordinates(Pair<Integer, Integer> volcanoCoordinates){
+        Orientation.Orientations leftHexOrientation = Orientation.Orientations.upLeft;
+
+        return isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, leftHexOrientation));
+    }
+
+    boolean isValidTileNukingPosition(TilePositionCoordinates tilePositionCoordinates){
+        if(!HexValidation.isValidVolcanoPlacement(tilePositionCoordinates.getVolcanoCoordinates(), gameBoard)){
+            return false;
+        }
+
+
+        return true;
+    }
 
 
 
