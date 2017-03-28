@@ -36,7 +36,7 @@ public class Board {
             }
         }
     }
-
+  
     void setHex (Hex hex, Pair<Integer,Integer> coordinatePair) {
       Integer originX = Orientation.getOriginValue().getKey();
       Integer originY = Orientation.getOriginValue().getValue();
@@ -44,13 +44,13 @@ public class Board {
       Integer y = coordinatePair.getValue() + originY;
       Pair<Integer, Integer> placementLocation = new Pair<>(x, y);
 
-      if(isOriginEmpty()) { //First tile placement
-          gameBoard[originX][originY] = hex;
-          gameBoardAvailability[originX][originY] = true;
-          hex.setLocation(new Pair<Integer,Integer>(originX, originY));
-          hex.incrementLevel();
-      }
-      else if(!HexValidation.isLocationNull(placementLocation, this)){
+//      if(isOriginEmpty()) { //First tile placement
+//          gameBoard[originX][originY] = hex;
+//          gameBoardAvailability[originX][originY] = true;
+//          hex.setLocation(new Pair<Integer,Integer>(originX, originY));
+//          hex.incrementLevel();
+//      }
+    if(!HexValidation.isLocationNull(placementLocation, this)){
           Hex presentHex = this.getHex(placementLocation);
           presentHex.incrementLevel();
           presentHex.setTerrain(hex.getTerrain());

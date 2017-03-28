@@ -39,11 +39,6 @@ public class Hex {
         return terrain;
     }
 
-    public Pair<Integer, Integer>  getLocation() {
-        return location;
-    }
-
-
     public void setTerrain(Terrain.terrainType terrain) {
         this.terrain = terrain;
     }
@@ -60,11 +55,16 @@ public class Hex {
         this.level = this.level + 1;
     }
 
-  public char getTerrainForVisualization() {
+    public Pair<Integer, Integer> getLocation() {
+        return location;
+    }
+
+    public char getTerrainForVisualization() {
         Terrain.terrainType terrain = getTerrain();
         if(terrain == Terrain.terrainType.Grassland) {
             return 'G';
         }
+
         else if(terrain == Terrain.terrainType.Jungle) {
             return 'J';
         }
