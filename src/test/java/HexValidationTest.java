@@ -3,7 +3,7 @@ import org.junit.After;
 import org.junit.*;
 
 /**
- * Created by WIIZZARD on 3/19/2017.
+ * Created by Nicholas on 3/19/2017.
  */
 public class HexValidationTest {
     Board gameBoard;
