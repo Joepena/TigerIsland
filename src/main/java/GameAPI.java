@@ -60,13 +60,16 @@ public class GameAPI {
 
         Orientation.Orientations rightOrient = Orientation.getRightHexMapping(tile.getLeftHexOrientation());
 
-        gameBoard.setHex(tile.getVolcano(), coordinatePair);
-        gameBoard.setHex(tile.getLeft(), Orientation.addPairByOrientation(coordinatePair, tile.getLeftHexOrientation()));
-        gameBoard.setHex(tile.getRight(), Orientation.addPairByOrientation(coordinatePair, rightOrient));
+        if (isTileDestinationValid(tile, coordinatePair)){
+            gameBoard.setHex(tile.getVolcano(), coordinatePair);
+            gameBoard.setHex(tile.getLeft(), Orientation.addPairByOrientation(coordinatePair, tile.getLeftHexOrientation()));
+            gameBoard.setHex(tile.getRight(), Orientation.addPairByOrientation(coordinatePair, rightOrient));
+        }
     }
 
 
     //ArrayList<Pair<Integer, Integer>> getValidTileLocations() {}
+
 
 
     ArrayList<Pair<Integer,Integer>> getValidNukingLocations() {
@@ -120,6 +123,19 @@ public class GameAPI {
         return true;
     }
 
+    public boolean isTileDestinationValid(Tile tile, Pair<Integer, Integer> destCoordPair){
+        if (gameBoard.isOriginEmpty() && destCoordPair == Orientation.getOriginValue()){
+            return true;
+        }
 
+        if (isTileConnected(tile, destCoordPair)){
+            return true;
+        }
 
+        return false;
+    }
+
+    public boolean isTileConnected(Tile tile, Pair<Integer, Integer> destCoordPair){
+        return true;
+    }
 }

@@ -25,7 +25,7 @@ public class Board {
             System.out.println();
             for (int j = 173; j < 204; j++) {
                 if(gameBoard[i][j] == null) {
-                    System.out.print("\t");
+                    System.out.print("---\t");
                 }
                 else {
 
@@ -36,6 +36,7 @@ public class Board {
             }
         }
     }
+
 
     void setHex (Hex hex, Pair<Integer,Integer> coordinatePair) {
       Integer originX = Orientation.getOriginValue().getKey();

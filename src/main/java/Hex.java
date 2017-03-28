@@ -39,6 +39,11 @@ public class Hex {
         return terrain;
     }
 
+    public Pair<Integer, Integer>  getLocation() {
+        return location;
+    }
+
+
     public void setTerrain(Terrain.terrainType terrain) {
         this.terrain = terrain;
     }
@@ -78,8 +83,6 @@ public class Hex {
             return 'V';
         }
   }
-
-
 
     public void setLocation(Pair location) {
         this.location = location;
