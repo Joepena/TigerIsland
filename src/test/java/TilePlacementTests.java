@@ -6,26 +6,66 @@ import javafx.util.Pair;
  */
 public class TilePlacementTests {
     Tile testTile;
+    Tile existingTile;
     GameAPI game = new GameAPI();
 
     @Before
     public void setUp() throws Exception {
 
-        Terrain.terrainType terrainLeft = Terrain.terrainType.Grassland;
-        Terrain.terrainType terrainRight = Terrain.terrainType.Lake;
-        Orientation.Orientations leftOrientation = Orientation.Orientations.downLeft;
-
-        testTile = new Tile(1,terrainLeft,terrainRight,leftOrientation);
-
+        existingTile = new Tile(1,Terrain.terrainType.Jungle,Terrain.terrainType.Rocky,Orientation.Orientations.upRight);
+        testTile = new Tile(2,Terrain.terrainType.Grassland,Terrain.terrainType.Lake,Orientation.Orientations.downLeft);
     }
 
     @Test
     public void isTileDestinationValidTest_OriginEmpty(){
-        Pair<Integer, Integer> testCoords = Orientation.getRelativeOriginValue();
-        game.placeTile(testTile, testCoords);
+        Pair<Integer, Integer> originCoords = Orientation.getRelativeOriginValue();
+
+        Assert.assertEquals("test",true,game.isTileDestinationValid(testTile, originCoords));
+    }
+
+    @Test
+    public void isTileDestinationValidTest_OriginNotEmpty(){
+        Pair<Integer, Integer> originCoords = Orientation.getRelativeOriginValue();
+        game.placeTile(existingTile, originCoords);
+
+        Assert.assertEquals("test",true,game.isTileDestinationValid(testTile, originCoords));
+    }
+
+    @Test
+    public void isTileDestinationValidTest_VolcanoConnected(){
+        Pair<Integer, Integer> originCoords = Orientation.getRelativeOriginValue();
+        game.placeTile(existingTile, originCoords);
+
+        Pair<Integer, Integer> testCoords = Orientation.addPairByOrientation(originCoords, Orientation.Orientations.upRight);
+        testCoords = Orientation.addPairByOrientation(testCoords, Orientation.Orientations.right);
 
         Assert.assertEquals("test",true,game.isTileDestinationValid(testTile, testCoords));
-        //Assert.assertEquals("Empty Origin, placing tile at Origin. Success.",true, game.isTileDestinationValid(testTile, testCoords));
+
+    }
+
+    @Test
+    public void isTileDestinationValidTest_VolcanoNotConnected(){
+        Pair<Integer, Integer> originCoords = Orientation.getRelativeOriginValue();
+        game.placeTile(existingTile, originCoords);
+
+        Pair<Integer, Integer> testCoords = Orientation.addPairByOrientation(originCoords, Orientation.Orientations.upRight);
+        testCoords = Orientation.addPairByOrientation(testCoords, Orientation.Orientations.upRight);
+        testCoords = Orientation.addPairByOrientation(testCoords, Orientation.Orientations.upRight);
+
+        Assert.assertEquals("test",true,game.isTileDestinationValid(testTile, testCoords));
+
+    }
+
+    @Test
+    public void isTileDestinationValidTest_NoHexConnected(){
+        Pair<Integer, Integer> originCoords = Orientation.getRelativeOriginValue();
+        game.placeTile(existingTile, originCoords);
+
+        Pair<Integer, Integer> testCoords = Orientation.addPairByOrientation(originCoords, Orientation.Orientations.downLeft);
+        testCoords = Orientation.addPairByOrientation(testCoords, Orientation.Orientations.downRight);
+
+        Assert.assertEquals("test",false,game.isTileDestinationValid(testTile, testCoords));
+
     }
 
 
