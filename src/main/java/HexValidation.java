@@ -21,16 +21,12 @@ public class HexValidation {
     }
 
 
-    public static boolean isValidVolcanoPlacement(Hex hex, Pair<Integer,Integer> coordinatePair, Board gameBoard){
+    public static boolean isValidVolcanoPlacement(Pair<Integer,Integer> coordinatePair, Board gameBoard){
         Hex presentHex = gameBoard.getHex(coordinatePair);
-
-        if(hex.getTerrain() == Terrain.terrainType.Volcano){
             if(presentHex.getTerrain() == Terrain.terrainType.Volcano)
                 return true;
             else
                 return false;
-        }
-        else return true;
     }
 
 
@@ -57,7 +53,6 @@ public class HexValidation {
 
     public static boolean existsAdjacentTeamPiece(Pair<Integer, Integer> testingLocation, Board gameBoard){
         Hex targetHex = gameBoard.getHex(testingLocation);
-        Hex.Team team = targetHex.getTeam();
 
         Hex hexLeftOf =  gameBoard.getHex(Orientation.leftOf(testingLocation));
         Hex hexRightOf =  gameBoard.getHex(Orientation.rightOf(testingLocation));
