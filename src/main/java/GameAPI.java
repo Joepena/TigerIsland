@@ -60,6 +60,9 @@ public class GameAPI {
 
         Orientation.Orientations rightOrient = Orientation.getRightHexMapping(tile.getLeftHexOrientation());
 
+        if (gameBoard.isOriginEmpty()){
+            coordinatePair = Orientation.getRelativeOriginValue();
+        }
         if (isTileDestinationValid(tile, coordinatePair)){
             gameBoard.setHex(tile.getVolcano(), coordinatePair);
             gameBoard.setHex(tile.getLeft(), Orientation.addPairByOrientation(coordinatePair, tile.getLeftHexOrientation()));
@@ -124,18 +127,28 @@ public class GameAPI {
     }
 
     public boolean isTileDestinationValid(Tile tile, Pair<Integer, Integer> destCoordPair){
-        if (gameBoard.isOriginEmpty() && destCoordPair == Orientation.getOriginValue()){
+        Pair<Integer,Integer> originvalue = Orientation.getOriginValue();
+        Pair<Integer, Integer> absDestCoordPair = Orientation.addPairs(destCoordPair, originvalue);
+
+        if (isTileConnected(tile, absDestCoordPair)){
             return true;
         }
 
-        if (isTileConnected(tile, destCoordPair)){
+        if (gameBoard.isOriginEmpty()){
             return true;
         }
 
         return false;
     }
 
-    public boolean isTileConnected(Tile tile, Pair<Integer, Integer> destCoordPair){
-        return true;
+    public boolean isTileConnected(Tile tile, Pair<Integer, Integer>absDestCoordPair){
+
+        Pair<Integer, Integer> leftCoordPair = Orientation.addPairByOrientation(absDestCoordPair, tile.getLeftHexOrientation());
+        Pair<Integer, Integer> rightCoordPair = Orientation.addPairByOrientation(absDestCoordPair, Orientation.getRightHexMapping(tile.getLeftHexOrientation()));
+
+        boolean valid = HexValidation.existsAdjacentHex(absDestCoordPair, gameBoard);
+        valid = valid || HexValidation.existsAdjacentHex(leftCoordPair, gameBoard);
+        valid = valid || HexValidation.existsAdjacentHex(rightCoordPair, gameBoard);
+        return valid;
     }
 }
