@@ -1,3 +1,4 @@
+
 import javafx.util.Pair;
 
 /**
@@ -10,6 +11,8 @@ public class GameAPI {
     private int totoroCount;
     private int tigerCount;
     private int victoryPoints;
+    private Settlements whiteSettlements;
+    private Settlements blackSettlements;
 
     public GameAPI() {
         villagerCount = 20;
@@ -17,6 +20,8 @@ public class GameAPI {
         tigerCount = 2;
         victoryPoints = 0;
         gameBoard = new Board();
+        whiteSettlements = new Settlements();
+        blackSettlements = new Settlements();
     }
 
 
@@ -54,6 +59,14 @@ public class GameAPI {
         this.victoryPoints = victoryPoints;
     }
 
+    public Settlements getWhiteSettlements() {
+    return whiteSettlements;
+  }
+
+    public Settlements getBlackSettlements() {
+    return blackSettlements;
+  }
+
     void placeTile(Tile tile, Pair<Integer, Integer> coordinatePair) {
 
         Orientation.Orientations rightOrient = Orientation.getRightHexMapping(tile.getLeftHexOrientation());
@@ -63,8 +76,76 @@ public class GameAPI {
         gameBoard.setHex(tile.getRight(), Orientation.addPairByOrientation(coordinatePair, rightOrient));
     }
 
-    //TOMAS DO THIS
-    //ArrayList<Pair<Integer, Integer>> getValidTileLocations() {}
+    protected void updateSettlements() {
+      updateSettlement(whiteSettlements);
+      updateSettlement(blackSettlements);
+    }
+
+    private void updateSettlement(Settlements settlement) {
+      settlement.wipeSettlementSet();
+      // create a copy of the availability array
+      boolean [][] copyArr = new boolean[gameBoard.getGameBoardAvailability().length][];
+
+      for(int i = 0; i < gameBoard.getGameBoardAvailability().length; i++)
+      {
+        boolean[] aCol = gameBoard.getGameBoardAvailability()[i];
+        int   aLength = aCol.length;
+        copyArr[i] = new boolean[aLength];
+        System.arraycopy(aCol, 0, copyArr[i], 0, aLength);
+      }
+
+      dfsSearch(copyArr, Orientation.getOriginValue(), settlement, new SettlementDataFrame(0,new Pair<Integer, Integer>(0,0)));
+    }
+
+    protected void dfsSearch(boolean[][] availabilityGrid, Pair<Integer,Integer> pair, Settlements settlement, SettlementDataFrame df) {
+      int xCord = pair.getKey();
+      int yCord = pair.getValue();
+
+      //edge case
+      if(!availabilityGrid[xCord][yCord] || pair.getKey() >= 376 || pair.getValue() >= 376) return;
+
+      //invalidate the position
+      availabilityGrid[xCord][yCord] = false;
+      Hex h = gameBoard.getHex(pair);
+
+
+      if (h.getTeam() != Hex.Team.Neutral) {
+        // initial call
+        if(df.getOwnedBy() == Hex.Team.Neutral) {
+          df.setOwnedBy(h.getTeam());
+          df.setSettlementlevel(h.getLevel() + df.getSettlementlevel());
+          df.setSettlementStartingLocation(pair);
+        }
+        else if(df.getOwnedBy() != h.getTeam()){
+          // we call dfs for a new clean dataFrame
+          dfsSearch(availabilityGrid,pair,settlement,new SettlementDataFrame(0,new Pair<Integer, Integer>(0,0)));
+          return;
+        }
+        else {
+          // matching ownership
+          df.setSettlementlevel(h.getLevel() + df.getSettlementlevel());
+        }
+      }
+
+      dfsSearch(availabilityGrid,Orientation.addPairByOrientation(pair, Orientation.Orientations.downLeft),settlement,df);
+      dfsSearch(availabilityGrid,Orientation.addPairByOrientation(pair, Orientation.Orientations.downRight),settlement,df);
+      dfsSearch(availabilityGrid,Orientation.addPairByOrientation(pair, Orientation.Orientations.left),settlement,df);
+      dfsSearch(availabilityGrid,Orientation.addPairByOrientation(pair, Orientation.Orientations.right),settlement,df);
+      dfsSearch(availabilityGrid,Orientation.addPairByOrientation(pair, Orientation.Orientations.upLeft),settlement,df);
+      dfsSearch(availabilityGrid,Orientation.addPairByOrientation(pair, Orientation.Orientations.upRight),settlement,df);
+
+      if(settlement.getListOfSettlements().contains(df)) {
+        settlement.getListOfSettlements().remove(df);
+        settlement.getListOfSettlements().add(df);
+      }
+      else {
+        settlement.addNewSettlement(df);
+      }
+
+
+    }
+
+
 
 
 
