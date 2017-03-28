@@ -119,7 +119,7 @@ public class GameAPI {
 
       if (h.getTeam() != Hex.Team.Neutral) {
         // initial call
-        if(df.getOwnedBy() == Hex.Team.Neutral) {
+        if(df.getOwnedBy() == null) {
           df.setOwnedBy(h.getTeam());
           df.setSettlementlevel(h.getLevel() + df.getSettlementlevel());
           df.setSettlementStartingLocation(pair);
