@@ -60,6 +60,9 @@ public class GameAPI {
 
         Orientation.Orientations rightOrient = Orientation.getRightHexMapping(tile.getLeftHexOrientation());
 
+        if (gameBoard.isOriginEmpty()){
+            coordinatePair = Orientation.getRelativeOriginValue();
+        }
         if (isTileDestinationValid(tile, coordinatePair)){
             gameBoard.setHex(tile.getVolcano(), coordinatePair);
             gameBoard.setHex(tile.getLeft(), Orientation.addPairByOrientation(coordinatePair, tile.getLeftHexOrientation()));
@@ -131,7 +134,7 @@ public class GameAPI {
             return true;
         }
 
-        if (gameBoard.isOriginEmpty() && (absDestCoordPair.equals(originvalue))){
+        if (gameBoard.isOriginEmpty()){
             return true;
         }
 
