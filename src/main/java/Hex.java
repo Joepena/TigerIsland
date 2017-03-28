@@ -38,12 +38,7 @@ public class Hex {
     public Terrain.terrainType getTerrain() {
         return terrain;
     }
-
-    public Pair<Integer, Integer>  getLocation() {
-        return location;
-    }
-
-
+    
     public void setTerrain(Terrain.terrainType terrain) {
         this.terrain = terrain;
     }
