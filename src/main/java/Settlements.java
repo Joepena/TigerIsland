@@ -1,4 +1,8 @@
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.TreeSet;
 import javafx.util.Pair;
 
@@ -6,29 +10,28 @@ import javafx.util.Pair;
  * Created by Joe on 3/26/17.
  */
 public class Settlements {
-  private TreeSet<SettlementDataFrame> listOfSettlements;
+  private ArrayList<SettlementDataFrame> listOfSettlements;
+  private Set<SettlementDataFrame> setOfSettlements;
 
   public Settlements() {
-    // comparator for sorting dataframe
-    Comparator<SettlementDataFrame> dataFrameComparator =
-      (SettlementDataFrame df1, SettlementDataFrame df2)->df1.getSettlementlevel().compareTo(df2.getSettlementlevel());
-
-    listOfSettlements = new TreeSet<>(dataFrameComparator);
+   listOfSettlements = new ArrayList<>();
+    setOfSettlements = new HashSet<>();
   }
 
-  public TreeSet<SettlementDataFrame> getListOfSettlements() {
+  public ArrayList<SettlementDataFrame> getListOfSettlements() {
     return listOfSettlements;
   }
 
   public void addNewSettlement(SettlementDataFrame df) {
+    if(setOfSettlements.contains(df)) return;
+    setOfSettlements.add(df);
     listOfSettlements.add(df);
+    Collections.sort(listOfSettlements);
   }
 
   public void wipeSettlementSet() {
-    Comparator<SettlementDataFrame> dataFrameComparator =
-      (SettlementDataFrame df1, SettlementDataFrame df2)->df1.getSettlementlevel().compareTo(df2.getSettlementlevel());
-
-    listOfSettlements = new TreeSet<>(dataFrameComparator);
+    listOfSettlements = new ArrayList<>();
+    setOfSettlements = new HashSet<>();
   }
 
 

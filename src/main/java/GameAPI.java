@@ -102,7 +102,7 @@ public class GameAPI {
         System.arraycopy(aCol, 0, copyArr[i], 0, aLength);
       }
 
-      dfsSearch(copyArr, Orientation.getOriginValue(), settlement, new SettlementDataFrame(0,new Pair<Integer, Integer>(0,0)));
+      dfsSearch(copyArr, Orientation.getOriginValue(), settlement, new SettlementDataFrame(0,new Pair<>(0,0)));
     }
 
     protected void dfsSearch(boolean[][] availabilityGrid, Pair<Integer,Integer> pair, Settlements settlement, SettlementDataFrame df) {
@@ -113,7 +113,6 @@ public class GameAPI {
       if(!availabilityGrid[xCord][yCord] || pair.getKey() >= 376 || pair.getValue() >= 376) return;
 
       //invalidate the position
-      availabilityGrid[xCord][yCord] = false;
       Hex h = gameBoard.getHex(pair);
 
 
@@ -121,34 +120,74 @@ public class GameAPI {
         // initial call
         if(df.getOwnedBy() == null) {
           df.setOwnedBy(h.getTeam());
-          df.setSettlementlevel(h.getLevel() + df.getSettlementlevel());
+          df.setSettlementlevel(1);
           df.setSettlementStartingLocation(pair);
+          settlement.addNewSettlement(df);
         }
         else if(df.getOwnedBy() != h.getTeam()){
           // we call dfs for a new clean dataFrame
-          dfsSearch(availabilityGrid,pair,settlement,new SettlementDataFrame(0,new Pair<Integer, Integer>(0,0)));
-          return;
+          dfsSearch(availabilityGrid,pair,settlement,new SettlementDataFrame(0,new Pair<>(0,0)));
         }
         else {
           // matching ownership
-          df.setSettlementlevel(h.getLevel() + df.getSettlementlevel());
+          df.setSettlementlevel(df.getSettlementlevel()+1);
         }
       }
 
-      dfsSearch(availabilityGrid,Orientation.addPairByOrientation(pair, Orientation.Orientations.downLeft),settlement,df);
-      dfsSearch(availabilityGrid,Orientation.addPairByOrientation(pair, Orientation.Orientations.downRight),settlement,df);
-      dfsSearch(availabilityGrid,Orientation.addPairByOrientation(pair, Orientation.Orientations.left),settlement,df);
-      dfsSearch(availabilityGrid,Orientation.addPairByOrientation(pair, Orientation.Orientations.right),settlement,df);
-      dfsSearch(availabilityGrid,Orientation.addPairByOrientation(pair, Orientation.Orientations.upLeft),settlement,df);
-      dfsSearch(availabilityGrid,Orientation.addPairByOrientation(pair, Orientation.Orientations.upRight),settlement,df);
+      availabilityGrid[xCord][yCord] = false;
 
-      if(settlement.getListOfSettlements().contains(df)) {
-        settlement.getListOfSettlements().remove(df);
-        settlement.getListOfSettlements().add(df);
+      //edge case #1: we have a team but this hex is neutral. We do not want to carry this df anymore
+      if(df.getOwnedBy() != null && h.getTeam() == Hex.Team.Neutral) {
+
+        dfsSearch(availabilityGrid,
+          Orientation.addPairByOrientation(pair, Orientation.Orientations.downLeft), settlement,
+          new SettlementDataFrame(0,new Pair<>(0,0)));
+        dfsSearch(availabilityGrid,
+          Orientation.addPairByOrientation(pair, Orientation.Orientations.downRight), settlement,
+          new SettlementDataFrame(0,new Pair<>(0,0)));
+        dfsSearch(availabilityGrid,
+          Orientation.addPairByOrientation(pair, Orientation.Orientations.left), settlement, new SettlementDataFrame(0,new Pair<>(0,0)));
+        dfsSearch(availabilityGrid,
+          Orientation.addPairByOrientation(pair, Orientation.Orientations.right), settlement, new SettlementDataFrame(0,new Pair<>(0,0)));
+        dfsSearch(availabilityGrid,
+          Orientation.addPairByOrientation(pair, Orientation.Orientations.upLeft), settlement, new SettlementDataFrame(0,new Pair<>(0,0)));
+        dfsSearch(availabilityGrid,
+          Orientation.addPairByOrientation(pair, Orientation.Orientations.upRight), settlement, new SettlementDataFrame(0,new Pair<>(0,0)));
       }
-      else {
-        settlement.addNewSettlement(df);
+      //edge case #2: we have a team but this hex is not
+      else if(df.getOwnedBy() != null){
+
+        // loop through all hexes same team first
+        Hex.Team dfTeam = df.getOwnedBy();
+
+        for(Orientation.Orientations orientation : Orientation.Orientations.values()) {
+
+          if (orientation == Orientation.Orientations.origin) continue;
+          // get adjacent hex
+          Pair<Integer,Integer> hexLocation = Orientation.addPairByOrientation(pair,orientation);
+          Hex adjacentHex = gameBoard.getHex(hexLocation);
+
+          if(adjacentHex == null || adjacentHex.getTeam() != dfTeam) continue;
+          // same team recurse through it
+
+          dfsSearch(availabilityGrid, hexLocation, settlement, df);
+        }
       }
+        dfsSearch(availabilityGrid,
+          Orientation.addPairByOrientation(pair, Orientation.Orientations.downLeft), settlement,
+          df);
+        dfsSearch(availabilityGrid,
+          Orientation.addPairByOrientation(pair, Orientation.Orientations.downRight), settlement,
+          df);
+        dfsSearch(availabilityGrid,
+          Orientation.addPairByOrientation(pair, Orientation.Orientations.left), settlement, df);
+        dfsSearch(availabilityGrid,
+          Orientation.addPairByOrientation(pair, Orientation.Orientations.right), settlement, df);
+        dfsSearch(availabilityGrid,
+          Orientation.addPairByOrientation(pair, Orientation.Orientations.upLeft), settlement, df);
+        dfsSearch(availabilityGrid,
+          Orientation.addPairByOrientation(pair, Orientation.Orientations.upRight), settlement, df);
+
 
 
     }

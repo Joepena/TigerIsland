@@ -1,8 +1,6 @@
 import static org.junit.Assert.*;
 
 import java.util.Iterator;
-import java.util.Objects;
-import java.util.TreeSet;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,16 +32,10 @@ public class updateSettlementsTest {
   public void updateSettlements() throws Exception {
     gameAPI.gameBoard.printSectionedBoard();
     gameAPI.updateSettlements();
-    Iterator<SettlementDataFrame> white = gameAPI.getWhiteSettlements().getListOfSettlements().descendingIterator();
-    Iterator<SettlementDataFrame> black = gameAPI.getBlackSettlements().getListOfSettlements().descendingIterator();
+    Iterator<SettlementDataFrame> white = gameAPI.getWhiteSettlements().getListOfSettlements().iterator();
+    Iterator<SettlementDataFrame> black = gameAPI.getBlackSettlements().getListOfSettlements().iterator();
     while(white.hasNext()){
       SettlementDataFrame df = white.next();
-      int level = df.getSettlementlevel();
-      Hex.Team owner = df.getOwnedBy();
-      System.out.println(level+" "+owner);
-    }
-    while(black.hasNext()){
-      SettlementDataFrame df = black.next();
       int level = df.getSettlementlevel();
       Hex.Team owner = df.getOwnedBy();
       System.out.println(level+" "+owner);

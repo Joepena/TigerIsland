@@ -3,7 +3,7 @@ import javafx.util.Pair;
 /**
  * Created by Joe on 3/26/17.
  */
-public class SettlementDataFrame {
+public class SettlementDataFrame implements Comparable<SettlementDataFrame>{
   private Integer settlementlevel;
   private Pair<Integer,Integer> settlementStartingLocation;
   private Hex.Team ownedBy;
@@ -37,5 +37,10 @@ public class SettlementDataFrame {
 
   public Hex.Team getOwnedBy() {
     return ownedBy;
+  }
+
+  @Override
+  public int compareTo(SettlementDataFrame o) {
+    return -1 * settlementlevel.compareTo(o.settlementlevel);
   }
 }
