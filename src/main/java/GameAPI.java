@@ -85,10 +85,10 @@ public class GameAPI {
 
 
     protected void updateSettlements() {
-      updateSettlement(whiteSettlements, blackSettlements);
+      updateBothSettlement(whiteSettlements, blackSettlements);
     }
 
-    private void updateSettlement(Settlements whiteSettlements, Settlements blackSettlements) {
+    private void updateBothSettlement(Settlements whiteSettlements, Settlements blackSettlements) {
       Settlements settlement = new Settlements();
       settlement.wipeSettlementSet();
       // create a copy of the availability array
@@ -193,8 +193,6 @@ public class GameAPI {
 
 
     }
-
-
 
 
     //ArrayList<Pair<Integer, Integer>> getValidTileLocations() {}
