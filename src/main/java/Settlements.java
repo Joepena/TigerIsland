@@ -35,5 +35,21 @@ public class Settlements {
   }
 
 
+  public static void retriveWhiteSettlements(Settlements settlement, Settlements target) {
+    ArrayList<SettlementDataFrame> settlementList = settlement.getListOfSettlements();
+    target.wipeSettlementSet();
+    settlementList.forEach((settlementDataFrame -> {
+      if(settlementDataFrame.getOwnedBy() == Hex.Team.White) target.addNewSettlement(settlementDataFrame);
+    }));
+  }
+
+  public static void retriveBlackSettlements(Settlements settlement, Settlements target) {
+    ArrayList<SettlementDataFrame> settlementList = settlement.getListOfSettlements();
+    target.wipeSettlementSet();
+    settlementList.forEach((settlementDataFrame -> {
+      if(settlementDataFrame.getOwnedBy() == Hex.Team.Black) target.addNewSettlement(settlementDataFrame);
+    }));
+  }
+
 
 }

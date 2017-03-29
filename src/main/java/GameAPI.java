@@ -85,11 +85,11 @@ public class GameAPI {
 
 
     protected void updateSettlements() {
-      updateSettlement(whiteSettlements);
-      updateSettlement(blackSettlements);
+      updateSettlement(whiteSettlements, blackSettlements);
     }
 
-    private void updateSettlement(Settlements settlement) {
+    private void updateSettlement(Settlements whiteSettlements, Settlements blackSettlements) {
+      Settlements settlement = new Settlements();
       settlement.wipeSettlementSet();
       // create a copy of the availability array
       boolean [][] copyArr = new boolean[gameBoard.getGameBoardAvailability().length][];
@@ -103,6 +103,8 @@ public class GameAPI {
       }
 
       dfsSearch(copyArr, Orientation.getOriginValue(), settlement, new SettlementDataFrame(0,new Pair<>(0,0)));
+      Settlements.retriveWhiteSettlements(settlement, whiteSettlements);
+      Settlements.retriveBlackSettlements(settlement, blackSettlements);
     }
 
     protected void dfsSearch(boolean[][] availabilityGrid, Pair<Integer,Integer> pair, Settlements settlement, SettlementDataFrame df) {
