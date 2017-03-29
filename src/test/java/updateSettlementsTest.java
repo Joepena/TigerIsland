@@ -1,9 +1,4 @@
-import static org.junit.Assert.*;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import javafx.util.Pair;
 import org.junit.Assert;
 import org.junit.Before;
@@ -40,7 +35,7 @@ public class updateSettlementsTest {
       for(int i= 0; i < whiteActual.size(); i++) {
         SettlementDataFrame dfActual = whiteActual.get(0);
         SettlementDataFrame dfExpected = whiteExpected.get(0);
-        if(dfActual.getOwnedBy() != dfExpected.getOwnedBy() || dfActual.getSettlementlevel() != dfExpected.getSettlementlevel()) {
+        if(dfActual.getOwnedBy() != dfExpected.getOwnedBy() || dfActual.getSettlementSize() != dfExpected.getSettlementSize()) {
           whiteActualFlag = false;
           break;
         }
@@ -54,7 +49,7 @@ public class updateSettlementsTest {
       for(int i= 0; i < blackActual.size(); i++) {
         SettlementDataFrame dfActual = blackActual.get(0);
         SettlementDataFrame dfExpected = blackExpected.get(0);
-        if(dfActual.getOwnedBy() != dfExpected.getOwnedBy() || dfActual.getSettlementlevel() != dfExpected.getSettlementlevel()) {
+        if(dfActual.getOwnedBy() != dfExpected.getOwnedBy() || dfActual.getSettlementSize() != dfExpected.getSettlementSize()) {
           blackActualFlag = false;
           break;
         }
@@ -85,7 +80,7 @@ public class updateSettlementsTest {
       for(int i= 0; i < whiteActual.size(); i++) {
         SettlementDataFrame dfActual = whiteActual.get(0);
         SettlementDataFrame dfExpected = whiteExpected.get(0);
-        if(dfActual.getOwnedBy() != dfExpected.getOwnedBy() || dfActual.getSettlementlevel() != dfExpected.getSettlementlevel()) {
+        if(dfActual.getOwnedBy() != dfExpected.getOwnedBy() || dfActual.getSettlementSize() != dfExpected.getSettlementSize()) {
           whiteActualFlag = false;
           break;
         }
@@ -99,7 +94,7 @@ public class updateSettlementsTest {
       for(int i= 0; i < blackActual.size(); i++) {
         SettlementDataFrame dfActual = blackActual.get(0);
         SettlementDataFrame dfExpected = blackExpected.get(0);
-        if(dfActual.getOwnedBy() != dfExpected.getOwnedBy() || dfActual.getSettlementlevel() != dfExpected.getSettlementlevel()) {
+        if(dfActual.getOwnedBy() != dfExpected.getOwnedBy() || dfActual.getSettlementSize() != dfExpected.getSettlementSize()) {
           blackActualFlag = false;
           break;
         }

@@ -122,7 +122,7 @@ public class GameAPI {
         // initial call
         if(df.getOwnedBy() == null) {
           df.setOwnedBy(h.getTeam());
-          df.setSettlementlevel(1);
+          df.setSettlementSize(1);
           df.setSettlementStartingLocation(pair);
           settlement.addNewSettlement(df);
         }
@@ -132,7 +132,7 @@ public class GameAPI {
         }
         else {
           // matching ownership
-          df.setSettlementlevel(df.getSettlementlevel()+1);
+          df.setSettlementSize(df.getSettlementSize()+1);
         }
       }
 
@@ -193,10 +193,6 @@ public class GameAPI {
 
 
     }
-
-
-    //ArrayList<Pair<Integer, Integer>> getValidTileLocations() {}
-
 
 
     ArrayList<Pair<Integer,Integer>> getValidNukingLocations() {
