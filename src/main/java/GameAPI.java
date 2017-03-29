@@ -1,6 +1,7 @@
 import javafx.util.Pair;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Troy on 3/22/17.
@@ -12,6 +13,7 @@ public class GameAPI {
     private int totoroCount;
     private int tigerCount;
     private int victoryPoints;
+    private ArrayList<Pair<Integer,Integer>> validNukingLocations;
 
     public GameAPI() {
         villagerCount = 20;
@@ -76,11 +78,35 @@ public class GameAPI {
 
 
 
+    public ArrayList<Hex> getNeighbors (Pair<Integer,Integer> coordinates) {
+        ArrayList<Hex> neighbors = new ArrayList<>();
+
+        neighbors.add(gameBoard.getHex(Orientation.upLeftOf(coordinates)));
+        neighbors.add(gameBoard.getHex(Orientation.upRightOf(coordinates)));
+        neighbors.add(gameBoard.getHex(Orientation.downLeftOf(coordinates)));
+        neighbors.add(gameBoard.getHex(Orientation.downRightOf(coordinates)));
+        neighbors.add(gameBoard.getHex(Orientation.leftOf(coordinates)));
+        neighbors.add(gameBoard.getHex(Orientation.rightOf(coordinates)));
+
+        return neighbors;
+
+    }
+
     ArrayList<Pair<Integer,Integer>> getValidNukingLocations() {
+        HashMap<Pair<Integer,Integer>,Integer> traversedLocations = new HashMap<>();
+
+        ArrayList<Pair<Integer,Integer> neighbors = new ArrayList<>();
+
         if(gameBoard.isOriginEmpty()){
             return null;
         }
         return null;
+    }
+
+    public void searchForNukingLocations(Pair<Integer,Integer> coordinates, HashMap<Pair<Integer,Integer>,Integer> traversedLocations){
+
+
+        return;
     }
 
     public boolean isValidNukingCoordinates(Pair<Integer, Integer> volcanoCoordinates){
