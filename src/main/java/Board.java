@@ -39,18 +39,10 @@ public class Board {
 
 
     void setHex (Hex hex, Pair<Integer,Integer> coordinatePair) {
-      Integer originX = Orientation.getOriginValue().getKey();
-      Integer originY = Orientation.getOriginValue().getValue();
-      Integer x = coordinatePair.getKey() + originX;
-      Integer y = coordinatePair.getValue() + originY;
+      Integer x = coordinatePair.getKey();
+      Integer y = coordinatePair.getValue();
       Pair<Integer, Integer> placementLocation = new Pair<>(x, y);
 
-//      if(isOriginEmpty()) { //First tile placement
-//          gameBoard[originX][originY] = hex;
-//          gameBoardAvailability[originX][originY] = true;
-//          hex.setLocation(new Pair<Integer,Integer>(originX, originY));
-//          hex.incrementLevel();
-//      }
     if(!HexValidation.isLocationNull(placementLocation, this)){
           Hex presentHex = this.getHex(placementLocation);
           presentHex.incrementLevel();
