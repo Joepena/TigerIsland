@@ -18,14 +18,14 @@ public class TilePlacementTests {
 
     @Test
     public void isTileDestinationValidTest_OriginEmpty(){
-        Pair<Integer, Integer> originCoords = Orientation.getRelativeOriginValue();
+        Pair<Integer, Integer> originCoords = Orientation.getOriginValue();
 
         Assert.assertEquals("test",true,game.isTileDestinationValid(testTile, originCoords));
     }
 
     @Test
     public void isTileDestinationValidTest_OriginNotEmpty(){
-        Pair<Integer, Integer> originCoords = Orientation.getRelativeOriginValue();
+        Pair<Integer, Integer> originCoords = Orientation.getOriginValue();
         game.placeTile(existingTile, originCoords);
 
         Assert.assertEquals("test",true,game.isTileDestinationValid(testTile, originCoords));
@@ -33,7 +33,7 @@ public class TilePlacementTests {
 
     @Test
     public void isTileDestinationValidTest_VolcanoConnected(){
-        Pair<Integer, Integer> originCoords = Orientation.getRelativeOriginValue();
+        Pair<Integer, Integer> originCoords = Orientation.getOriginValue();
         game.placeTile(existingTile, originCoords);
 
         Pair<Integer, Integer> testCoords = Orientation.addPairByOrientation(originCoords, Orientation.Orientations.upRight);
@@ -45,13 +45,13 @@ public class TilePlacementTests {
 
     @Test
     public void isTileDestinationValidTest_VolcanoNotConnected(){
-        Pair<Integer, Integer> originCoords = Orientation.getRelativeOriginValue();
+        Pair<Integer, Integer> originCoords = Orientation.getOriginValue();
         game.placeTile(existingTile, originCoords);
 
         Pair<Integer, Integer> testCoords = Orientation.addPairByOrientation(originCoords, Orientation.Orientations.upRight);
         testCoords = Orientation.addPairByOrientation(testCoords, Orientation.Orientations.upRight);
-        testCoords = Orientation.addPairByOrientation(testCoords, Orientation.Orientations.upRight);
 
+        game.placeTile(testTile, testCoords);
         game.gameBoard.printSectionedBoard();
 
         Assert.assertEquals("test",true,game.isTileDestinationValid(testTile, testCoords));
@@ -60,11 +60,15 @@ public class TilePlacementTests {
 
     @Test
     public void isTileDestinationValidTest_NoHexConnected(){
-        Pair<Integer, Integer> originCoords = Orientation.getRelativeOriginValue();
+        Pair<Integer, Integer> originCoords = Orientation.getOriginValue();
         game.placeTile(existingTile, originCoords);
 
         Pair<Integer, Integer> testCoords = Orientation.addPairByOrientation(originCoords, Orientation.Orientations.downLeft);
         testCoords = Orientation.addPairByOrientation(testCoords, Orientation.Orientations.downRight);
+        testCoords = Orientation.addPairByOrientation(testCoords, Orientation.Orientations.downRight);
+
+        game.placeTile(testTile, testCoords);
+        game.gameBoard.printSectionedBoard();
 
         Assert.assertEquals("test",false,game.isTileDestinationValid(testTile, testCoords));
 
