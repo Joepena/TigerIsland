@@ -49,7 +49,6 @@ public class Board {
         }
     }
 
-
     void setHex(Hex hex, Pair<Integer, Integer> coordinatePair) {
         Integer originX = Orientation.getOriginValue().getKey();
         Integer originY = Orientation.getOriginValue().getValue();
