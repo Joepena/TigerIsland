@@ -29,6 +29,19 @@ dependencies {
   compile group: 'info.cukes', name: 'cucumber-core', version: '1.1.5'
 }
 
+sourceSets {
+  main {
+    java {
+      srcDirs = ["src/main"]
+    }
+  }
+  test {
+    java {
+      srcDirs = ["src/test"]
+    }
+  }
+}
+
 repositories {
     mavenCentral()
 }
