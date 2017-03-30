@@ -87,6 +87,15 @@ public class BoardTest {
         Assert.assertEquals("Place Hex on top of another Hex and increase level by 1", true, valid);
     }
 
+    @Test
+    public void printSectionedBoardTest(){
+        gameBoard.setHex(testHex, new Pair<>(0,0));
+        gameBoard.setHex(new Hex(1, Terrain.terrainType.Rocky), Orientation.getUpleftValue());
+        gameBoard.setHex(new Hex(1, Terrain.terrainType.Rocky), Orientation.addPairByOrientation(Orientation.getUpleftValue(), Orientation.Orientations.upRight));
+
+        Assert.assertEquals("printBoardTest", true, true);
+    }
+
 
 
 }
