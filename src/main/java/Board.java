@@ -9,33 +9,81 @@ public class Board {
     protected boolean[][] gameBoardAvailability;
 
     public Board() {
-    gameBoard = new Hex[376][376];
-    gameBoardAvailability = new boolean[376][376];
+        gameBoard = new Hex[376][376];
+        gameBoardAvailability = new boolean[376][376];
     }
 
-    public boolean isEmpty() {
-      Integer x = Orientation.ORIGIN.getKey();
-      Integer y = Orientation.ORIGIN.getValue();
-      return (gameBoard[x][y] == null) ? true : false;
+    public boolean isOriginEmpty() {
+        Integer x = Orientation.getOriginValue().getKey();
+        Integer y = Orientation.getOriginValue().getValue();
+        return (gameBoard[x][y] == null);
     }
+
+    void printSectionedBoard() {
+        // This will print out a 30x30 rectangle around the origin location
+        for (int i = 204; i > 173; i--) {
+            System.out.println();
+            for (int j = 173; j < 204; j++) {
+                if (i == 188 && j == 188) {
+                    if (gameBoard[i][j] == null) {
+                        System.out.print("***\t");
+                    } else {
+                        System.out.print("*");
+                        System.out.print(gameBoard[i][j].getTileId());
+                        System.out.print(gameBoard[i][j].getTerrainForVisualization());
+                        System.out.print(gameBoard[i][j].getLevel());
+                    }
+                } else {
+                    if (gameBoard[i][j] == null) {
+                        System.out.print("---\t");
+                    } else {
+
+                        System.out.print(gameBoard[i][j].getTileId());
+                        System.out.print(gameBoard[i][j].getTerrainForVisualization());
+                        System.out.print(gameBoard[i][j].getLevel() + "\t");
+                    }
+                }
+
+
+
+            }
+        }
+    }
+
+
 
     void setHex (Hex hex, Pair<Integer,Integer> coordinatePair) {
-      Integer originX = Orientation.ORIGIN.getKey();
-      Integer originY = Orientation.ORIGIN.getValue();
-      Integer x = coordinatePair.getKey() + originX;
-      Integer y = coordinatePair.getValue() + originY;
+      Integer x = coordinatePair.getKey();
+      Integer y = coordinatePair.getValue();
+      Pair<Integer, Integer> placementLocation = new Pair<>(x, y);
 
-      if(isEmpty()) { //First tile placement
-          gameBoard[originX][originY] = hex;
-          gameBoardAvailability[originX][originY] = true;
-          return;
+    if(!HexValidation.isLocationNull(placementLocation, this)){
+          Hex presentHex = this.getHex(placementLocation);
+          presentHex.incrementLevel();
+          presentHex.setTerrain(hex.getTerrain());
+          presentHex.setTileId(hex.getTileId());
       }
-      gameBoard[x][y] = hex;
-      gameBoardAvailability[x][y] = true;
+      else {
+          gameBoard[x][y] = hex;
+          gameBoardAvailability[x][y] = true;
+          hex.setLocation(placementLocation);
+          hex.incrementLevel();
+      }
 
     }
+
+    Hex getHex(Pair<Integer, Integer> hexLocation) {
+        return gameBoard[hexLocation.getKey()][hexLocation.getValue()];
+    }
+
 
     public boolean[][] getGameBoardAvailability() {
         return gameBoardAvailability;
     }
+
+    public boolean getGameBoardAvailabilityAtCoordinatePair(Pair<Integer, Integer> coordinatePair) {
+
+        return gameBoardAvailability[coordinatePair.getKey()][coordinatePair.getValue()];
+    }
+
 }
