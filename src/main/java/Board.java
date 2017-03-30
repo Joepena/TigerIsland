@@ -45,6 +45,7 @@ public class Board {
                 }
 
 
+
             }
         }
     }
@@ -67,6 +68,7 @@ public class Board {
             hex.setLocation(placementLocation);
             hex.incrementLevel();
         }
+
 
     }
 
