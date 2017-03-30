@@ -6,8 +6,13 @@ public class TempHexHelpers {
 
     public static boolean isSameTeam(Hex hex1, Hex hex2){
 
+        if(hex1 == null || hex2 == null)
+            return false;
+
         Hex.Team team1 = hex1.getTeam();
         Hex.Team team2 = hex2.getTeam();
+
+
 
         return (team1 == team2);
     }

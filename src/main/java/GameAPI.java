@@ -1,7 +1,7 @@
 
 import javafx.util.Pair;
 
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * Created by Troy on 3/22/17.
@@ -74,7 +74,8 @@ public class GameAPI {
         Orientation.Orientations rightOrient = Orientation.getRightHexMapping(tile.getLeftHexOrientation());
 
         if (gameBoard.isOriginEmpty()){
-            coordinatePair = Orientation.getRelativeOriginValue();
+            coordinatePair = Orientation.getOriginValue();
+            tile.setLeftHexOrientation(Orientation.Orientations.downLeft);
         }
         if (isTileDestinationValid(tile, coordinatePair)){
             gameBoard.setHex(tile.getVolcano(), coordinatePair);
@@ -195,24 +196,82 @@ public class GameAPI {
     }
 
 
+    public ArrayList<Hex> getNeighbors (Pair<Integer,Integer> coordinates) {
+        ArrayList<Hex> neighbors = new ArrayList<>();
+
+        neighbors.add(gameBoard.getHex(Orientation.upLeftOf(coordinates)));
+        neighbors.add(gameBoard.getHex(Orientation.upRightOf(coordinates)));
+        neighbors.add(gameBoard.getHex(Orientation.downLeftOf(coordinates)));
+        neighbors.add(gameBoard.getHex(Orientation.downRightOf(coordinates)));
+        neighbors.add(gameBoard.getHex(Orientation.leftOf(coordinates)));
+        neighbors.add(gameBoard.getHex(Orientation.rightOf(coordinates)));
+
+        neighbors.removeAll(Collections.singleton(null));
+
+        return neighbors;
+
+    }
+
     ArrayList<Pair<Integer,Integer>> getValidNukingLocations() {
         if(gameBoard.isOriginEmpty()){
             return null;
         }
-        return null;
+        ArrayList<Pair<Integer,Integer>> validNukingLocations = new ArrayList<>();
+        HashMap<Pair<Integer,Integer>,Integer> traversedLocations = new HashMap<>();
+
+        ArrayList<Hex> neighbors;
+
+        Queue<Pair<Integer,Integer>> bfsQueue = new ArrayDeque<>();
+
+        bfsQueue.add(Orientation.getOriginValue());
+        traversedLocations.put(Orientation.getOriginValue(), 1);
+
+        while(!bfsQueue.isEmpty()){
+            Pair<Integer,Integer> coordinates = bfsQueue.remove();
+            if(isValidNukingCoordinates(coordinates)){
+                validNukingLocations.add(coordinates);
+            }
+            neighbors = getNeighbors(coordinates);
+
+            for(Hex neighbor : neighbors) {
+                if(!traversedLocations.containsKey(neighbor.getLocation())) {
+                    traversedLocations.put(neighbor.getLocation(), 1);
+                    bfsQueue.add(neighbor.getLocation());
+                }
+            }
+
+        }
+
+
+        return validNukingLocations;
     }
 
-    private boolean isValidNukingCoordinates(Pair<Integer, Integer> volcanoCoordinates){
-        Orientation.Orientations leftHexOrientation = Orientation.Orientations.upLeft;
 
-        return isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, leftHexOrientation));
+    public boolean isValidNukingCoordinates(Pair<Integer, Integer> volcanoCoordinates){
+        if(isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.downLeft)))
+            return true;
+        if(isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.downRight)))
+            return true;
+        if(isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.upLeft)))
+            return true;
+        if(isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.upRight)))
+            return true;
+        if(isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.left)))
+            return true;
+        if(isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.right)))
+            return true;
+
+        return false;
     }
 
-    private boolean isValidTileNukingPosition(TilePositionCoordinates tilePositionCoordinates){
+    public boolean isValidTileNukingPosition(TilePositionCoordinates tilePositionCoordinates){
 
         Hex hexUnderVolcano = gameBoard.getHex(tilePositionCoordinates.getVolcanoCoordinates());
         Hex hexUnderLeft = gameBoard.getHex(tilePositionCoordinates.getLeftHexCoordinates());
         Hex hexUnderRight = gameBoard.getHex(tilePositionCoordinates.getRightHexCoordinates());
+
+        if(hexUnderLeft == null || hexUnderRight == null)
+            return false;
 
         int settlementPiecesNuked = 0;
         int settlementSize = 3;
@@ -221,6 +280,9 @@ public class GameAPI {
             return false;
 
         if(hexUnderVolcano.getLevel() != hexUnderLeft.getLevel() || hexUnderLeft.getLevel() != hexUnderRight.getLevel())
+            return false;
+
+        if(hexUnderVolcano.getTileId() == hexUnderLeft.getTileId() && hexUnderRight.getTileId() == hexUnderVolcano.getTileId())
             return false;
 
         if(hexUnderVolcano.getOccupiedBy() != Hex.gamePieces.empty){
@@ -247,10 +309,10 @@ public class GameAPI {
     }
 
     public boolean isTileDestinationValid(Tile tile, Pair<Integer, Integer> destCoordPair){
-        Pair<Integer,Integer> originvalue = Orientation.getOriginValue();
-        Pair<Integer, Integer> absDestCoordPair = Orientation.addPairs(destCoordPair, originvalue);
+       // Pair<Integer,Integer> originvalue = Orientation.getOriginValue();
+       // Pair<Integer, Integer> absDestCoordPair = Orientation.addPairs(destCoordPair, originvalue);
 
-        if (isTileConnected(tile, absDestCoordPair)){
+        if (isTileConnected(tile, destCoordPair)){
             return true;
         }
 

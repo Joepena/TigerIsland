@@ -35,4 +35,6 @@ public class Tile {
   public Orientation.Orientations getLeftHexOrientation() {
     return leftHexOrientation;
   }
+
+  public void setLeftHexOrientation(Orientation.Orientations leftHexOrientation){ this.leftHexOrientation = leftHexOrientation;}
 }
