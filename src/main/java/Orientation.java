@@ -17,7 +17,7 @@ public class Orientation {
         downRight,
         downLeft
     }
-
+    private static final Pair<Integer, Integer> RELATIVEORIGIN = new Pair<>(0,0);
     private static final Pair<Integer, Integer> ORIGIN = new Pair<>(188,188);
     private static final Pair<Integer, Integer> UPRIGHT = new Pair<>(2,1);
     private static final Pair<Integer, Integer> UPLEFT = new Pair<>(2,-1);
@@ -25,6 +25,8 @@ public class Orientation {
     private static final Pair<Integer, Integer> LEFT = new Pair<>(0,-2);
     private static final Pair<Integer, Integer> DOWNRIGHT = new Pair<>(-2,1);
     private static final Pair<Integer, Integer> DOWNLEFT = new Pair<>(-2,-1);
+
+    public static Pair<Integer, Integer> getRelativeOriginValue(){return RELATIVEORIGIN;}
 
     public static Pair<Integer, Integer> getOriginValue() {
         return ORIGIN;
@@ -100,6 +102,17 @@ public class Orientation {
         Integer pair2Y = pair2.getValue();
 
         return new Pair<Integer,Integer> (pair1X + pair2X, pair1Y + pair2Y);
+
+    }
+
+    public static  Pair<Integer,Integer> subtractPairs (Pair<Integer,Integer> pair1, Pair<Integer,Integer> pair2){
+        Integer pair1X = pair1.getKey();
+        Integer pair1Y = pair1.getValue();
+
+        Integer pair2X = pair2.getKey();
+        Integer pair2Y = pair2.getValue();
+
+        return new Pair<Integer,Integer> (pair1X - pair2X, pair1Y - pair2Y);
 
     }
 
