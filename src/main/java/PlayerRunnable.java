@@ -2,6 +2,13 @@
  * Created by Troy on 3/27/17.
  */
 public class PlayerRunnable implements Runnable {
+
+
+    private Tile newTile;
+    private Boolean hasTile;
+    private Boolean gameOver;
+
+
     @Override
     public void run() {
         GameAPI game = new GameAPI();
@@ -9,24 +16,51 @@ public class PlayerRunnable implements Runnable {
         System.out.println("Totoro count of " + this.toString() + " is: " + game.getTotoroCount());
         System.out.println("Tiger count of " + this.toString() + " is: " + game.getTigerCount());
 
-        //Player
+        //Player Logic
+        while(!gameOver) {
 
-        //Receive piece
+            //Wait to receive piece
+            while (!hasTile);
 
-        //Check for tile placement options
+            //Check for tile placement options
+            
+            //Check for nuking options
 
-        //Check for nuking options
+            //Decide normal place or nuke
 
-        //Decide normal place or nuke
+            //Check settlements
 
-        //Check settlements
+            //Decide move
 
-        //Decide move
+            //Build/Expand/Tiger/Totoro
 
-        //Build/Expand/Tiger/Totoro
+            //End Turn
+        }
 
-        //End Turn
 
+    }
 
+    public Tile getNewTile() {
+        return newTile;
+    }
+
+    public void setNewTile(Tile newTile) {
+        this.newTile = newTile;
+    }
+
+    public Boolean getHasTile() {
+        return hasTile;
+    }
+
+    public void setHasTile(Boolean hasTile) {
+        this.hasTile = hasTile;
+    }
+
+    public Boolean getGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(Boolean gameOver) {
+        this.gameOver = gameOver;
     }
 }
