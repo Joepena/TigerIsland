@@ -60,33 +60,33 @@ public class BoardTest {
 
     @Test
     public void setHex() {
-        Pair<Integer,Integer> testPair = new Pair(0,0);
+        Pair<Integer,Integer> testPair = Orientation.getOriginValue();
         gameBoard.setHex(testHex, testPair);
         Assert.assertEquals("Place Hex Test", false, gameBoard.isOriginEmpty());
     }
 
     @Test
     public void getLocationTest() {
-        Pair<Integer,Integer> testPair = new Pair(0,0);
+        Pair<Integer,Integer> testPair = Orientation.getOriginValue();
         gameBoard.setHex(testHex, testPair);
-        Pair<Integer,Integer> secondPair = new Pair(1,0);
+        Pair<Integer,Integer> secondPair = Orientation.rightOf(testPair);
         Hex secondHex = new Hex(1, Terrain.terrainType.Grassland);
         gameBoard.setHex(secondHex, secondPair);
-        Assert.assertEquals(Orientation.addPairs(secondPair, Orientation.getOriginValue()), secondHex.getLocation());
+        Assert.assertEquals(secondPair, secondHex.getLocation());
     }
 
 
     @Test
     public void setHexLevel() {
-        Pair<Integer,Integer> testPair = new Pair(0,0);
+        Pair<Integer,Integer> testPair = Orientation.getOriginValue();
         gameBoard.setHex(testHex, testPair);
         Assert.assertEquals("Place Hex Test", 1, testHex.getLevel());
     }
 
     @Test
     public void setHexOnOtherHexUpdateTerrainTest() {
-        gameBoard.setHex(testHex, new Pair<>(0,0));
-        gameBoard.setHex(new Hex(1, Terrain.terrainType.Jungle), new Pair<>(0,0));
+        gameBoard.setHex(testHex, Orientation.getOriginValue());
+        gameBoard.setHex(new Hex(1, Terrain.terrainType.Jungle), Orientation.getOriginValue());
 
         Hex updatedHex = gameBoard.getHex(Orientation.getOriginValue());
         boolean valid = (updatedHex.getTerrain() == Terrain.terrainType.Jungle);
@@ -96,8 +96,8 @@ public class BoardTest {
 
     @Test
     public void setHexOnOtherHexUpdateTileIdTest() {
-        gameBoard.setHex(testHex, new Pair<>(0,0));
-        gameBoard.setHex(new Hex(1, Terrain.terrainType.Jungle), new Pair<>(0,0));
+        gameBoard.setHex(testHex, Orientation.getOriginValue());
+        gameBoard.setHex(new Hex(1, Terrain.terrainType.Jungle),Orientation.getOriginValue());
 
         Hex updatedHex = gameBoard.getHex(Orientation.getOriginValue());
         boolean valid = (updatedHex.getTileId() == 1);
@@ -107,23 +107,14 @@ public class BoardTest {
 
     @Test
     public void setHexOnOtherHexUpdateLevelTest() {
-        gameBoard.setHex(testHex, new Pair<>(0,0));
-        gameBoard.setHex(new Hex(1, Terrain.terrainType.Jungle), new Pair<>(0,0));
+        gameBoard.setHex(testHex, Orientation.getOriginValue());
+        gameBoard.setHex(new Hex(1, Terrain.terrainType.Jungle), Orientation.getOriginValue());
 
         Hex updatedHex = gameBoard.getHex(Orientation.getOriginValue());
         boolean valid = (updatedHex.getLevel() == 2);
 
         Assert.assertEquals("Place Hex on top of another Hex and increase level by 1", true, valid);
     }
-
-    @Test
-    public void printSectionedBoardTest(){
-        gameBoard.setHex(testHex, new Pair<>(0,0));
-        gameBoard.setHex(new Hex(1, Terrain.terrainType.Rocky), Orientation.getUpleftValue());
-        gameBoard.setHex(new Hex(1, Terrain.terrainType.Rocky), Orientation.addPairByOrientation(Orientation.getUpleftValue(), Orientation.Orientations.upRight));
-
-        Assert.assertEquals("printBoardTest", true, true);
-    }
-
+    
 
 }
