@@ -3,6 +3,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 /**
  * Created by TomasK on 3/27/2017.
  */
@@ -29,12 +31,11 @@ public class GameAPITest {
         game.placeTile(tile1, tile1Loc);
         game.placeTile(tile2, tile2Loc);
 
-        game.gameBoard.printSectionedBoard();
 
     }
 
     @Test
-    public void placeTileOnWholeTileTest () throws Exception {
+    public void validatePlaceTileOnWholeTileTest () throws Exception {
         createLandMass();
 
         Tile newTile = new Tile(3, Terrain.terrainType.Jungle, Terrain.terrainType.Grassland, Orientation.Orientations.downLeft);
@@ -44,7 +45,7 @@ public class GameAPITest {
     }
 
     @Test
-    public void placeTileOnUnevenLevel() throws Exception {
+    public void validatePlaceTileOnUnevenLevel() throws Exception {
         createLandMass ();
 
         Tile additionalTile = new Tile(3, Terrain.terrainType.Grassland, Terrain.terrainType.Rocky, Orientation.Orientations.downLeft);
@@ -52,11 +53,13 @@ public class GameAPITest {
 
         game.placeTile(additionalTile, additionPosition.getVolcanoCoordinates());
 
-        game.gameBoard.printSectionedBoard();
+        TilePositionCoordinates testPosition = new TilePositionCoordinates(Orientation.upRightOf(Orientation.getOriginValue()), Orientation.Orientations.left);
+
+        Assert.assertEquals("Placing tile on uneven hex levels", false, game.isValidTileNukingPosition(testPosition));
     }
 
     @Test
-    public void placeTileOnTotoro() throws Exception {
+    public void validatePlaceTileOnTotoro() throws Exception {
         createLandMass();
 
         Hex hex =  game.gameBoard.getHex(Orientation.getOriginValue());
@@ -71,7 +74,7 @@ public class GameAPITest {
     }
 
     @Test
-    public void placeTileOnTiger() throws Exception {
+    public void validatePlaceTileOnTiger() throws Exception {
         createLandMass();
 
         Hex hex =  game.gameBoard.getHex(Orientation.getOriginValue());
@@ -85,7 +88,7 @@ public class GameAPITest {
     }
 
     @Test
-    public void placeTileOnLevelOneSettlement() throws Exception {
+    public void validatePlaceTileOnLevelOneSettlement() throws Exception {
         createLandMass();
 
         Hex hex =  game.gameBoard.getHex(Orientation.getOriginValue());
@@ -100,12 +103,25 @@ public class GameAPITest {
     }
 
     @Test
-    public void placeTileOnEntireSettlement() throws Exception {
+    public void getListOfValidLocationsTest() throws Exception {
+        createLandMass();
+        ArrayList<Pair<Integer,Integer>> nukingLocations = game.getValidNukingLocations();
+        ArrayList<Pair<Integer,Integer>> correctLocations = new ArrayList<>();
+
+        correctLocations.add(Orientation.getOriginValue());
+        correctLocations.add(Orientation.upRightOf(Orientation.getOriginValue()));
+        correctLocations.add(Orientation.rightOf(Orientation.upRightOf(Orientation.getOriginValue())));
+
+        Assert.assertEquals("Testing valid locations list creation", true, nukingLocations.containsAll(correctLocations));
+    }
+
+    @Test
+    public void validatePlaceTileOnEntireSettlement() throws Exception {
 
     }
 
     @Test
-    public void placeTileOnThreeOccupiedHexesOfLevel4Settlement() throws Exception {
+    public void validatePlaceTileOnThreeOccupiedHexesOfLevel4Settlement() throws Exception {
 
     }
 

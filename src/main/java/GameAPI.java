@@ -1,7 +1,6 @@
 import javafx.util.Pair;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Created by Troy on 3/22/17.
@@ -13,7 +12,6 @@ public class GameAPI {
     private int totoroCount;
     private int tigerCount;
     private int victoryPoints;
-    private ArrayList<Pair<Integer,Integer>> validNukingLocations;
 
     public GameAPI() {
         villagerCount = 20;
@@ -88,26 +86,46 @@ public class GameAPI {
         neighbors.add(gameBoard.getHex(Orientation.leftOf(coordinates)));
         neighbors.add(gameBoard.getHex(Orientation.rightOf(coordinates)));
 
+        neighbors.removeAll(Collections.singleton(null));
+
         return neighbors;
 
     }
 
     ArrayList<Pair<Integer,Integer>> getValidNukingLocations() {
-        HashMap<Pair<Integer,Integer>,Integer> traversedLocations = new HashMap<>();
-
-        ArrayList<Pair<Integer,Integer> neighbors = new ArrayList<>();
-
         if(gameBoard.isOriginEmpty()){
             return null;
         }
-        return null;
+        ArrayList<Pair<Integer,Integer>> validNukingLocations = new ArrayList<>();
+        HashMap<Pair<Integer,Integer>,Integer> traversedLocations = new HashMap<>();
+
+        ArrayList<Hex> neighbors;
+
+        Queue<Pair<Integer,Integer>> bfsQueue = new ArrayDeque<>();
+
+        bfsQueue.add(Orientation.getOriginValue());
+        traversedLocations.put(Orientation.getOriginValue(), 1);
+
+        while(!bfsQueue.isEmpty()){
+            Pair<Integer,Integer> coordinates = bfsQueue.remove();
+            if(isValidNukingCoordinates(coordinates)){
+                validNukingLocations.add(coordinates);
+            }
+            neighbors = getNeighbors(coordinates);
+
+            for(Hex neighbor : neighbors) {
+                if(!traversedLocations.containsKey(neighbor.getLocation())) {
+                    traversedLocations.put(neighbor.getLocation(), 1);
+                    bfsQueue.add(neighbor.getLocation());
+                }
+            }
+
+        }
+
+
+        return validNukingLocations;
     }
 
-    public void searchForNukingLocations(Pair<Integer,Integer> coordinates, HashMap<Pair<Integer,Integer>,Integer> traversedLocations){
-
-
-        return;
-    }
 
     public boolean isValidNukingCoordinates(Pair<Integer, Integer> volcanoCoordinates){
         if(isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.downLeft)))
@@ -131,6 +149,9 @@ public class GameAPI {
         Hex hexUnderVolcano = gameBoard.getHex(tilePositionCoordinates.getVolcanoCoordinates());
         Hex hexUnderLeft = gameBoard.getHex(tilePositionCoordinates.getLeftHexCoordinates());
         Hex hexUnderRight = gameBoard.getHex(tilePositionCoordinates.getRightHexCoordinates());
+
+        if(hexUnderLeft == null || hexUnderRight == null)
+            return false;
 
         int settlementPiecesNuked = 0;
         int settlementSize = 3;
