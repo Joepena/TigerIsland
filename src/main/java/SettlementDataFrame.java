@@ -18,9 +18,9 @@ public class SettlementDataFrame implements Comparable<SettlementDataFrame>{
     this.gamePiece = gamePiece;
   }
 
-  public SettlementDataFrame(int settlementlevel,
+  public SettlementDataFrame(int settlementSize,
     Pair<Integer, Integer> settlementStartingLocation) {
-    this.settlementSize = settlementlevel;
+    this.settlementSize = settlementSize;
     this.settlementStartingLocation = settlementStartingLocation;
   }
 
