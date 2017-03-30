@@ -21,7 +21,7 @@ public class HexValidationTest {
     @Test
     public void existsAdjacentHexSuccessTest() {
         Hex firstHex = new Hex(0, Terrain.terrainType.Jungle);
-        Pair<Integer, Integer> hex1Loc = new Pair(0, 0);
+        Pair<Integer, Integer> hex1Loc = Orientation.getOriginValue();
         gameBoard.setHex(firstHex, hex1Loc);
 
         Integer firstHexLocX = firstHex.getLocation().getKey();
@@ -38,7 +38,7 @@ public class HexValidationTest {
     @Test
     public void existsAdjacentHexFailureTest() {
         Hex firstHex = new Hex(0, Terrain.terrainType.Jungle);
-        Pair<Integer, Integer> hex1Loc = new Pair(0, 0);
+        Pair<Integer, Integer> hex1Loc = Orientation.getOriginValue();
         gameBoard.setHex(firstHex, hex1Loc);
 
         Integer firstHexLocX = firstHex.getLocation().getKey();
@@ -110,12 +110,12 @@ public class HexValidationTest {
 
     @Test
     public void nukeMeepleValidationSuccessTest() {
-        gameBoard.setHex(new Hex(0, Terrain.terrainType.Jungle), new Pair<>(4, 0));
-        Pair<Integer,Integer> testingLocation = new Pair<>(192,188);
-        gameBoard.setHex(new Hex(0, Terrain.terrainType.Jungle), new Pair<>(4, 0));
+        gameBoard.setHex(new Hex(0, Terrain.terrainType.Jungle), Orientation.rightOf(Orientation.rightOf(Orientation.getOriginValue())));
+        Pair<Integer,Integer> testingLocation =Orientation.rightOf(Orientation.rightOf(Orientation.getOriginValue()));
+        gameBoard.setHex(new Hex(0, Terrain.terrainType.Jungle), Orientation.rightOf(Orientation.rightOf(Orientation.getOriginValue())));
         gameBoard.getHex(testingLocation).setOccupiedBy(Hex.gamePieces.Meeple);
         gameBoard.getHex(testingLocation).setTeam(Hex.Team.Black);
-        setHexesAroundCoordinates(new Pair<>(4, 0));
+        setHexesAroundCoordinates(Orientation.rightOf(Orientation.rightOf(Orientation.getOriginValue())));
 
         gameBoard.getHex(Orientation.addPairByOrientation(testingLocation, Orientation.Orientations.downLeft)).setOccupiedBy(Hex.gamePieces.Meeple);
         gameBoard.getHex(Orientation.addPairByOrientation(testingLocation, Orientation.Orientations.downLeft)).setTeam(Hex.Team.Black);
@@ -126,12 +126,12 @@ public class HexValidationTest {
 
     @Test
     public void nukeMeepleValidationFailureTest() {
-        gameBoard.setHex(new Hex(0, Terrain.terrainType.Jungle), new Pair<>(4, 0));
-        Pair<Integer,Integer> testingLocation = new Pair<>(192,188);
-        gameBoard.setHex(new Hex(0, Terrain.terrainType.Jungle), new Pair<>(4, 0));
+        gameBoard.setHex(new Hex(0, Terrain.terrainType.Jungle), Orientation.rightOf(Orientation.rightOf(Orientation.getOriginValue())));
+        Pair<Integer,Integer> testingLocation = Orientation.rightOf(Orientation.rightOf(Orientation.getOriginValue()));
+        gameBoard.setHex(new Hex(0, Terrain.terrainType.Jungle), Orientation.rightOf(Orientation.rightOf(Orientation.getOriginValue())));
         gameBoard.getHex(testingLocation).setOccupiedBy(Hex.gamePieces.Meeple);
         gameBoard.getHex(testingLocation).setTeam(Hex.Team.Black);
-        setHexesAroundCoordinates(new Pair<>(4, 0));
+        setHexesAroundCoordinates(Orientation.rightOf(Orientation.rightOf(Orientation.getOriginValue())));
 
         gameBoard.getHex(Orientation.addPairByOrientation(testingLocation, Orientation.Orientations.downLeft)).setOccupiedBy(Hex.gamePieces.Meeple);
         gameBoard.getHex(Orientation.addPairByOrientation(testingLocation, Orientation.Orientations.downLeft)).setTeam(Hex.Team.White);
