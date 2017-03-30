@@ -15,6 +15,7 @@ public class GameAPI {
     private int victoryPoints;
     private Settlements whiteSettlements;
     private Settlements blackSettlements;
+    private final int BOARD_EDGE = 376;
 
     public GameAPI() {
         villagerCount = 20;
@@ -113,7 +114,7 @@ public class GameAPI {
       int yCord = pair.getValue();
 
       //edge case
-      if(!availabilityGrid[xCord][yCord] || pair.getKey() >= 376 || pair.getValue() >= 376) return;
+      if(!availabilityGrid[xCord][yCord] || pair.getKey() >= BOARD_EDGE || pair.getValue() >= BOARD_EDGE) return;
 
       //invalidate the position
       Hex h = gameBoard.getHex(pair);
