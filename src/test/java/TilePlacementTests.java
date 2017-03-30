@@ -51,9 +51,6 @@ public class TilePlacementTests {
         Pair<Integer, Integer> testCoords = Orientation.addPairByOrientation(originCoords, Orientation.Orientations.upRight);
         testCoords = Orientation.addPairByOrientation(testCoords, Orientation.Orientations.upRight);
 
-        game.placeTile(testTile, testCoords);
-        game.gameBoard.printSectionedBoard();
-
         Assert.assertEquals("test",true,game.isTileDestinationValid(testTile, testCoords));
 
     }
@@ -66,9 +63,6 @@ public class TilePlacementTests {
         Pair<Integer, Integer> testCoords = Orientation.addPairByOrientation(originCoords, Orientation.Orientations.downLeft);
         testCoords = Orientation.addPairByOrientation(testCoords, Orientation.Orientations.downRight);
         testCoords = Orientation.addPairByOrientation(testCoords, Orientation.Orientations.downRight);
-
-        game.placeTile(testTile, testCoords);
-        game.gameBoard.printSectionedBoard();
 
         Assert.assertEquals("test",false,game.isTileDestinationValid(testTile, testCoords));
 
