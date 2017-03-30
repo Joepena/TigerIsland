@@ -129,7 +129,7 @@ public class GameAPI {
         }
         else if(df.getOwnedBy() != h.getTeam()){
           // we call dfs for a new clean dataFrame
-          dfsSearch(availabilityGrid,pair,settlement,new SettlementDataFrame(0,new Pair<>(0,0)));
+          dfsSearch(availabilityGrid,pair,settlement,new SettlementDataFrame(0,Orientation.getOriginValue()));
         }
         else {
           // matching ownership
@@ -144,18 +144,18 @@ public class GameAPI {
 
         dfsSearch(availabilityGrid,
           Orientation.addPairByOrientation(pair, Orientation.Orientations.downLeft), settlement,
-          new SettlementDataFrame(0,new Pair<>(0,0)));
+          new SettlementDataFrame(0,Orientation.getOriginValue()));
         dfsSearch(availabilityGrid,
           Orientation.addPairByOrientation(pair, Orientation.Orientations.downRight), settlement,
-          new SettlementDataFrame(0,new Pair<>(0,0)));
+          new SettlementDataFrame(0,Orientation.getOriginValue()));
         dfsSearch(availabilityGrid,
-          Orientation.addPairByOrientation(pair, Orientation.Orientations.left), settlement, new SettlementDataFrame(0,new Pair<>(0,0)));
+          Orientation.addPairByOrientation(pair, Orientation.Orientations.left), settlement, new SettlementDataFrame(0,Orientation.getOriginValue()));
         dfsSearch(availabilityGrid,
-          Orientation.addPairByOrientation(pair, Orientation.Orientations.right), settlement, new SettlementDataFrame(0,new Pair<>(0,0)));
+          Orientation.addPairByOrientation(pair, Orientation.Orientations.right), settlement, new SettlementDataFrame(0,Orientation.getOriginValue()));
         dfsSearch(availabilityGrid,
-          Orientation.addPairByOrientation(pair, Orientation.Orientations.upLeft), settlement, new SettlementDataFrame(0,new Pair<>(0,0)));
+          Orientation.addPairByOrientation(pair, Orientation.Orientations.upLeft), settlement, new SettlementDataFrame(0,Orientation.getOriginValue()));
         dfsSearch(availabilityGrid,
-          Orientation.addPairByOrientation(pair, Orientation.Orientations.upRight), settlement, new SettlementDataFrame(0,new Pair<>(0,0)));
+          Orientation.addPairByOrientation(pair, Orientation.Orientations.upRight), settlement, new SettlementDataFrame(0,Orientation.getOriginValue()));
       }
       //edge case #2: we have a team but this hex is not
       else if(df.getOwnedBy() != null){
