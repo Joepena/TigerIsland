@@ -21,6 +21,24 @@ public class BoardTest {
     }
 
     @Test
+    public void getTileIdTest() { Assert.assertEquals(0, testHex.getTileId());}
+
+    @Test
+    public void getLevelOfUnplacedHexTest() { Assert.assertEquals(0, testHex.getLevel());}
+
+    @Test
+    public void getDefaultTeamTest() { Assert.assertEquals(Hex.Team.Neutral, testHex.getTeam());}
+
+    @Test
+    public void getOccupiedByNothingTest() { Assert.assertEquals(Hex.gamePieces.empty, testHex.getOccupiedBy());}
+
+    @Test
+    public void getOccupiedByGamePieceTest() {
+        testHex.setOccupiedBy(Hex.gamePieces.Meeple);
+        Assert.assertEquals(Hex.gamePieces.Meeple, testHex.getOccupiedBy());
+    }
+
+    @Test
     public void createHexObject() {
         Assert.assertTrue(testHex instanceof Hex);
     }
@@ -46,6 +64,17 @@ public class BoardTest {
         gameBoard.setHex(testHex, testPair);
         Assert.assertEquals("Place Hex Test", false, gameBoard.isOriginEmpty());
     }
+
+    @Test
+    public void getLocationTest() {
+        Pair<Integer,Integer> testPair = new Pair(0,0);
+        gameBoard.setHex(testHex, testPair);
+        Pair<Integer,Integer> secondPair = new Pair(1,0);
+        Hex secondHex = new Hex(1, Terrain.terrainType.Grassland);
+        gameBoard.setHex(secondHex, secondPair);
+        Assert.assertEquals(Orientation.addPairs(secondPair, Orientation.getOriginValue()), secondHex.getLocation());
+    }
+
 
     @Test
     public void setHexLevel() {
@@ -87,6 +116,14 @@ public class BoardTest {
         Assert.assertEquals("Place Hex on top of another Hex and increase level by 1", true, valid);
     }
 
+    @Test
+    public void printSectionedBoardTest(){
+        gameBoard.setHex(testHex, new Pair<>(0,0));
+        gameBoard.setHex(new Hex(1, Terrain.terrainType.Rocky), Orientation.getUpleftValue());
+        gameBoard.setHex(new Hex(1, Terrain.terrainType.Rocky), Orientation.addPairByOrientation(Orientation.getUpleftValue(), Orientation.Orientations.upRight));
+
+        Assert.assertEquals("printBoardTest", true, true);
+    }
 
 
 }
