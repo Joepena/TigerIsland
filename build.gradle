@@ -44,21 +44,15 @@ sourceSets {
 }
 repositories {
     mavenCentral()
-    jcenter()
 }
 
-jacoco {
-  toolVersion = '0.7.1.201405082137'
-}
-
-task jacocoRootReport(type: org.gradle.testing.jacoco.tasks.JacocoReport) {
-  dependsOn = subprojects.test
-  sourceDirectories = files(sourceSets.main.allSource.srcDirs)
-  classDirectories =  files(sourceSets.main.output)
-  executionData = files(subprojects.jacocoTestReport.executionData)
+jacocoTestReport {
   reports {
-    html.enabled = true
     xml.enabled = true
-    csv.enabled = false
+    html.enabled = true
   }
 }
+
+check.dependsOn jacocoTestReport
+
+
