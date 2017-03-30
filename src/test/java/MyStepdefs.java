@@ -21,7 +21,7 @@ public class MyStepdefs {
     public void setupBoardForHexTest () throws Throwable {
       testBoard = new Board();
       testHex = new Hex(0, Terrain.terrainType.Jungle);
-      testPair = new Pair(0, 0);
+      testPair = Orientation.getOriginValue();
 
     }
 
@@ -74,7 +74,7 @@ public class MyStepdefs {
         Terrain.terrainType terrainRight = Terrain.terrainType.Lake;
         Orientation.Orientations leftOrientation = Orientation.Orientations.downLeft;
         testTile = new Tile(1,terrainLeft,terrainRight,leftOrientation);
-        testPair = new Pair(0, 0);
+        testPair = Orientation.getOriginValue();
 
     }
 
@@ -95,7 +95,7 @@ public class MyStepdefs {
         testBoard = new Board();
         validate = new HexValidation();
         testHex = new Hex(0, Terrain.terrainType.Jungle);
-        testPair = new Pair(0, 0);
+        testPair = Orientation.getOriginValue();
         testBoard.setHex(testHex, testPair);
     }
 
@@ -104,11 +104,10 @@ public class MyStepdefs {
         Hex hexToPlace = new Hex(1, Terrain.terrainType.Lake);
 
         Pair firstHexLoc = new Pair(testHex.getLocation().getKey(), testHex.getLocation().getValue());
-        Pair hex2Loc = Orientation.addPairs(firstHexLoc, Orientation.getUpleftValue());
-        Pair pairToPlace = Orientation.subtractPairs(hex2Loc, Orientation.getOriginValue());
+        Pair hex2Loc = Orientation.upLeftOf(firstHexLoc);
 
         if(validate.existsAdjacentHex(hex2Loc, testBoard))
-            testBoard.setHex(hexToPlace, pairToPlace);
+            testBoard.setHex(hexToPlace, hex2Loc);
     }
 
     @Then("^the hex will be placed on the board")
@@ -121,7 +120,7 @@ public class MyStepdefs {
         testBoard = new Board();
         validate = new HexValidation();
         testHex = new Hex(0, Terrain.terrainType.Jungle);
-        testPair = new Pair(0, 0);
+        testPair = Orientation.getOriginValue();
         testBoard.setHex(testHex, testPair);
     }
 
@@ -130,12 +129,10 @@ public class MyStepdefs {
         Hex hexToPlace = new Hex(1, Terrain.terrainType.Lake);
 
         Pair firstHexLoc = new Pair(testHex.getLocation().getKey(), testHex.getLocation().getValue());
-        Pair hex2Loc = Orientation.addPairs(firstHexLoc, Orientation.addPairs(Orientation.getUpleftValue(), Orientation.getUpleftValue()));
-        Pair pairToPlace = Orientation.subtractPairs(hex2Loc, Orientation.getOriginValue());
+        Pair hex2Loc = Orientation.upLeftOf(Orientation.upLeftOf(firstHexLoc));
 
         if(validate.existsAdjacentHex(hex2Loc, testBoard))
-            testBoard.setHex(hexToPlace, pairToPlace);
-
+            testBoard.setHex(hexToPlace, hex2Loc);
     }
 
     @Then("^the hex will be not placed on the board")

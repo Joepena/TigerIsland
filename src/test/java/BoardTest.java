@@ -115,6 +115,6 @@ public class BoardTest {
 
         Assert.assertEquals("Place Hex on top of another Hex and increase level by 1", true, valid);
     }
-    
+
 
 }
