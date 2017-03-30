@@ -52,6 +52,8 @@ public class TilePlacementTests {
         testCoords = Orientation.addPairByOrientation(testCoords, Orientation.Orientations.upRight);
         testCoords = Orientation.addPairByOrientation(testCoords, Orientation.Orientations.upRight);
 
+        game.gameBoard.printSectionedBoard();
+
         Assert.assertEquals("test",true,game.isTileDestinationValid(testTile, testCoords));
 
     }
