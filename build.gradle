@@ -47,11 +47,11 @@ repositories {
 
 test {
   testLogging.showStandardStreams = true
+  println 'Starting the JUnit test'
+  include '**/*Test*'
 }
 
-task testSuite(type: Test) {
-  include 'JUnitRunner.class'
-}
+
 
 
 
