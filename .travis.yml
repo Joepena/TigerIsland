@@ -3,5 +3,6 @@ jdk:
   - oraclejdk8
 script:
   - ./gradlew clean test
+  - ./gradlew clean testSuite
 after_success:
   - bash <(curl -s https://codecov.io/bash)

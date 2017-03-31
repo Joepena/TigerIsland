@@ -49,5 +49,9 @@ test {
   testLogging.showStandardStreams = true
 }
 
+task testSuite(type: Test) {
+  include 'JUnitRunner.class'
+}
+
 
 
