@@ -13,7 +13,8 @@ import org.junit.runners.Suite;
   OrientationClassTest.class,
   TilePlacementTests.class,
   TileTest.class,
-  updateSettlementsTest.class
+  updateSettlementsTest.class,
+  HexValidationTest.class
 })
 
 public class JUnitRunner {
