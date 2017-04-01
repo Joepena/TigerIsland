@@ -157,7 +157,7 @@ public class MyStepdefs {
     }
 
     @Given("^there a settlement of size five or greater for the player's team")
-    public void there_a_settlement_of_size_or_greater_for_the_player_s_team() throws Throwable {
+    public void there_a_settlement_of_size_5_or_greater_for_the_player_s_team() throws Throwable {
 
     }
 
@@ -201,5 +201,34 @@ public class MyStepdefs {
 
     }
 
+    @Given("^a player places a totoro on the board")
+    public void a_player_places_a_totoro_on_the_board() throws Throwable {
+
+    }
+
+    @When("^the totoro is placed in a valid location")
+    public void the_totoro_is_placed_in_a_valid_location() throws Throwable {
+
+    }
+
+    @Then("^player's score goes up by 200 points")
+    public void player_s_score_goes_up_by_200_points() throws Throwable {
+
+    }
+
+    @Given("^a player places a tiger on the board")
+    public void a_player_places_a_tiger_on_the_board() throws Throwable {
+
+    }
+
+    @When("^the tiger is placed")
+    public void the_tiger_is_placed() throws Throwable {
+
+    }
+
+    @Then("^player's score goes up by 75 points")
+    public void player_s_score_goes_up_by_75_points() throws Throwable {
+
+    }
 
 }
