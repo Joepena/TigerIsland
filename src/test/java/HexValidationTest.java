@@ -126,6 +126,7 @@ public class HexValidationTest {
 
     @Test
     public void nukeMeepleValidationFailureTest() {
+        gameBoard.setHex(new Hex(0, Terrain.terrainType.Rocky), Orientation.getOriginValue());
         gameBoard.setHex(new Hex(0, Terrain.terrainType.Jungle), Orientation.rightOf(Orientation.rightOf(Orientation.getOriginValue())));
         Pair<Integer,Integer> testingLocation = Orientation.rightOf(Orientation.rightOf(Orientation.getOriginValue()));
         gameBoard.setHex(new Hex(0, Terrain.terrainType.Jungle), Orientation.rightOf(Orientation.rightOf(Orientation.getOriginValue())));

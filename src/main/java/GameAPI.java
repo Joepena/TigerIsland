@@ -334,4 +334,14 @@ public class GameAPI {
         valid = valid || HexValidation.existsAdjacentHex(rightCoordPair, gameBoard);
         return valid;
     }
+
+    public boolean canSelectBuildTotoro() {
+
+        ArrayList<SettlementDataFrame> blackSettlements = getBlackSettlements().getListOfSettlements();
+        ArrayList<SettlementDataFrame> whiteSettlements = getWhiteSettlements().getListOfSettlements();
+
+
+        return false;
+    }
+
 }
