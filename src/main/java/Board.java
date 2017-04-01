@@ -28,6 +28,7 @@ public class Board {
     }
     else {
       Tuple actualCoordinates = calculateOffset(coordinates);
+      gameBoardAvailability[actualCoordinates.getX()][actualCoordinates.getY()][actualCoordinates.getZ()] = true;
       gameBoard[actualCoordinates.getX()][actualCoordinates.getY()][actualCoordinates.getZ()] = hex;
       hex.setLocation(coordinates);
       hex.incrementLevel();
