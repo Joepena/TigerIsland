@@ -338,9 +338,11 @@ public class GameAPI {
     public boolean canSelectBuildTotoro() {
 
         ArrayList<SettlementDataFrame> blackSettlements = getBlackSettlements().getListOfSettlements();
-        ArrayList<SettlementDataFrame> whiteSettlements = getWhiteSettlements().getListOfSettlements();
 
-
+        for(int i = 0; i < blackSettlements.size(); i++) {
+            if(blackSettlements.get(i).getSettlementSize() >= 5)
+                return true;
+        }
         return false;
     }
 

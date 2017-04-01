@@ -16,26 +16,38 @@ public class TotoroValidationTest {
     }
 
     @Test
-    public void testTVScenario1() {
-        setUpTVScenario1();
+    public void totoroValidation() {
+        setUpTotoroValidationScenario1();
         gameAPI.updateSettlements();
-        ArrayList<SettlementDataFrame> blackActual = gameAPI.getBlackSettlements().getListOfSettlements();
-        for(int i = 0; i < blackActual.size(); i++)
-        {
-            System.out.println(blackActual.get(i).getSettlementSize());
-        }
-
         gameAPI.gameBoard.printSectionedBoard();
 
+    }
 
-        Assert.assertEquals(true, true);
+
+    @Test
+    public void canSelectBuildTotoroTestPass() {
+        setUpTotoroValidationScenario1();
+        gameAPI.updateSettlements();
+        boolean pass = gameAPI.canSelectBuildTotoro();
+
+        Assert.assertEquals(true, pass);
+    }
+
+    @Test
+    public void canSelectBuildTotoroTestFail() {
+        setUpTotoroValidationScenario1();
+        gameAPI.gameBoard.getHex(Orientation.rightOf(Orientation.getOriginValue())).setTeam(Hex.Team.White);
+        gameAPI.updateSettlements();
+        boolean pass = gameAPI.canSelectBuildTotoro();
+
+        Assert.assertEquals(false, pass);
     }
 
 
 
 
 
-    private void setUpTVScenario1() {
+    private void setUpTotoroValidationScenario1() {
         Hex hex1 = new Hex(1, Terrain.terrainType.Volcano);
         Hex hex2 = new Hex(1, Terrain.terrainType.Grassland);
         Hex hex3 = new Hex(1, Terrain.terrainType.Rocky);
@@ -47,6 +59,10 @@ public class TotoroValidationTest {
         Hex hex7 = new Hex(3, Terrain.terrainType.Volcano);
         Hex hex8 = new Hex(3, Terrain.terrainType.Grassland);
         Hex hex9 = new Hex(3, Terrain.terrainType.Rocky);
+
+        Hex hex10 = new Hex(4, Terrain.terrainType.Rocky);
+        Hex hex11 = new Hex(4, Terrain.terrainType.Grassland);
+        Hex hex12 = new Hex(4, Terrain.terrainType.Volcano);
 
         hex9.setTeam(Hex.Team.Black);
         hex8.setTeam(Hex.Team.Black);
@@ -73,6 +89,10 @@ public class TotoroValidationTest {
         gameAPI.gameBoard.setHex(hex8, Orientation.upLeftOf(Orientation.getOriginValue()));
         gameAPI.gameBoard.setHex(hex7, Orientation.leftOf(hex8.getLocation()));
         gameAPI.gameBoard.setHex(hex9, Orientation.upRightOf(hex7.getLocation()));
+
+        gameAPI.gameBoard.setHex(hex10, Orientation.rightOf(hex9.getLocation()));
+        gameAPI.gameBoard.setHex(hex11, Orientation.upRightOf(hex9.getLocation()));
+        gameAPI.gameBoard.setHex(hex12, Orientation.rightOf(hex11.getLocation()));
 
     }
 
