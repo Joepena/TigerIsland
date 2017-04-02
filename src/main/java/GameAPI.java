@@ -347,4 +347,16 @@ public class GameAPI {
         return valid;
 
     }
+
+    public boolean canSelectBuildTotoro() {
+
+        ArrayList<SettlementDataFrame> blackSettlements = getBlackSettlements().getListOfSettlements();
+
+        for(int i = 0; i < blackSettlements.size(); i++) {
+            if(blackSettlements.get(i).getSettlementSize() >= 5)
+                return true;
+        }
+        return false;
+    }
+
 }
