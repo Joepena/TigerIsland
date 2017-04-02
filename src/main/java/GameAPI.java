@@ -15,7 +15,7 @@ public class GameAPI {
     private int victoryPoints;
     private Settlements whiteSettlements;
     private Settlements blackSettlements;
-    private final int BOARD_EDGE = 194;
+    private final int BOARD_EDGE = 97;
 
     public GameAPI() {
         villagerCount = 20;
@@ -118,8 +118,10 @@ public class GameAPI {
         int xCord = coord.getX();
         int yCord = coord.getY();
         int zCord = coord.getZ();
+        Tuple offset = gameBoard.calculateOffset(coord);
         //edge case
-        if(xCord >= BOARD_EDGE || yCord >= BOARD_EDGE || zCord >= BOARD_EDGE|| !availabilityGrid[xCord][yCord][zCord]) return;
+        if(xCord >= BOARD_EDGE || xCord <= -BOARD_EDGE|| yCord >= BOARD_EDGE || yCord <= -BOARD_EDGE || zCord >= BOARD_EDGE|| zCord <= -BOARD_EDGE
+          || !availabilityGrid[offset.getX()][offset.getY()][offset.getZ()]) return;
 
         //invalidate the position
         Hex h = gameBoard.getHex(coord);
@@ -143,7 +145,7 @@ public class GameAPI {
             }
         }
 
-        availabilityGrid[xCord][yCord][yCord] = false;
+        availabilityGrid[offset.getX()][offset.getY()][offset.getZ()] = false;
 
         //edge case #1: we have a team but this hex is neutral. We do not want to carry this df anymore
         if(df.getOwnedBy() != null && h.getTeam() == Hex.Team.Neutral) {
