@@ -1,8 +1,8 @@
--language: java
- -jdk:
- -  - oraclejdk8
- -script:
- -  - ./gradlew clean test
- -branches:
- -  only:
- -    - development
+language: java
+  jdk:
+  - oraclejdk8
+ script:
+   - ./gradlew clean test
+ branches:
+  only:
+     - development
