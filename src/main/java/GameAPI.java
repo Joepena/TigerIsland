@@ -1,4 +1,5 @@
 
+import com.sun.org.apache.xpath.internal.operations.Or;
 import javafx.util.Pair;
 
 import java.util.*;
@@ -136,6 +137,7 @@ public class GameAPI {
             if(df.getOwnedBy() == null) {
                 df.setOwnedBy(h.getTeam());
                 df.setSettlementSize(1);
+                df.addLocationListOfHexes(coord);
                 df.setSettlementStartingLocation(coord);
                 settlement.addNewSettlement(df);
             }
@@ -146,6 +148,7 @@ public class GameAPI {
             else {
                 // matching ownership
                 df.setSettlementSize(df.getSettlementSize()+1);
+                df.addLocationListOfHexes(coord);
             }
         }
 
@@ -154,20 +157,12 @@ public class GameAPI {
         //edge case #1: we have a team but this hex is neutral. We do not want to carry this df anymore
         if(df.getOwnedBy() != null && h.getTeam() == Hex.Team.Neutral) {
 
-            dfsSearch(availabilityGrid,
-                    Orientation.addCoordinatesByOrientation(coord, Orientation.Orientations.downLeft), settlement,
-                    new SettlementDataFrame(0,Orientation.getOrigin()));
-            dfsSearch(availabilityGrid,
-                    Orientation.addCoordinatesByOrientation(coord, Orientation.Orientations.downRight), settlement,
-                    new SettlementDataFrame(0,Orientation.getOrigin()));
-            dfsSearch(availabilityGrid,
-                    Orientation.addCoordinatesByOrientation(coord, Orientation.Orientations.left), settlement, new SettlementDataFrame(0,Orientation.getOrigin()));
-            dfsSearch(availabilityGrid,
-                    Orientation.addCoordinatesByOrientation(coord, Orientation.Orientations.right), settlement, new SettlementDataFrame(0,Orientation.getOrigin()));
-            dfsSearch(availabilityGrid,
-                    Orientation.addCoordinatesByOrientation(coord, Orientation.Orientations.upLeft), settlement, new SettlementDataFrame(0,Orientation.getOrigin()));
-            dfsSearch(availabilityGrid,
-                    Orientation.addCoordinatesByOrientation(coord, Orientation.Orientations.upRight), settlement, new SettlementDataFrame(0,Orientation.getOrigin()));
+            dfsSearch(availabilityGrid, Orientation.downLeftOf(coord), settlement, new SettlementDataFrame(0,Orientation.getOrigin()));
+            dfsSearch(availabilityGrid, Orientation.downRightOf(coord), settlement, new SettlementDataFrame(0,Orientation.getOrigin()));
+            dfsSearch(availabilityGrid, Orientation.leftOf(coord), settlement, new SettlementDataFrame(0,Orientation.getOrigin()));
+            dfsSearch(availabilityGrid, Orientation.rightOf(coord), settlement, new SettlementDataFrame(0,Orientation.getOrigin()));
+            dfsSearch(availabilityGrid, Orientation.upLeftOf(coord), settlement, new SettlementDataFrame(0,Orientation.getOrigin()));
+            dfsSearch(availabilityGrid, Orientation.upRightOf(coord), settlement, new SettlementDataFrame(0,Orientation.getOrigin()));
         }
         //edge case #2: we have a team but this hex is not
         else if(df.getOwnedBy() != null){

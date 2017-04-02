@@ -32,13 +32,12 @@ public class updateSettlementsTest {
     }
     else{
       for(int i= 0; i < whiteActual.size(); i++) {
-        SettlementDataFrame dfActual = whiteActual.get(0);
-        SettlementDataFrame dfExpected = whiteExpected.get(0);
+        SettlementDataFrame dfActual = whiteActual.get(i);
+        SettlementDataFrame dfExpected = whiteExpected.get(i);
         if(dfActual.getOwnedBy() != dfExpected.getOwnedBy() || dfActual.getSettlementSize() != dfExpected.getSettlementSize()) {
           whiteActualFlag = false;
           break;
         }
-
       }
     }
     if(blackActual.size() != blackExpected.size()){
@@ -46,13 +45,12 @@ public class updateSettlementsTest {
     }
     else{
       for(int i= 0; i < blackActual.size(); i++) {
-        SettlementDataFrame dfActual = blackActual.get(0);
-        SettlementDataFrame dfExpected = blackExpected.get(0);
+        SettlementDataFrame dfActual = blackActual.get(i);
+        SettlementDataFrame dfExpected = blackExpected.get(i);
         if(dfActual.getOwnedBy() != dfExpected.getOwnedBy() || dfActual.getSettlementSize() != dfExpected.getSettlementSize()) {
           blackActualFlag = false;
           break;
         }
-
       }
     }
     Assert.assertTrue("White settlement verification scenario 1",whiteActualFlag);
@@ -77,8 +75,8 @@ public class updateSettlementsTest {
     }
     else{
       for(int i= 0; i < whiteActual.size(); i++) {
-        SettlementDataFrame dfActual = whiteActual.get(0);
-        SettlementDataFrame dfExpected = whiteExpected.get(0);
+        SettlementDataFrame dfActual = whiteActual.get(i);
+        SettlementDataFrame dfExpected = whiteExpected.get(i);
         if(dfActual.getOwnedBy() != dfExpected.getOwnedBy() || dfActual.getSettlementSize() != dfExpected.getSettlementSize()) {
           whiteActualFlag = false;
           break;
@@ -91,8 +89,8 @@ public class updateSettlementsTest {
     }
     else{
       for(int i= 0; i < blackActual.size(); i++) {
-        SettlementDataFrame dfActual = blackActual.get(0);
-        SettlementDataFrame dfExpected = blackExpected.get(0);
+        SettlementDataFrame dfActual = blackActual.get(i);
+        SettlementDataFrame dfExpected = blackExpected.get(i);
         if(dfActual.getOwnedBy() != dfExpected.getOwnedBy() || dfActual.getSettlementSize() != dfExpected.getSettlementSize()) {
           blackActualFlag = false;
           break;
@@ -122,8 +120,8 @@ public class updateSettlementsTest {
     }
     else{
       for(int i= 0; i < whiteActual.size(); i++) {
-        SettlementDataFrame dfActual = whiteActual.get(0);
-        SettlementDataFrame dfExpected = whiteExpected.get(0);
+        SettlementDataFrame dfActual = whiteActual.get(i);
+        SettlementDataFrame dfExpected = whiteExpected.get(i);
         if(dfActual.getOwnedBy() != dfExpected.getOwnedBy() || dfActual.getSettlementSize() != dfExpected.getSettlementSize()) {
           whiteActualFlag = false;
           break;
@@ -136,8 +134,8 @@ public class updateSettlementsTest {
     }
     else{
       for(int i= 0; i < blackActual.size(); i++) {
-        SettlementDataFrame dfActual = blackActual.get(0);
-        SettlementDataFrame dfExpected = blackExpected.get(0);
+        SettlementDataFrame dfActual = blackActual.get(i);
+        SettlementDataFrame dfExpected = blackExpected.get(i);
         if(dfActual.getOwnedBy() != dfExpected.getOwnedBy() || dfActual.getSettlementSize() != dfExpected.getSettlementSize()) {
           blackActualFlag = false;
           break;

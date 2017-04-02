@@ -110,7 +110,6 @@ public class HexValidationTest {
         gameBoard.getHex(Orientation.addCoordinatesByOrientation(testingLocation, Orientation.Orientations.downLeft)).setOccupiedBy(Hex.gamePieces.Meeple);
         gameBoard.getHex(Orientation.addCoordinatesByOrientation(testingLocation, Orientation.Orientations.downLeft)).setTeam(Hex.Team.White);
 
-        gameBoard.printSectionedBoard();
 
         Assert.assertEquals("Nuke a meeple that is NOT connected to another meeple of the same team", false, HexValidation.isValidHexEruption(testingLocation, gameBoard));
     }
