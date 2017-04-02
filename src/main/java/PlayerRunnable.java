@@ -2,7 +2,6 @@
  * Created by Troy on 3/27/17.
  */
 public class PlayerRunnable implements Runnable {
-
     @Override
     public void run() {
         GameAPI game = new GameAPI();
