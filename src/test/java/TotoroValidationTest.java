@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * Created by Max on 4/1/17.
  */
-/*
+
 public class TotoroValidationTest {
     GameAPI gameAPI;
 
@@ -20,7 +20,6 @@ public class TotoroValidationTest {
     public void totoroValidation() {
         setUpTotoroValidationScenario1();
         gameAPI.updateSettlements();
-        gameAPI.gameBoard.printSectionedBoard();
 
     }
 
@@ -37,7 +36,7 @@ public class TotoroValidationTest {
     @Test
     public void canSelectBuildTotoroTestFail() {
         setUpTotoroValidationScenario1();
-        gameAPI.gameBoard.getHex(Orientation.rightOf(Orientation.getOriginValue())).setTeam(Hex.Team.White);
+        gameAPI.gameBoard.getHex(Orientation.rightOf(Orientation.getOrigin())).setTeam(Hex.Team.White);
         gameAPI.updateSettlements();
         boolean pass = gameAPI.canSelectBuildTotoro();
 
@@ -79,15 +78,15 @@ public class TotoroValidationTest {
         hex3.setOccupiedBy(Hex.gamePieces.Meeple);
         hex2.setOccupiedBy(Hex.gamePieces.Meeple);
 
-        gameAPI.gameBoard.setHex(hex1, Orientation.getOriginValue());
-        gameAPI.gameBoard.setHex(hex2, Orientation.downLeftOf(Orientation.getOriginValue()));
-        gameAPI.gameBoard.setHex(hex3, Orientation.downRightOf(Orientation.getOriginValue()));
+        gameAPI.gameBoard.setHex(hex1, Orientation.getOrigin());
+        gameAPI.gameBoard.setHex(hex2, Orientation.downLeftOf(Orientation.getOrigin()));
+        gameAPI.gameBoard.setHex(hex3, Orientation.downRightOf(Orientation.getOrigin()));
 
-        gameAPI.gameBoard.setHex(hex6, Orientation.upRightOf(Orientation.getOriginValue()));
-        gameAPI.gameBoard.setHex(hex5, Orientation.rightOf(Orientation.getOriginValue()));
+        gameAPI.gameBoard.setHex(hex6, Orientation.upRightOf(Orientation.getOrigin()));
+        gameAPI.gameBoard.setHex(hex5, Orientation.rightOf(Orientation.getOrigin()));
         gameAPI.gameBoard.setHex(hex4, Orientation.upRightOf(hex5.getLocation()));
 
-        gameAPI.gameBoard.setHex(hex8, Orientation.upLeftOf(Orientation.getOriginValue()));
+        gameAPI.gameBoard.setHex(hex8, Orientation.upLeftOf(Orientation.getOrigin()));
         gameAPI.gameBoard.setHex(hex7, Orientation.leftOf(hex8.getLocation()));
         gameAPI.gameBoard.setHex(hex9, Orientation.upRightOf(hex7.getLocation()));
 
@@ -102,4 +101,4 @@ public class TotoroValidationTest {
 
 
 
-}*/
+}
