@@ -37,7 +37,6 @@ public class HexValidationTest {
         gameBoard.setHex(firstHex, hex1Loc);
         Tuple hex2Loc = Orientation.upLeftOf(Orientation.upLeftOf((hex1Loc)));
 
-
         Assert.assertEquals("existsAdjacentHexFailureTest", false, HexValidation.existsAdjacentHex(hex2Loc, gameBoard));
     }
 
