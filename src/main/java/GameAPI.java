@@ -106,6 +106,9 @@ public class GameAPI {
             array[i][j].length);
         }
       }
+      for(int i = 0; i < copyArr.length; i++)
+          for(int j = 0; j < copyArr.length; j++)
+              Arrays.fill(copyArr[i][j], true);
 
       dfsSearch(copyArr, Orientation.getOrigin(), settlement, new SettlementDataFrame(0,new Tuple(0,0,0)));
       Settlements.retriveWhiteSettlements(settlement, whiteSettlements);
@@ -113,14 +116,26 @@ public class GameAPI {
     }
 
     protected void dfsSearch(boolean[][][] availabilityGrid, Tuple coord, Settlements settlement, SettlementDataFrame df) {
-      int xCord = coord.getX();
-      int yCord = coord.getY();
-      int zCord = coord.getZ();
-      //edge case
-      if(xCord >= BOARD_EDGE || yCord >= BOARD_EDGE || zCord >= BOARD_EDGE|| !availabilityGrid[xCord][yCord][zCord]) return;
 
+        Tuple offsetCoord = gameBoard.calculateOffset(coord);
+
+      int xCord = offsetCoord.getX();
+      int yCord = offsetCoord.getY();
+      int zCord = offsetCoord.getZ();
+
+        if(gameBoard.getHex(coord) == null)
+            System.out.println("NULL HEX LOC");
+
+      //edge case
+      if(xCord >= BOARD_EDGE || yCord >= BOARD_EDGE || zCord >= BOARD_EDGE|| !availabilityGrid[xCord][yCord][zCord] || HexValidation.isLocationNull(coord, gameBoard)){
+          System.out.println("Terminating:  "  + coord.toString());
+          return;
+      }
+
+        System.out.println(coord.toString());
       //invalidate the position
       Hex h = gameBoard.getHex(coord);
+
 
 
       if (h.getTeam() != Hex.Team.Neutral) {
@@ -130,6 +145,7 @@ public class GameAPI {
           df.setSettlementSize(1);
           df.setSettlementStartingLocation(coord);
           settlement.addNewSettlement(df);
+          System.out.println("Adding Settlement...");
         }
         else if(df.getOwnedBy() != h.getTeam()){
           // we call dfs for a new clean dataFrame
@@ -140,8 +156,8 @@ public class GameAPI {
           df.setSettlementSize(df.getSettlementSize()+1);
         }
       }
+        availabilityGrid[xCord][yCord][yCord] = false;
 
-      availabilityGrid[xCord][yCord][yCord] = false;
 
       //edge case #1: we have a team but this hex is neutral. We do not want to carry this df anymore
       if(df.getOwnedBy() != null && h.getTeam() == Hex.Team.Neutral) {
@@ -178,6 +194,7 @@ public class GameAPI {
           // same team recurse through it
 
           dfsSearch(availabilityGrid, hexLocation, settlement, df);
+
         }
       }
         dfsSearch(availabilityGrid,
@@ -278,7 +295,7 @@ public class GameAPI {
             return false;
 
         int settlementPiecesNuked = 0;
-        int settlementSize = 3;
+        int settlementSize = 4;
 
         if(!HexValidation.isValidVolcanoPlacement(tilePositionCoordinates.getVolcanoCoordinates(),
           gameBoard))

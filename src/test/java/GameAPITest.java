@@ -128,7 +128,7 @@ public class GameAPITest {
 
   public void createLandMass() throws Exception {
     Tuple origin = Orientation.getOrigin();
-    Tuple tile1Loc = Orientation.rightOf(origin);
+    Tuple tile1Loc = Orientation.rightOf(Orientation.upRightOf(origin));
     Tuple tile2Loc = Orientation.leftOf(tile1Loc);
 
     Tile tile0 = new Tile(0, Terrain.terrainType.Grassland, Terrain.terrainType.Jungle, Orientation.Orientations.downLeft);
@@ -137,7 +137,6 @@ public class GameAPITest {
     game.placeTile(tile0, origin);
     game.placeTile(tile1, tile1Loc);
     game.placeTile(tile2, tile2Loc);
-
 
   }
 }

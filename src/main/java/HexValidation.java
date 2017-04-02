@@ -12,8 +12,8 @@ public class HexValidation {
         Tuple upRight = Orientation.upRightOf(coordinates);
         Tuple downLeft = Orientation.downLeftOf(coordinates);
         Tuple downRight = Orientation.downRightOf(coordinates);
-        Tuple left = Orientation.rightOf(coordinates);
-        Tuple right = Orientation.leftOf(coordinates);
+        Tuple right = Orientation.rightOf(coordinates);
+        Tuple left = Orientation.leftOf(coordinates);
 
         return(!isLocationNull(upLeft, gameBoard) || !isLocationNull(upRight, gameBoard) || !isLocationNull(downLeft, gameBoard) ||
                 !isLocationNull(downRight, gameBoard) || !isLocationNull(left, gameBoard) || !isLocationNull(right, gameBoard)

@@ -45,7 +45,7 @@ public class Board {
     return gameBoardAvailability;
   }
 
-  private Tuple calculateOffset(Tuple coordinates) {
+  public Tuple calculateOffset(Tuple coordinates) {
     int x = coordinates.getX() + ORIGINOFFSET;
     int y = coordinates.getY() + ORIGINOFFSET;
     int z = coordinates.getZ() + ORIGINOFFSET;
