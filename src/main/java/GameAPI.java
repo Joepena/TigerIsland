@@ -76,7 +76,9 @@ public class GameAPI {
 
         if (gameBoard.isOriginEmpty()){
             coordinates = Orientation.getOrigin();
-            tile.setLeftHexOrientation(Orientation.Orientations.downLeft);
+            gameBoard.setHex(tile.getVolcano(), coordinates);
+            gameBoard.setHex(tile.getLeft(), Orientation.addCoordinatesByOrientation(coordinates, tile.getLeftHexOrientation()));
+            gameBoard.setHex(tile.getRight(), Orientation.addCoordinatesByOrientation(coordinates, rightOrient));
         }
         if (isTileDestinationValid(tile, coordinates)){
 
@@ -319,6 +321,9 @@ public class GameAPI {
     public boolean isTileDestinationValid(Tile tile, Tuple destCoordPair){
        // Pair<Integer,Integer> originvalue = Orientation.getOriginValue();
        // Pair<Integer, Integer> absDestCoordPair = Orientation.addPairs(destCoordPair, originvalue);
+
+        Tuple originValue = Orientation.getOrigin();
+
 
         if (isTileConnected(tile, destCoordPair)){
             return true;

@@ -16,7 +16,7 @@ public class HexValidation {
         Tuple right = Orientation.leftOf(coordinates);
 
         return(!isLocationNull(upLeft, gameBoard) || !isLocationNull(upRight, gameBoard) || !isLocationNull(downLeft, gameBoard) ||
-                !isLocationNull(downRight, gameBoard) || !isLocationNull(left, gameBoard) || !isLocationNull(right, gameBoard)
+                   !isLocationNull(downRight, gameBoard) || !isLocationNull(left, gameBoard) || !isLocationNull(right, gameBoard)
                 || !isLocationNull(coordinates, gameBoard));
     }
 
@@ -31,7 +31,9 @@ public class HexValidation {
 
 
     public static boolean isLocationNull(Tuple coordinatePair, Board gameBoard){
-
+        if (gameBoard.getHex(coordinatePair) != null) {
+            Hex temp = gameBoard.getHex(coordinatePair);
+        }
       return(gameBoard.getHex(coordinatePair) == null);
     }
 

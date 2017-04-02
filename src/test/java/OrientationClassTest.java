@@ -37,7 +37,9 @@ public class OrientationClassTest {
   @Test
   public void addPairTest() {
       Tuple result = Orientation.addCoordinates(new Tuple(2,3,1), new Tuple(1,4,1));
-      Assert.assertEquals("Adding Pairs 2,3,1 and 1,4,1 expect 3,7,2",new Tuple(3,7,2),result);
+      Assert.assertEquals("Adding Pairs 2,3,1 and 1,4,1 expect 3,7,2",result.getX(),3);
+      Assert.assertEquals("Adding Pairs 2,3,1 and 1,4,1 expect 3,7,2",result.getY(),7);
+      Assert.assertEquals("Adding Pairs 2,3,1 and 1,4,1 expect 3,7,2",result.getZ(),2);
   }
 
   //TODO: ALL THESE TESTS MUST BE REDONE FOR TUPLE..

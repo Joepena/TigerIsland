@@ -35,7 +35,8 @@ public class TilePlacementTests {
     @Test
     public void isTileDestinationValidTest_VolcanoConnected(){
         Tuple originCoords = Orientation.getOrigin();
-        game.placeTile(existingTile, originCoords);
+        Tile tempTile = new Tile(1,Terrain.terrainType.Jungle,Terrain.terrainType.Rocky,Orientation.Orientations.upRight);
+        game.placeTile(tempTile, originCoords);
 
         Tuple testCoords = Orientation.addCoordinatesByOrientation(originCoords, Orientation.Orientations.upRight);
         testCoords = Orientation.addCoordinatesByOrientation(testCoords, Orientation.Orientations.right);
