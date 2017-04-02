@@ -161,8 +161,8 @@ public class updateSettlementsTest {
     tile3.getLeft().setTeam(Hex.Team.Black);
     tile3.getRight().setTeam(Hex.Team.Black);
     gameAPI.placeTile(originTile,Orientation.getOrigin());
-    gameAPI.placeTile(tile2,Orientation.addCoordinatesByOrientation(Orientation.getOrigin(),Orientation.Orientations.upLeft));
-    gameAPI.placeTile(tile3,Orientation.addCoordinatesByOrientation(Orientation.getOrigin(),Orientation.Orientations.upRight));
+    gameAPI.placeTile(tile2,Orientation.upLeftOf(Orientation.getOrigin()));
+    gameAPI.placeTile(tile3,Orientation.upRightOf(Orientation.getOrigin()));
   }
   private void setUpExpectedForScenario1(ArrayList<SettlementDataFrame> whiteExpected, ArrayList<SettlementDataFrame> blackExpected) {
     whiteExpected.add(new SettlementDataFrame(1, Orientation.getOrigin()));
