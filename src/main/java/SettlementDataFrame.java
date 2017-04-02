@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import javafx.util.Pair;
 
 /**
@@ -7,6 +8,8 @@ import javafx.util.Pair;
 public class SettlementDataFrame implements Comparable<SettlementDataFrame>{
   private Integer settlementSize;
   private Tuple settlementStartingLocation;
+
+  private ArrayList<Tuple> listOfHexes;
   private Hex.Team ownedBy;
   private Hex.gamePieces gamePiece;
 
@@ -22,6 +25,7 @@ public class SettlementDataFrame implements Comparable<SettlementDataFrame>{
     Tuple settlementStartingLocation) {
     this.settlementSize = settlementSize;
     this.settlementStartingLocation = settlementStartingLocation;
+    this.listOfHexes = new ArrayList<>();
   }
 
   public Integer getSettlementSize() {
@@ -47,6 +51,13 @@ public class SettlementDataFrame implements Comparable<SettlementDataFrame>{
 
   public Hex.Team getOwnedBy() {
     return ownedBy;
+  }
+
+  public ArrayList<Tuple> getListOfHexLocations() {
+    return listOfHexes;
+  }
+  public void addLocationListOfHexes(Tuple locationOfHex) {
+    listOfHexes.add(locationOfHex);
   }
 
   @Override
