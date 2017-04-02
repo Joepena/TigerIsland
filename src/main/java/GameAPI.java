@@ -74,18 +74,22 @@ public class GameAPI {
 
         Orientation.Orientations rightOrient = Orientation.getRightHexMapping(tile.getLeftHexOrientation());
 
-        if (gameBoard.isOriginEmpty()){
-            coordinates = Orientation.getOrigin();
-            gameBoard.setHex(tile.getVolcano(), coordinates);
-            gameBoard.setHex(tile.getLeft(), Orientation.addCoordinatesByOrientation(coordinates, tile.getLeftHexOrientation()));
-            gameBoard.setHex(tile.getRight(), Orientation.addCoordinatesByOrientation(coordinates, rightOrient));
-        }
-        else if (isTileDestinationValid(tile, coordinates)){
+        if (isTileDestinationValid(tile, coordinates)){
 
             gameBoard.setHex(tile.getVolcano(), coordinates);
             gameBoard.setHex(tile.getLeft(), Orientation.addCoordinatesByOrientation(coordinates, tile.getLeftHexOrientation()));
             gameBoard.setHex(tile.getRight(), Orientation.addCoordinatesByOrientation(coordinates, rightOrient));
         }
+    }
+
+    void placeFirstTile() {
+
+        Tuple originCoords = new Tuple(0,0,0);
+        gameBoard.setHex(new Hex(1, Terrain.terrainType.Volcano), originCoords);
+        gameBoard.setHex(new Hex(1, Terrain.terrainType.Jungle), Orientation.addCoordinatesByOrientation(originCoords, Orientation.Orientations.upLeft));
+        gameBoard.setHex(new Hex(1, Terrain.terrainType.Lake), Orientation.addCoordinatesByOrientation(originCoords, Orientation.Orientations.upRight));
+        gameBoard.setHex(new Hex(1, Terrain.terrainType.Rocky), Orientation.addCoordinatesByOrientation(originCoords, Orientation.Orientations.downLeft));
+        gameBoard.setHex(new Hex(1, Terrain.terrainType.Grassland), Orientation.addCoordinatesByOrientation(originCoords, Orientation.Orientations.downRight));
     }
 
 

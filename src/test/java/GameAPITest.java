@@ -19,6 +19,47 @@ public class GameAPITest {
 
     }
 
+    @Test
+    public void validatePlaceFirstTile_Volcano() throws Exception {
+
+        game.placeFirstTile();
+        Tuple originCoords = new Tuple(0,0,0);
+        Assert.assertEquals("Checking volcano", game.gameBoard.getHex(originCoords).getTerrain(), Terrain.terrainType.Volcano);
+
+    }
+
+    @Test
+    public void validatePlaceFirstTile_Jungle() throws Exception {
+
+        game.placeFirstTile();
+        Tuple jungleCoords = new Tuple(0, 1, -1);
+        Assert.assertEquals("Checking jungle", game.gameBoard.getHex(jungleCoords).getTerrain(), Terrain.terrainType.Jungle);
+    }
+
+    @Test
+    public void validatePlaceFirstTile_Lake() throws Exception {
+
+        game.placeFirstTile();
+        Tuple lakeCoords = new Tuple(1, 0, -1);
+        Assert.assertEquals("Checking lake", game.gameBoard.getHex(lakeCoords).getTerrain(), Terrain.terrainType.Lake);
+    }
+
+    @Test
+    public void validatePlaceFirstTile_Rocky() throws Exception {
+
+        game.placeFirstTile();
+        Tuple rockyCoords = new Tuple(-1, 0, 1);
+        Assert.assertEquals("Checking rocky", game.gameBoard.getHex(rockyCoords).getTerrain(), Terrain.terrainType.Rocky);
+    }
+
+    @Test
+    public void validatePlaceFirstTile_Grassland() throws Exception {
+
+        game.placeFirstTile();
+        Tuple grassCoords = new Tuple(0, -1, 1);
+        Assert.assertEquals("Checking grassland", game.gameBoard.getHex(grassCoords).getTerrain(), Terrain.terrainType.Grassland);
+    }
+
 
     @Test
     public void validatePlaceTileOnWholeTileTest () throws Exception {
@@ -115,15 +156,6 @@ public class GameAPITest {
 
         Assert.assertEquals("verify getRight", testTile.getRight().getTerrain(), Terrain.terrainType.Lake);
 
-    }
-
-    @Test
-    public void firstTileForcedOriginTest(){
-        Tuple testCoords = new Tuple(5,5,5);
-        game.placeTile(testTile, testCoords);
-        Hex originHex = testTile.getVolcano();
-
-        Assert.assertEquals("test",originHex, game.gameBoard.getHex(Orientation.getOrigin()));
     }
 
   public void createLandMass() throws Exception {
