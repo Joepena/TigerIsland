@@ -14,7 +14,8 @@ import org.junit.runners.Suite;
   TilePlacementTests.class,
   TileTest.class,
   updateSettlementsTest.class,
-  HexValidationTest.class
+  HexValidationTest.class,
+  TotoroValidationTest.class
 })
 
 public class JUnitRunner {

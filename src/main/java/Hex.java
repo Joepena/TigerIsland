@@ -7,7 +7,7 @@ public class Hex {
     private int tileId;
     private int level;
     private Terrain.terrainType terrain;
-    private Pair<Integer, Integer> location;
+    private Tuple location;
     private gamePieces occupiedBy;
     private Team team;
 
@@ -55,7 +55,7 @@ public class Hex {
         this.level = this.level + 1;
     }
 
-    public Pair<Integer, Integer> getLocation() {
+    public Tuple getLocation() {
         return location;
     }
 
@@ -79,7 +79,7 @@ public class Hex {
         }
   }
 
-    public void setLocation(Pair location) {
+    public void setLocation(Tuple location) {
         this.location = location;
     }
 

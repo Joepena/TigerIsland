@@ -6,7 +6,7 @@ import javafx.util.Pair;
  */
 public class SettlementDataFrame implements Comparable<SettlementDataFrame>{
   private Integer settlementSize;
-  private Pair<Integer,Integer> settlementStartingLocation;
+  private Tuple settlementStartingLocation;
   private Hex.Team ownedBy;
   private Hex.gamePieces gamePiece;
 
@@ -19,7 +19,7 @@ public class SettlementDataFrame implements Comparable<SettlementDataFrame>{
   }
 
   public SettlementDataFrame(int settlementSize,
-    Pair<Integer, Integer> settlementStartingLocation) {
+    Tuple settlementStartingLocation) {
     this.settlementSize = settlementSize;
     this.settlementStartingLocation = settlementStartingLocation;
   }
@@ -28,7 +28,7 @@ public class SettlementDataFrame implements Comparable<SettlementDataFrame>{
     return settlementSize;
   }
 
-  public Pair<Integer, Integer> getSettlementStartingLocation() {
+  public Tuple getSettlementStartingLocation() {
     return settlementStartingLocation;
   }
 
@@ -37,7 +37,7 @@ public class SettlementDataFrame implements Comparable<SettlementDataFrame>{
   }
 
   public void setSettlementStartingLocation(
-    Pair<Integer, Integer> settlementStartingLocation) {
+    Tuple settlementStartingLocation) {
     this.settlementStartingLocation = settlementStartingLocation;
   }
 
