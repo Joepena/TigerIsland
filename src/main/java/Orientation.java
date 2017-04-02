@@ -1,154 +1,155 @@
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import javafx.util.Pair;
 
 /**
- * Created by Max on 3/16/17.
+ * Created by Joe on 4/1/17.
  */
 public class Orientation {
+  public static enum Orientations {
+    origin,
+    upRight,
+    upLeft,
+    right,
+    left,
+    downRight,
+    downLeft
+  }
+  private static final Tuple Origin = new Tuple(0,0,0);
 
-    public static enum Orientations {
-        origin,
-        upRight,
-        upLeft,
-        right,
-        left,
-        downRight,
-        downLeft
+  private static final Tuple UPRIGHT = new Tuple(1,0,-1);
+  private static final Tuple UPLEFT = new Tuple(0,1,-1);
+  private static final Tuple RIGHT = new Tuple(1,-1,0);
+  private static final Tuple LEFT = new Tuple(-1,1,0);
+  private static final Tuple DOWNRIGHT = new Tuple(0,-1,1);
+  private static final Tuple DOWNLEFT = new Tuple(-1,0,1);
+
+
+  public static Tuple getOrigin() {
+    return Origin;
+  }
+
+  public static Tuple getUPRIGHT() {
+    return UPRIGHT;
+  }
+
+  public static Tuple getUPLEFT() {
+    return UPLEFT;
+  }
+
+  public static Tuple getRIGHT() {
+    return RIGHT;
+  }
+
+  public static Tuple getLEFT() {
+    return LEFT;
+  }
+
+  public static Tuple getDOWNRIGHT() {
+    return DOWNRIGHT;
+  }
+
+  public static Tuple getDOWNLEFT() {
+    return DOWNLEFT;
+  }
+
+  private static final Map<Orientations, Orientations> rightHexMapping;
+
+  static { //immutable map using static initialiser.
+    Map<Orientations, Orientations> aMap = new HashMap<>();
+    aMap.put(Orientations.upRight, Orientations.upLeft);
+    aMap.put(Orientations.upLeft, Orientations.left);
+    aMap.put(Orientations.left, Orientations.downLeft);
+    aMap.put(Orientations.downLeft, Orientations.downRight);
+    aMap.put(Orientations.downRight, Orientations.right);
+    aMap.put(Orientations.right, Orientations.upRight);
+    rightHexMapping = Collections.unmodifiableMap(aMap);
+  }
+
+  public static Orientations getRightHexMapping(Orientations orientation) {
+    return rightHexMapping.get(orientation);
+  }
+
+  public static Tuple addCoordinatesByOrientation(Tuple coordinates,
+    Orientations orientation) {
+    switch (orientation) {
+      case upRight:
+        return upRightOf(coordinates);
+      case upLeft:
+        return upLeftOf(coordinates);
+      case left:
+        return leftOf(coordinates);
+      case right:
+        return rightOf(coordinates);
+      case downLeft:
+        return downLeftOf(coordinates);
+      case downRight:
+        return downRightOf(coordinates);
+      default:
+        return Origin;
     }
-    private static final Pair<Integer, Integer> ORIGIN = new Pair<>(188,188);
-    private static final Pair<Integer, Integer> UPRIGHT = new Pair<>(2,1);
-    private static final Pair<Integer, Integer> UPLEFT = new Pair<>(2,-1);
-    private static final Pair<Integer, Integer> RIGHT = new Pair<>(0,2);
-    private static final Pair<Integer, Integer> LEFT = new Pair<>(0,-2);
-    private static final Pair<Integer, Integer> DOWNRIGHT = new Pair<>(-2,1);
-    private static final Pair<Integer, Integer> DOWNLEFT = new Pair<>(-2,-1);
+  }
 
-    public static Pair<Integer, Integer> getOriginValue() {
-        return ORIGIN;
-    }
+  public static  Tuple addCoordinates (Tuple coordinate1, Tuple coordinate2){
+    Integer pair1X = coordinate1.getX();
+    Integer pair1Y = coordinate1.getY();
+    Integer pair1Z = coordinate1.getZ();
 
-    public static Pair<Integer, Integer> getUprightValue() {
-        return UPRIGHT;
-    }
+    Integer pair2X = coordinate2.getX();
+    Integer pair2Y = coordinate2.getY();
+    Integer pair2Z = coordinate2.getZ();
 
-    public static Pair<Integer, Integer> getUpleftValue() {
-        return UPLEFT;
-    }
+    return new Tuple(pair1X+pair2X, pair1Y+pair2Y, pair1Z+pair2Z);
 
-    public static Pair<Integer, Integer> getRightValue() {
-        return RIGHT;
-    }
+  }
 
-    public static Pair<Integer, Integer> getLeftValue() {
-        return LEFT;
-    }
+  public static Tuple upLeftOf(Tuple startCoordinates){
 
-    public static Pair<Integer, Integer> getDownrightValue() {
-        return DOWNRIGHT;
-    }
+    int resultLocationX = startCoordinates.getX() + Orientation.getUPLEFT().getX();
+    int resultLocationY = startCoordinates.getY() + Orientation.getUPLEFT().getY();
+    int resultLocationZ = startCoordinates.getZ() + Orientation.getUPLEFT().getZ();
 
-    public static Pair<Integer, Integer> getDownleftValue() {
-        return DOWNLEFT;
-    }
+    return new Tuple(resultLocationX,resultLocationY,resultLocationZ);
+  }
+  public static Tuple upRightOf(Tuple startCoordinates){
 
-    private static final Map<Orientations, Orientations> rightHexMapping;
+    int resultLocationX = startCoordinates.getX() + Orientation.getUPRIGHT().getX();
+    int resultLocationY = startCoordinates.getY() + Orientation.getUPRIGHT().getY();
+    int resultLocationZ = startCoordinates.getZ() + Orientation.getUPRIGHT().getZ();
 
+    return new Tuple(resultLocationX,resultLocationY,resultLocationZ);
+  }
+  public static Tuple downRightOf(Tuple startCoordinates){
 
-    static { //immutable map using static initialiser.
-      Map<Orientations, Orientations> aMap = new HashMap<>();
-      aMap.put(Orientations.upRight, Orientations.upLeft);
-      aMap.put(Orientations.upLeft, Orientations.left);
-      aMap.put(Orientations.left, Orientations.downLeft);
-      aMap.put(Orientations.downLeft, Orientations.downRight);
-      aMap.put(Orientations.downRight, Orientations.right);
-      aMap.put(Orientations.right, Orientations.upRight);
-      rightHexMapping = Collections.unmodifiableMap(aMap);
-    }
+    int resultLocationX = startCoordinates.getX() + Orientation.getDOWNRIGHT().getX();
+    int resultLocationY = startCoordinates.getY() + Orientation.getDOWNRIGHT().getY();
+    int resultLocationZ = startCoordinates.getZ() + Orientation.getDOWNRIGHT().getZ();
 
-    public static Orientations getRightHexMapping(Orientations orientation) {
-      return rightHexMapping.get(orientation);
-    }
+    return new Tuple(resultLocationX,resultLocationY,resultLocationZ);
+  }
+  public static Tuple downLeftOf(Tuple startCoordinates){
 
-    public static Pair<Integer,Integer> addPairByOrientation(Pair<Integer,Integer> coord,
-                                                             Orientations orientation) {
-        switch (orientation) {
-            case upRight:
-                return upRightOf(coord);
-            case upLeft:
-                return upLeftOf(coord);
-            case left:
-                return leftOf(coord);
-            case right:
-                return rightOf(coord);
-            case downLeft:
-                return downLeftOf(coord);
-            case downRight:
-                return downRightOf(coord);
-            default:
-                return ORIGIN;
-        }
-    }
-  
-    public static  Pair<Integer,Integer> addPairs (Pair<Integer,Integer> pair1, Pair<Integer,Integer> pair2){
-        Integer pair1X = pair1.getKey();
-        Integer pair1Y = pair1.getValue();
+    int resultLocationX = startCoordinates.getX() + Orientation.getDOWNLEFT().getX();
+    int resultLocationY = startCoordinates.getY() + Orientation.getDOWNLEFT().getY();
+    int resultLocationZ = startCoordinates.getZ() + Orientation.getDOWNLEFT().getZ();
 
-        Integer pair2X = pair2.getKey();
-        Integer pair2Y = pair2.getValue();
+    return new Tuple(resultLocationX,resultLocationY,resultLocationZ);
+  }
+  public static Tuple leftOf(Tuple startCoordinates){
 
-        return new Pair<Integer,Integer> (pair1X + pair2X, pair1Y + pair2Y);
+    int resultLocationX = startCoordinates.getX() + Orientation.getLEFT().getX();
+    int resultLocationY = startCoordinates.getY() + Orientation.getLEFT().getY();
+    int resultLocationZ = startCoordinates.getZ() + Orientation.getLEFT().getZ();
 
-    }
+    return new Tuple(resultLocationX,resultLocationY,resultLocationZ);
+  }
+  public static Tuple rightOf(Tuple startCoordinates){
 
-    public static  Pair<Integer,Integer> subtractPairs (Pair<Integer,Integer> pair1, Pair<Integer,Integer> pair2){
-        Integer pair1X = pair1.getKey();
-        Integer pair1Y = pair1.getValue();
+    int resultLocationX = startCoordinates.getX() + Orientation.getRIGHT().getX();
+    int resultLocationY = startCoordinates.getY() + Orientation.getRIGHT().getY();
+    int resultLocationZ = startCoordinates.getZ() + Orientation.getRIGHT().getZ();
 
-        Integer pair2X = pair2.getKey();
-        Integer pair2Y = pair2.getValue();
-
-        return new Pair<Integer,Integer> (pair1X - pair2X, pair1Y - pair2Y);
-
-    }
-
-    public static Pair<Integer,Integer> upLeftOf(Pair<Integer,Integer> startCoordinates){
-
-        Integer resultLocationX = startCoordinates.getKey() + Orientation.UPLEFT.getKey();
-        Integer resultLocationY = startCoordinates.getValue() + Orientation.UPLEFT.getValue();
-
-        return new Pair<Integer,Integer> (resultLocationX, resultLocationY);
-    }
-    public static Pair<Integer,Integer> upRightOf(Pair<Integer,Integer> startCoordinates){
-        Integer resultLocationX = startCoordinates.getKey() + Orientation.UPRIGHT.getKey();
-        Integer resultLocationY = startCoordinates.getValue() + Orientation.UPRIGHT.getValue();
-
-        return new Pair<Integer,Integer> (resultLocationX, resultLocationY);
-    }
-    public static Pair<Integer,Integer> downLeftOf(Pair<Integer,Integer> startCoordinates){
-        Integer resultLocationX = startCoordinates.getKey() + Orientation.DOWNLEFT.getKey();
-        Integer resultLocationY = startCoordinates.getValue() + Orientation.DOWNLEFT.getValue();
-
-        return new Pair<Integer,Integer> (resultLocationX, resultLocationY);
-    }
-    public static Pair<Integer,Integer> downRightOf(Pair<Integer,Integer> startCoordinates){
-        Integer resultLocationX = startCoordinates.getKey() + Orientation.DOWNRIGHT.getKey();
-        Integer resultLocationY = startCoordinates.getValue() + Orientation.DOWNRIGHT.getValue();
-
-        return new Pair<Integer,Integer> (resultLocationX, resultLocationY);
-    }
-    public static Pair<Integer,Integer> leftOf(Pair<Integer,Integer> startCoordinates){
-        Integer resultLocationX = startCoordinates.getKey() + Orientation.LEFT.getKey();
-        Integer resultLocationY = startCoordinates.getValue() + Orientation.LEFT.getValue();
-
-        return new Pair<Integer,Integer> (resultLocationX, resultLocationY);
-    }
-    public static Pair<Integer,Integer> rightOf(Pair<Integer,Integer> startCoordinates){
-        Integer resultLocationX = startCoordinates.getKey() + Orientation.RIGHT.getKey();
-        Integer resultLocationY = startCoordinates.getValue() + Orientation.RIGHT.getValue();
-
-        return new Pair<Integer,Integer> (resultLocationX, resultLocationY);
-    }
+    return new Tuple(resultLocationX,resultLocationY,resultLocationZ);
+  }
 
 }
