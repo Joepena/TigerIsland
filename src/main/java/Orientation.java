@@ -16,12 +16,14 @@ public class Orientation {
     downLeft
   }
   private static final Tuple Origin = new Tuple(0,0,0);
+
   private static final Tuple UPRIGHT = new Tuple(1,0,-1);
   private static final Tuple UPLEFT = new Tuple(0,1,-1);
   private static final Tuple RIGHT = new Tuple(1,-1,0);
   private static final Tuple LEFT = new Tuple(-1,1,0);
   private static final Tuple DOWNRIGHT = new Tuple(0,-1,1);
   private static final Tuple DOWNLEFT = new Tuple(-1,0,1);
+
 
   public static Tuple getOrigin() {
     return Origin;

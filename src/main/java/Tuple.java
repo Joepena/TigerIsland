@@ -21,7 +21,15 @@ public class Tuple {
   }
 
   public int getX() {
-
     return x;
+  }
+
+  public String toString() {
+    return " " + x + " " + y + " " + z;
+  }
+
+  public boolean equals(Object o) {
+    Tuple tuple = (Tuple)o;
+    return((this.x == tuple.x) && (this.y == tuple.y) && (this.z == tuple.z));
   }
 }

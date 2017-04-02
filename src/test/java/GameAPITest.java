@@ -128,16 +128,16 @@ public class GameAPITest {
 
   public void createLandMass() throws Exception {
     Tuple origin = Orientation.getOrigin();
-    Tuple tile1Loc = Orientation.rightOf(origin);
-    Tuple tile2Loc = Orientation.upRightOf(origin);
+    Tuple tile1Loc = Orientation.rightOf(Orientation.upRightOf(origin));
+    Tuple tile2Loc = Orientation.leftOf(tile1Loc);
+
 
     Tile tile0 = new Tile(0, Terrain.terrainType.Grassland, Terrain.terrainType.Jungle, Orientation.Orientations.downLeft);
-    Tile tile1 = new Tile(1, Terrain.terrainType.Jungle, Terrain.terrainType.Grassland, Orientation.Orientations.downRight);
-    Tile tile2 = new Tile(2, Terrain.terrainType.Lake, Terrain.terrainType.Grassland, Orientation.Orientations.right);
+    Tile tile1 = new Tile(1, Terrain.terrainType.Jungle, Terrain.terrainType.Grassland, Orientation.Orientations.downLeft);
+    Tile tile2 = new Tile(2, Terrain.terrainType.Lake, Terrain.terrainType.Grassland, Orientation.Orientations.upRight);
     game.placeTile(tile0, origin);
     game.placeTile(tile1, tile1Loc);
     game.placeTile(tile2, tile2Loc);
-
 
   }
 }

@@ -8,6 +8,7 @@ import cucumber.api.java.en.Then;
 /**
  * Created by Joe on 3/18/17.
  */
+/*
 public class MyStepdefs {
 
     Board testBoard;
@@ -28,7 +29,7 @@ public class MyStepdefs {
     @When("^the first player places a hex")
     public void place_first_hex () throws Throwable {
       testBoard.setHex(testHex, testPair);
-    }
+    }*/
 
     /***
      * TODO
@@ -37,6 +38,7 @@ public class MyStepdefs {
      * Change magic numbers for origin to global constant
      *
      * ***/
+    /*
     @Then("^the first hex should be placed at the origin")
     public void hex_should_be_in_origin_of_board () throws Throwable {
 
@@ -140,3 +142,4 @@ public class MyStepdefs {
 //
 //    }
 }
+*/
