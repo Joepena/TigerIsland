@@ -27,8 +27,6 @@ public class updateSettlementsTest {
     Boolean whiteActualFlag = true;
     Boolean blackActualFlag = true;
 
-    System.out.println("Actual:  " + whiteActual.size() + "   Expected:  " + whiteExpected.size());
-
     if(whiteActual.size() != whiteExpected.size()){
       whiteActualFlag = false;
     }
