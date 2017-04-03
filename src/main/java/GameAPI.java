@@ -71,6 +71,10 @@ public class GameAPI {
     return blackSettlements;
   }
 
+    boolean isBoardEmpty() {
+        return gameBoard.isOriginEmpty();
+    }
+
     void placeTile(Tile tile, Tuple coordinates) {
 
         Orientation.Orientations rightOrient = Orientation.getRightHexMapping(tile.getLeftHexOrientation());
