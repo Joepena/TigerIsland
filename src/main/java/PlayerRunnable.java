@@ -1,16 +1,19 @@
+import java.util.ArrayList;
+
 /**
  * Created by Troy on 3/27/17.
  */
 public class PlayerRunnable implements Runnable {
 
-
+    private boolean gameOver;
+    private boolean hasTile;
     private Tile newTile;
-    private Boolean hasTile;
-    private Boolean gameOver;
-
+    private Tuple decisionCoords;
 
     @Override
     public void run() {
+        gameOver = false;
+        hasTile = false;
         GameAPI game = new GameAPI();
         System.out.println("Villager count of " + this.toString() + " is: " + game.getVillagerCount());
         System.out.println("Totoro count of " + this.toString() + " is: " + game.getTotoroCount());
@@ -19,16 +22,36 @@ public class PlayerRunnable implements Runnable {
         //Player Logic
         while(!gameOver) {
 
-            //Wait to receive piece
-            while (!hasTile);
+            if (game.isBoardEmpty()) {
+
+                game.placeFirstTile();
+
+            } else {
+
+                //Wait to receive piece
+                while (!hasTile);
+
+            }
+
+            //Update board state
+            game.updateSettlements();
 
             //Check for tile placement options
-            
+
+
             //Check for nuking options
+            ArrayList<Tuple> eruptionOptions = new ArrayList<>();
+            eruptionOptions = game.getValidNukingLocations();
 
             //Decide normal place or nuke
 
+
+
+            //Place tile
+            game.placeTile(newTile, decisionCoords);
+
             //Check settlements
+            game.updateSettlements();
 
             //Decide move
 
@@ -36,31 +59,5 @@ public class PlayerRunnable implements Runnable {
 
             //End Turn
         }
-
-
-    }
-
-    public Tile getNewTile() {
-        return newTile;
-    }
-
-    public void setNewTile(Tile newTile) {
-        this.newTile = newTile;
-    }
-
-    public Boolean getHasTile() {
-        return hasTile;
-    }
-
-    public void setHasTile(Boolean hasTile) {
-        this.hasTile = hasTile;
-    }
-
-    public Boolean getGameOver() {
-        return gameOver;
-    }
-
-    public void setGameOver(Boolean gameOver) {
-        this.gameOver = gameOver;
     }
 }

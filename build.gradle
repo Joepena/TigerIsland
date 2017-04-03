@@ -28,7 +28,36 @@ dependencies {
   testCompile 'junit:junit:4.11'
   compile group: 'info.cukes', name: 'cucumber-core', version: '1.1.5'
 }
+sourceSets {
+   main {
+      java {
+          srcDirs = ["src/main"]
+        }
+   }
+   test {
+     java {
+       srcDirs = ["src/test"]
+         }
+    }
+  }
+test {
+    testLogging.showStandardStreams = true
+    testLogging {
+       // set options for log level LIFECYCLE
+          events "passed","failed"
+       exceptionFormat "short"
 
+          // set options for log level DEBUG
+            debug {
+                events "started", "skipped", "failed"
+                exceptionFormat "full"
+              }
+
+          // remove standard output/error logging from --info builds
+          // by assigning only 'failed' and 'skipped' events
+              info.events = ["failed", "skipped"]
+      }
+  }
 repositories {
     mavenCentral()
 }

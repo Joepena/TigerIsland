@@ -5,44 +5,44 @@ import javafx.util.Pair;
  */
 public class TilePositionCoordinates {
 
-    private Pair<Integer, Integer> volcanoCoordinates;
+    private Tuple volcanoCoordinates;
 
 
-    private Pair<Integer, Integer> leftHexCoordinates;
-    private Pair<Integer, Integer> rightHexCoordinates;
+    private Tuple leftHexCoordinates;
+    private Tuple rightHexCoordinates;
 
 
 
 
-    public TilePositionCoordinates(Pair<Integer,Integer> volcanoCoordinates, Orientation.Orientations leftHexOrientation){
-        Pair<Integer, Integer> leftHexCoordinates = Orientation.addPairByOrientation(volcanoCoordinates, leftHexOrientation);
+    public TilePositionCoordinates(Tuple volcanoCoordinates, Orientation.Orientations leftHexOrientation){
+        Tuple leftHexCoordinates = Orientation.addCoordinatesByOrientation(volcanoCoordinates, leftHexOrientation);
         Orientation.Orientations rightHexOrientation = Orientation.getRightHexMapping(leftHexOrientation);
-        Pair<Integer, Integer> rightHexCoordinates = Orientation.addPairByOrientation(volcanoCoordinates, rightHexOrientation);
+        Tuple rightHexCoordinates = Orientation.addCoordinatesByOrientation(volcanoCoordinates, rightHexOrientation);
 
         this.volcanoCoordinates = volcanoCoordinates;
         this.leftHexCoordinates = leftHexCoordinates;
         this.rightHexCoordinates = rightHexCoordinates;
     }
 
-    public void setVolcanoCoordinates(Pair<Integer, Integer> volcanoCoordinates) {
+    public void setVolcanoCoordinates(Tuple volcanoCoordinates) {
         this.volcanoCoordinates = volcanoCoordinates;
     }
-    public Pair<Integer, Integer> getVolcanoCoordinates() {
+    public Tuple getVolcanoCoordinates() {
         return volcanoCoordinates;
     }
-    public Pair<Integer, Integer> getLeftHexCoordinates() {
+    public Tuple getLeftHexCoordinates() {
         return leftHexCoordinates;
     }
 
-    public void setLeftHexCoordinates(Pair<Integer, Integer> leftHexCoordinates) {
+    public void setLeftHexCoordinates(Tuple leftHexCoordinates) {
         this.leftHexCoordinates = leftHexCoordinates;
     }
 
-    public Pair<Integer, Integer> getRightHexCoordinates() {
+    public Tuple getRightHexCoordinates() {
         return rightHexCoordinates;
     }
 
-    public void setRightHexCoordinates(Pair<Integer, Integer> rightHexCoordinates) {
+    public void setRightHexCoordinates(Tuple rightHexCoordinates) {
         this.rightHexCoordinates = rightHexCoordinates;
     }
 

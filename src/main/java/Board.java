@@ -1,89 +1,65 @@
-import javafx.util.Pair;
-
 /**
- * Created by Joe on 3/15/17.
+ * Created by Joe on 4/1/17.
  */
 public class Board {
 
-    protected Hex[][] gameBoard;
-    protected boolean[][] gameBoardAvailability;
+  protected  Hex[][][] gameBoard;
+  protected  boolean[][][] gameBoardAvailability;
+  private  final int ORIGINOFFSET = 97;
+  public Board() {
+    gameBoard = new Hex[194][194][194];
+    gameBoardAvailability = new boolean[194][194][194];
+  }
 
-    public Board() {
-        gameBoard = new Hex[376][376];
-        gameBoardAvailability = new boolean[376][376];
+  public  boolean isOriginEmpty() {
+    Tuple origin = calculateOffset(Orientation.getOrigin());
+    return (gameBoard[origin.getX()][origin.getY()][origin.getZ()] == null);
+  }
+
+
+  public void setHex (Hex hex, Tuple coordinates) {
+
+
+    if(!HexValidation.isLocationNull(coordinates, this)){
+      Hex presentHex = getHex(coordinates);
+      presentHex.incrementLevel();
+      presentHex.setTerrain(hex.getTerrain());
+      presentHex.setTileId(hex.getTileId());
+    }
+    else {
+      Tuple actualCoordinates = calculateOffset(coordinates);
+      gameBoardAvailability[actualCoordinates.getX()][actualCoordinates.getY()][actualCoordinates.getZ()] = true;
+      gameBoard[actualCoordinates.getX()][actualCoordinates.getY()][actualCoordinates.getZ()] = hex;
+      hex.setLocation(coordinates);
+      hex.incrementLevel();
     }
 
-    public boolean isOriginEmpty() {
-        Integer x = Orientation.getOriginValue().getKey();
-        Integer y = Orientation.getOriginValue().getValue();
-        return (gameBoard[x][y] == null);
-    }
+  }
 
-    void printSectionedBoard() {
-        // This will print out a 30x30 rectangle around the origin location
-        for (int i = 204; i > 173; i--) {
-            System.out.println();
-            for (int j = 173; j < 204; j++) {
-                if (i == 188 && j == 188) {
-                    if (gameBoard[i][j] == null) {
-                        System.out.print("***\t");
-                    } else {
-                        System.out.print("*");
-                        System.out.print(gameBoard[i][j].getTileId());
-                        System.out.print(gameBoard[i][j].getTerrainForVisualization());
-                        System.out.print(gameBoard[i][j].getLevel());
-                    }
-                } else {
-                    if (gameBoard[i][j] == null) {
-                        System.out.print("---\t");
-                    } else {
+  Hex getHex(Tuple hexLocation) {
+    Tuple coordinates = calculateOffset(hexLocation);
+    return gameBoard[coordinates.getX()][coordinates.getY()][coordinates.getZ()];
+  }
 
-                        System.out.print(gameBoard[i][j].getTileId());
-                        System.out.print(gameBoard[i][j].getTerrainForVisualization());
-                        System.out.print(gameBoard[i][j].getLevel() + "\t");
-                    }
-                }
+  public boolean[][][] getGameBoardAvailability() {
+    return gameBoardAvailability;
+  }
 
+  public Tuple calculateOffset(Tuple coordinates) {
+    int x = coordinates.getX() + ORIGINOFFSET;
+    int y = coordinates.getY() + ORIGINOFFSET;
+    int z = coordinates.getZ() + ORIGINOFFSET;
 
+    return new Tuple(x,y,z);
 
-            }
-        }
-    }
+  }
+  private Tuple removeOffset(Tuple coordinates) {
+    int x = coordinates.getX() - ORIGINOFFSET;
+    int y = coordinates.getY() - ORIGINOFFSET;
+    int z = coordinates.getZ() - ORIGINOFFSET;
 
+    return new Tuple(x,y,z);
 
-
-    void setHex (Hex hex, Pair<Integer,Integer> coordinatePair) {
-      Integer x = coordinatePair.getKey();
-      Integer y = coordinatePair.getValue();
-      Pair<Integer, Integer> placementLocation = new Pair<>(x, y);
-
-    if(!HexValidation.isLocationNull(placementLocation, this)){
-          Hex presentHex = this.getHex(placementLocation);
-          presentHex.incrementLevel();
-          presentHex.setTerrain(hex.getTerrain());
-          presentHex.setTileId(hex.getTileId());
-      }
-      else {
-          gameBoard[x][y] = hex;
-          gameBoardAvailability[x][y] = true;
-          hex.setLocation(placementLocation);
-          hex.incrementLevel();
-      }
-
-    }
-
-    Hex getHex(Pair<Integer, Integer> hexLocation) {
-        return gameBoard[hexLocation.getKey()][hexLocation.getValue()];
-    }
-
-
-    public boolean[][] getGameBoardAvailability() {
-        return gameBoardAvailability;
-    }
-
-    public boolean getGameBoardAvailabilityAtCoordinatePair(Pair<Integer, Integer> coordinatePair) {
-
-        return gameBoardAvailability[coordinatePair.getKey()][coordinatePair.getValue()];
-    }
+  }
 
 }
