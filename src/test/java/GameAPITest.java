@@ -15,6 +15,7 @@ public class GameAPITest {
     @Before
     public void setUp() throws Exception {
 
+        game = new GameAPI();
         testTile = new Tile(3, Terrain.terrainType.Jungle, Terrain.terrainType.Lake, Orientation.Orientations.left);
 
     }
@@ -116,9 +117,11 @@ public class GameAPITest {
     public void validatePlaceTileOnLevelOneSettlement() throws Exception {
         createLandMass();
 
-        Hex hex =  game.gameBoard.getHex(Orientation.getOrigin());
+        Hex hex =  game.gameBoard.getHex(Orientation.rightOf(Orientation.getOrigin()));
         hex.setOccupiedBy(Hex.gamePieces.Meeple);
         hex.setTeam(Hex.Team.Black);
+
+        game.updateSettlements();
 
         Tile additionalTile = new Tile(3, Terrain.terrainType.Grassland, Terrain.terrainType.Rocky, Orientation.Orientations.downLeft);
         TilePositionCoordinates additionPosition = new TilePositionCoordinates(Orientation.upRightOf(Orientation.getOrigin()), Orientation.Orientations.downLeft);
@@ -142,6 +145,22 @@ public class GameAPITest {
 
     @Test
     public void validatePlaceTileOnEntireSettlement() throws Exception {
+        createLandMass();
+
+        Hex meeple = game.gameBoard.getHex(Orientation.rightOf(Orientation.getOrigin()));
+        meeple.setOccupiedBy(Hex.gamePieces.Meeple);
+        meeple.setTeam(Hex.Team.White);
+
+        meeple = game.gameBoard.getHex(Orientation.downRightOf(Orientation.getOrigin()));
+        meeple.setOccupiedBy(Hex.gamePieces.Meeple);
+        meeple.setTeam(Hex.Team.White);
+
+        game.updateSettlements();
+
+        TilePositionCoordinates tilePlacement = new TilePositionCoordinates(Orientation.getOrigin(), Orientation.Orientations.downRight);
+
+        Assert.assertEquals("Nuking entire level 2 settlement", false, game.isValidTileNukingPosition(tilePlacement));
+
 
     }
 
@@ -150,12 +169,188 @@ public class GameAPITest {
 
     }
 
+    @Test
+    public void getWhiteSettlementFromLocationTest() throws Exception {
+        createLandMass();
+
+        Hex meeple = game.gameBoard.getHex(Orientation.rightOf(Orientation.getOrigin()));
+        meeple.setOccupiedBy(Hex.gamePieces.Meeple);
+        meeple.setTeam(Hex.Team.White);
+
+        meeple = game.gameBoard.getHex(Orientation.downRightOf(Orientation.getOrigin()));
+        meeple.setOccupiedBy(Hex.gamePieces.Meeple);
+        meeple.setTeam(Hex.Team.White);
+
+        game.updateSettlements();
+
+        SettlementDataFrame settlement = game.getWhiteSettlementFromLocation(Orientation.rightOf(Orientation.getOrigin()));
+        SettlementDataFrame testSettlement = game.getWhiteSettlements().getListOfSettlements().get(0);
+
+        Assert.assertEquals("Obtain white settlement from location of member Hex", true,
+                settlement.equals(testSettlement));
+    }
+
+    @Test
+    public void getBlackSettlementFromLocationTest() throws Exception {
+        createLandMass();
+
+        Hex meeple = game.gameBoard.getHex(Orientation.rightOf(Orientation.getOrigin()));
+        meeple.setOccupiedBy(Hex.gamePieces.Meeple);
+        meeple.setTeam(Hex.Team.Black);
+
+        meeple = game.gameBoard.getHex(Orientation.downRightOf(Orientation.getOrigin()));
+        meeple.setOccupiedBy(Hex.gamePieces.Meeple);
+        meeple.setTeam(Hex.Team.Black);
+
+        game.updateSettlements();
+
+        SettlementDataFrame settlement = game.getBlackSettlementFromLocation(Orientation.rightOf(Orientation.getOrigin()));
+        SettlementDataFrame testSettlement = game.getBlackSettlements().getListOfSettlements().get(0);
+
+        Assert.assertEquals("Obtain Black settlement from location of member Hex", true,
+                settlement.equals(testSettlement));
+    }
+
+    @Test
+    public void getListOfValidLocationsMultiLevelsTest() throws Exception {
+        createLandMass();
+        expandLandMass();
+        ArrayList<Tuple> nukingLocations = game.getValidNukingLocations();
+        ArrayList<Tuple> correctLocations = new ArrayList<>();
+
+        correctLocations.add(Orientation.getOrigin());
+        correctLocations.add(Orientation.upRightOf(Orientation.getOrigin()));
+
+        Assert.assertEquals("Testing valid locations list creation on island with multiple levels", true,
+                nukingLocations.containsAll(correctLocations) && correctLocations.containsAll(nukingLocations));
+    }
+
+    @Test
+    public void isInSettlementTest() throws Exception {
+        createLandMass();
+
+        Hex meeple = game.gameBoard.getHex(Orientation.rightOf(Orientation.getOrigin()));
+        meeple.setOccupiedBy(Hex.gamePieces.Meeple);
+        meeple.setTeam(Hex.Team.Black);
+
+        meeple = game.gameBoard.getHex(Orientation.downRightOf(Orientation.getOrigin()));
+        meeple.setOccupiedBy(Hex.gamePieces.Meeple);
+        meeple.setTeam(Hex.Team.Black);
+
+        game.updateSettlements();
+
+        SettlementDataFrame testSettlement = game.getBlackSettlements().getListOfSettlements().get(0);
+
+        boolean valid = game.isInSettlement(Orientation.rightOf(Orientation.getOrigin()), testSettlement);
+        valid = valid || game.isInSettlement(Orientation.downRightOf(Orientation.getOrigin()), testSettlement);
+
+        Assert.assertTrue("Check if hex is found in settlement", valid);
+
+    }
+
+    @Test
+    public void isNotInSettlementTest() throws Exception {
+        createLandMass();
+
+        Hex meeple = game.gameBoard.getHex(Orientation.rightOf(Orientation.getOrigin()));
+        meeple.setOccupiedBy(Hex.gamePieces.Meeple);
+        meeple.setTeam(Hex.Team.Black);
+
+        meeple = game.gameBoard.getHex(Orientation.downRightOf(Orientation.getOrigin()));
+        meeple.setOccupiedBy(Hex.gamePieces.Meeple);
+        meeple.setTeam(Hex.Team.Black);
+
+        game.updateSettlements();
+
+        SettlementDataFrame testSettlement = game.getBlackSettlements().getListOfSettlements().get(0);
+
+        boolean valid = game.isInSettlement(Orientation.getOrigin(), testSettlement);
+
+        Assert.assertFalse("Check if hex is found in settlement when location not a part of settlement", valid);
+
+    }
+
+    @Test
+    public void getListOfValidLocationsLevelOneSettlementTest() throws Exception {
+        createLandMass();
+        expandLandMass();
+
+
+        Hex meeple = game.gameBoard.getHex(Orientation.rightOf(Orientation.getOrigin()));
+        meeple.setOccupiedBy(Hex.gamePieces.Meeple);
+        meeple.setTeam(Hex.Team.White);
+
+        game.gameBoard.getHex(Orientation.upRightOf(Orientation.upRightOf(Orientation.getOrigin()))).setTileId(6);
+
+        game.updateSettlements();
+
+        ArrayList<Tuple> nukingLocations = game.getValidNukingLocations();
+        ArrayList<Tuple> correctLocations = new ArrayList<>();
+
+        correctLocations.add(Orientation.upRightOf(Orientation.getOrigin()));
+
+
+        Assert.assertEquals("Testing valid locations list creation on island with" +
+                        " multiple levels and a level one settlement", true,
+                (nukingLocations.containsAll(correctLocations)) && correctLocations.containsAll(nukingLocations));
+    }
+
 
     @Test
     public void getRight() throws Exception {
 
         Assert.assertEquals("verify getRight", testTile.getRight().getTerrain(), Terrain.terrainType.Lake);
 
+    }
+
+    @Test
+    public void isTilePlacementNukingWholeSettlementOfHexOneTest() throws Exception {
+        createLandMass();
+
+        Hex meeple = game.gameBoard.getHex(Orientation.rightOf(Orientation.getOrigin()));
+        meeple.setOccupiedBy(Hex.gamePieces.Meeple);
+        meeple.setTeam(Hex.Team.Black);
+
+        meeple = game.gameBoard.getHex(Orientation.downRightOf(Orientation.getOrigin()));
+        meeple.setOccupiedBy(Hex.gamePieces.Meeple);
+        meeple.setTeam(Hex.Team.Black);
+
+        game.updateSettlements();
+
+        TilePositionCoordinates tilePositionCoordinates =
+                new TilePositionCoordinates(Orientation.getOrigin(), Orientation.Orientations.downRight);
+
+        boolean valid = game.isTilePlacementNukingWholeSettlementOfHexOne(tilePositionCoordinates.getLeftHexCoordinates(),
+                tilePositionCoordinates.getVolcanoCoordinates(), tilePositionCoordinates.getRightHexCoordinates());
+
+        Assert.assertTrue("Checks if settlement under leftHex is totally nuked, in this scenario it is", valid);
+    }
+
+    @Test
+    public void isTilePlacementNOTNukingWholeSettlementOfHexOneTest() throws Exception {
+        createLandMass();
+
+        Hex meeple = game.gameBoard.getHex(Orientation.rightOf(Orientation.getOrigin()));
+        meeple.setOccupiedBy(Hex.gamePieces.Meeple);
+        meeple.setTeam(Hex.Team.Black);
+
+        meeple = game.gameBoard.getHex(Orientation.downRightOf(Orientation.getOrigin()));
+        meeple.setOccupiedBy(Hex.gamePieces.Meeple);
+        meeple.setTeam(Hex.Team.Black);
+
+        meeple = game.gameBoard.getHex(Orientation.rightOf(Orientation.rightOf(Orientation.getOrigin())));
+        meeple.setOccupiedBy(Hex.gamePieces.Meeple);
+        meeple.setTeam(Hex.Team.Black);
+
+        game.updateSettlements();
+
+        TilePositionCoordinates tilePositionCoordinates =
+                new TilePositionCoordinates(Orientation.getOrigin(), Orientation.Orientations.downRight);
+
+        boolean valid = game.isTilePlacementNukingWholeSettlementOfHexOne(tilePositionCoordinates.getLeftHexCoordinates(),
+                tilePositionCoordinates.getVolcanoCoordinates(), tilePositionCoordinates.getRightHexCoordinates());
+
+        Assert.assertFalse("Checks if settlement under leftHex is totally nuked, in this scenario it is not", valid);
     }
 
   public void createLandMass() throws Exception {
@@ -172,4 +367,24 @@ public class GameAPITest {
     game.placeTile(tile2, tile2Loc);
 
   }
+
+    public void expandLandMass() throws Exception {
+        Tuple origin = Orientation.getOrigin();
+        Tuple tile1Loc = Orientation.rightOf(Orientation.upRightOf(origin));
+        Tuple tile2Loc = Orientation.leftOf(tile1Loc);
+
+        Tuple tile3Loc = Orientation.upRightOf(Orientation.upRightOf(tile2Loc));
+        Tuple tile4Loc = tile2Loc;
+        Tuple tile5Loc = Orientation.getOrigin();
+
+        Tile tile3 = new Tile(3, Terrain.terrainType.Lake, Terrain.terrainType.Grassland, Orientation.Orientations.downLeft);
+        Tile tile4 = new Tile(4, Terrain.terrainType.Lake, Terrain.terrainType.Grassland, Orientation.Orientations.upLeft);
+        Tile tile5 = new Tile(5, Terrain.terrainType.Lake, Terrain.terrainType.Grassland, Orientation.Orientations.downRight);
+
+        game.placeTile(tile3, tile3Loc);
+        game.placeTile(tile4, tile4Loc);
+        game.placeTile(tile5, tile5Loc);
+
+    }
+
 }
