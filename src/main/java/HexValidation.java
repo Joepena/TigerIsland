@@ -37,6 +37,17 @@ public class HexValidation {
       return(gameBoard.getHex(coordinatePair) == null);
     }
 
+    public static boolean isLocationFree(Tuple coordinatePair, Board gameBoard){
+        if(!isLocationNull(coordinatePair, gameBoard)) {
+            if (gameBoard.getHex(coordinatePair).getOccupiedBy() == Hex.gamePieces.empty)
+                return true;
+            else
+                return false;
+        } else {
+            return false;
+        }
+    }
+
 
     public static boolean isValidHexEruption(Tuple testingLocation, Board gameBoard) {
         Hex targetHex = gameBoard.getHex(testingLocation);

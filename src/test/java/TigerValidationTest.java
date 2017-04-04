@@ -3,13 +3,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 /**
- * Created by Max on 4/1/17.
+ * Created by Max on 4/4/17.
  */
-
-public class TotoroValidationTest {
+public class TigerValidationTest {
     GameAPI gameAPI;
     ArrayList<Tuple> expectedResults = new ArrayList<>();
     Hex hex1;
@@ -31,41 +29,25 @@ public class TotoroValidationTest {
     }
 
     @Test
-    public void totoroValidation() {
-        setUpTotoroValidationScenario1();
+    public void tigerValidation () throws Exception {
+        setUpTigerValidationScenario1();
         gameAPI.updateSettlements();
 
-        ArrayList<Tuple> validLocations = gameAPI.validTotoroPlacements();
+        ArrayList<Tuple> validLocations = gameAPI.validTigerPlacements();
 
         Assert.assertEquals(expectedResults, validLocations);
-
-    }
-
-
-    @Test
-    public void canSelectBuildTotoroTestPass() {
-        setUpTotoroValidationScenario1();
-        gameAPI.updateSettlements();
-        boolean pass = gameAPI.canSelectBuildTotoro();
-
-        Assert.assertEquals(true, pass);
-    }
-
-    @Test
-    public void canSelectBuildTotoroTestFail() {
-        setUpTotoroValidationScenario1();
-        gameAPI.gameBoard.getHex(Orientation.rightOf(Orientation.getOrigin())).setTeam(Hex.Team.White);
-        gameAPI.updateSettlements();
-        boolean pass = gameAPI.canSelectBuildTotoro();
-
-        Assert.assertEquals(false, pass);
     }
 
 
 
 
 
-    private void setUpTotoroValidationScenario1() {
+
+
+
+
+
+    private void setUpTigerValidationScenario1() {
         hex1 = new Hex(1, Terrain.terrainType.Volcano);
         hex2 = new Hex(1, Terrain.terrainType.Grassland);
         hex3 = new Hex(1, Terrain.terrainType.Rocky);
@@ -83,18 +65,17 @@ public class TotoroValidationTest {
         hex12 = new Hex(4, Terrain.terrainType.Volcano);
 
         hex9.setTeam(Hex.Team.Black);
-        hex8.setTeam(Hex.Team.Black);
+        hex8.setTeam(Hex.Team.White);
         hex6.setTeam(Hex.Team.Black);
-        hex5.setTeam(Hex.Team.Black);
         hex3.setTeam(Hex.Team.Black);
         hex2.setTeam(Hex.Team.White);
 
         hex9.setOccupiedBy(Hex.gamePieces.Meeple);
         hex8.setOccupiedBy(Hex.gamePieces.Meeple);
         hex6.setOccupiedBy(Hex.gamePieces.Meeple);
-        hex5.setOccupiedBy(Hex.gamePieces.Meeple);
         hex3.setOccupiedBy(Hex.gamePieces.Meeple);
         hex2.setOccupiedBy(Hex.gamePieces.Meeple);
+
 
         gameAPI.gameBoard.setHex(hex1, Orientation.getOrigin());
         gameAPI.gameBoard.setHex(hex2, Orientation.downLeftOf(Orientation.getOrigin()));
@@ -112,14 +93,12 @@ public class TotoroValidationTest {
         gameAPI.gameBoard.setHex(hex11, Orientation.upRightOf(hex9.getLocation()));
         gameAPI.gameBoard.setHex(hex12, Orientation.rightOf(hex11.getLocation()));
 
+        hex10.setLevel(3);
+        hex5.setLevel(3);
+        hex11.setLevel(2);
+
+        expectedResults.add(hex5.getLocation());
         expectedResults.add(hex10.getLocation());
-        expectedResults.add(hex11.getLocation());
 
     }
-
-
-
-
-
-
 }

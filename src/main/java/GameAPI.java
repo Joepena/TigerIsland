@@ -360,4 +360,107 @@ public class GameAPI {
         return false;
     }
 
+    public ArrayList<Tuple> validTotoroPlacements() {
+        ArrayList<Tuple> validLocations = new ArrayList<>();
+        ArrayList<Tuple> testableTuples = new ArrayList<>();
+        ArrayList<SettlementDataFrame> ourSettlements = getBlackSettlements().getListOfSettlements();
+
+        for(int i = 0; i < ourSettlements.size(); i++) {
+            if(ourSettlements.get(i).getSettlementSize() >= 5)
+                for(int j = 0; j < ourSettlements.get(i).getSettlementSize(); j++)
+                    testableTuples.add(ourSettlements.get(i).getListOfHexLocations().get(j));
+        } // This above loop finds all tuples in settlements size 5+
+
+        for(int i = 0; i < testableTuples.size(); i++) {
+
+            Tuple currentTuple =  testableTuples.get(i);
+
+            if(HexValidation.isLocationFree(Orientation.leftOf(currentTuple), gameBoard)
+                    && gameBoard.getHex(Orientation.leftOf(currentTuple)).getTerrain() != Terrain.terrainType.Volcano)
+                validLocations.add(Orientation.leftOf(currentTuple));
+            if(HexValidation.isLocationFree(Orientation.rightOf(currentTuple), gameBoard)
+                    && gameBoard.getHex(Orientation.rightOf(currentTuple)).getTerrain() != Terrain.terrainType.Volcano)
+                validLocations.add(Orientation.rightOf(currentTuple));
+            if (HexValidation.isLocationFree(Orientation.upLeftOf(currentTuple), gameBoard)
+                    && gameBoard.getHex(Orientation.upLeftOf(currentTuple)).getTerrain() != Terrain.terrainType.Volcano)
+                validLocations.add(Orientation.upLeftOf(currentTuple));
+            if (HexValidation.isLocationFree(Orientation.upRightOf(currentTuple), gameBoard)
+                    && gameBoard.getHex(Orientation.upRightOf(currentTuple)).getTerrain() != Terrain.terrainType.Volcano)
+                validLocations.add(Orientation.upRightOf(currentTuple));
+            if (HexValidation.isLocationFree(Orientation.downLeftOf(currentTuple), gameBoard)
+                    && gameBoard.getHex(Orientation.downLeftOf(currentTuple)).getTerrain() != Terrain.terrainType.Volcano)
+                validLocations.add(Orientation.downLeftOf(currentTuple));
+            if (HexValidation.isLocationFree(Orientation.downRightOf(currentTuple), gameBoard)
+                    && gameBoard.getHex(Orientation.downRightOf(currentTuple)).getTerrain() != Terrain.terrainType.Volcano)
+                validLocations.add(Orientation.downRightOf(currentTuple));
+        } // the above loop looks around every hex in the settlements for an empty placed hex
+
+        ArrayList<Tuple> uniqueValidLocations = new ArrayList<>();
+
+        for(int i = 0; i < validLocations.size(); i++) {
+            if(!uniqueValidLocations.contains(validLocations.get(i)))
+                uniqueValidLocations.add(validLocations.get(i));
+        }
+
+        return uniqueValidLocations;
+    }
+
+    public ArrayList<Tuple> validTigerPlacements() {
+        ArrayList<Tuple> validLocations = new ArrayList<>();
+        ArrayList<Tuple> testableTuples = new ArrayList<>();
+        ArrayList<SettlementDataFrame> ourSettlements = getBlackSettlements().getListOfSettlements();
+
+        for(int i = 0; i < ourSettlements.size(); i++) {
+            if(ourSettlements.get(i).getSettlementSize() >= 1)
+                for(int j = 0; j < ourSettlements.get(i).getSettlementSize(); j++)
+                    testableTuples.add(ourSettlements.get(i).getListOfHexLocations().get(j));
+        } // This above loop finds all tuples in settlements size 1+
+
+        for(int i = 0; i < testableTuples.size(); i++) {
+
+            Tuple currentTuple =  testableTuples.get(i);
+
+            if(HexValidation.isLocationFree(Orientation.leftOf(currentTuple), gameBoard)
+                    && gameBoard.getHex(Orientation.leftOf(currentTuple)).getTerrain() != Terrain.terrainType.Volcano
+                    && gameBoard.getHex(Orientation.leftOf(currentTuple)).getLevel() >= 3)
+                validLocations.add(Orientation.leftOf(currentTuple));
+            if(HexValidation.isLocationFree(Orientation.rightOf(currentTuple), gameBoard)
+                    && gameBoard.getHex(Orientation.rightOf(currentTuple)).getTerrain() != Terrain.terrainType.Volcano
+                    && gameBoard.getHex(Orientation.rightOf(currentTuple)).getLevel() >= 3)
+                validLocations.add(Orientation.rightOf(currentTuple));
+            if (HexValidation.isLocationFree(Orientation.upLeftOf(currentTuple), gameBoard)
+                    && gameBoard.getHex(Orientation.upLeftOf(currentTuple)).getTerrain() != Terrain.terrainType.Volcano
+                    && gameBoard.getHex(Orientation.upLeftOf(currentTuple)).getLevel() >= 3)
+                validLocations.add(Orientation.upLeftOf(currentTuple));
+            if (HexValidation.isLocationFree(Orientation.upRightOf(currentTuple), gameBoard)
+                    && gameBoard.getHex(Orientation.upRightOf(currentTuple)).getTerrain() != Terrain.terrainType.Volcano
+                    && gameBoard.getHex(Orientation.upRightOf(currentTuple)).getLevel() >= 3)
+                validLocations.add(Orientation.upRightOf(currentTuple));
+            if (HexValidation.isLocationFree(Orientation.downLeftOf(currentTuple), gameBoard)
+                    && gameBoard.getHex(Orientation.downLeftOf(currentTuple)).getTerrain() != Terrain.terrainType.Volcano
+                    && gameBoard.getHex(Orientation.downLeftOf(currentTuple)).getLevel() >= 3)
+                validLocations.add(Orientation.downLeftOf(currentTuple));
+            if (HexValidation.isLocationFree(Orientation.downRightOf(currentTuple), gameBoard)
+                    && gameBoard.getHex(Orientation.downRightOf(currentTuple)).getTerrain() != Terrain.terrainType.Volcano
+                    && gameBoard.getHex(Orientation.downRightOf(currentTuple)).getLevel() >= 3)
+                validLocations.add(Orientation.downRightOf(currentTuple));
+        } // the above loop looks around every hex in the settlements for an empty placed hex above level 3
+
+        ArrayList<Tuple> uniqueValidLocations = new ArrayList<>();
+
+        for(int i = 0; i < validLocations.size(); i++) {
+            if(!uniqueValidLocations.contains(validLocations.get(i)))
+                uniqueValidLocations.add(validLocations.get(i));
+        }
+
+        return uniqueValidLocations;
+    }
+
+
+
+
+
+
+
+
 }
