@@ -2,6 +2,7 @@
 import com.sun.org.apache.xpath.internal.operations.Or;
 import javafx.util.Pair;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -69,6 +70,37 @@ public class GameAPI {
 
     public Settlements getBlackSettlements() {
     return blackSettlements;
+  }
+
+  protected SettlementDataFrame getBlackSettlementFromLocation(Tuple coordinates){
+        ArrayList<SettlementDataFrame> listOfBlackSettlements = blackSettlements.getListOfSettlements();
+
+        for(int i = 0; i < listOfBlackSettlements.size(); i++){
+            ArrayList<Tuple> hexesInSettlement = listOfBlackSettlements.get(i).getListOfHexLocations();
+            for (Tuple aHexesInSettlement : hexesInSettlement) {
+                if (aHexesInSettlement.equals(coordinates))
+                    return listOfBlackSettlements.get(i);
+            }
+        }
+        return null;
+  }
+
+    protected SettlementDataFrame getWhiteSettlementFromLocation(Tuple coordinates){
+        ArrayList<SettlementDataFrame> listOfWhiteSettlements = whiteSettlements.getListOfSettlements();
+
+        for(int i = 0; i < listOfWhiteSettlements.size(); i++){
+            ArrayList<Tuple> hexesInSettlement = listOfWhiteSettlements.get(i).getListOfHexLocations();
+            for (Tuple aHexesInSettlement : hexesInSettlement) {
+                if (aHexesInSettlement.equals(coordinates))
+                    return listOfWhiteSettlements.get(i);
+
+            }
+        }
+        return null;
+    }
+
+  protected boolean isInSettlement(Tuple coordinates, SettlementDataFrame settlement){
+      return settlement.getListOfHexLocations().contains(coordinates);
   }
 
     void placeTile(Tile tile, Tuple coordinates) {
@@ -280,9 +312,6 @@ public class GameAPI {
         if(hexUnderLeft == null || hexUnderRight == null || hexUnderVolcano == null)
             return false;
 
-        int settlementPiecesNuked = 0;
-        int settlementSize = 4;
-
         if(!HexValidation.isValidVolcanoPlacement(tilePositionCoordinates.getVolcanoCoordinates(),
           gameBoard))
             return false;
@@ -293,30 +322,66 @@ public class GameAPI {
         if(hexUnderVolcano.getTileId() == hexUnderLeft.getTileId() && hexUnderRight.getTileId() == hexUnderVolcano.getTileId())
             return false;
 
-        if(hexUnderVolcano.getOccupiedBy() != Hex.gamePieces.empty){
-            settlementPiecesNuked++;
-            if(!HexValidation.isValidHexEruption(tilePositionCoordinates.getVolcanoCoordinates(),
-              gameBoard))
-                return false;
-        }
-        if(hexUnderLeft.getOccupiedBy() != Hex.gamePieces.empty){
-            settlementPiecesNuked++;
-            if(!HexValidation.isValidHexEruption(tilePositionCoordinates.getLeftHexCoordinates(),
-              gameBoard))
-                return false;
-        }
-        if(hexUnderRight.getOccupiedBy() != Hex.gamePieces.empty){
-            settlementPiecesNuked++;
-            if(!HexValidation.isValidHexEruption(tilePositionCoordinates.getRightHexCoordinates(),
-              gameBoard))
-                return false;
-            }
-
-        if(settlementPiecesNuked == settlementSize)
+        if(isVolcanoNukingWholeSettlement(tilePositionCoordinates))
             return false;
 
+        if(isLeftHexNukingWholeSettlement(tilePositionCoordinates))
+            return false;
+
+        if(isRightHexNukingWholeSettlement(tilePositionCoordinates))
+            return false;
+
+        if(TempHexHelpers.hasTigerTotoro(hexUnderVolcano) || TempHexHelpers.hasTigerTotoro(hexUnderLeft) ||
+                TempHexHelpers.hasTigerTotoro(hexUnderRight))
+            return false;
 
         return true;
+    }
+
+    protected boolean isVolcanoNukingWholeSettlement(TilePositionCoordinates tileCoordinates) {
+       return isTilePlacementNukingWholeSettlementOfHexOne(tileCoordinates.getVolcanoCoordinates(),
+                tileCoordinates.getLeftHexCoordinates(), tileCoordinates.getRightHexCoordinates());
+    }
+    protected boolean isLeftHexNukingWholeSettlement(TilePositionCoordinates tileCoordinates) {
+        return isTilePlacementNukingWholeSettlementOfHexOne(tileCoordinates.getLeftHexCoordinates(),
+                tileCoordinates.getVolcanoCoordinates(), tileCoordinates.getRightHexCoordinates());
+    }
+    protected boolean isRightHexNukingWholeSettlement(TilePositionCoordinates tileCoordinates) {
+        return isTilePlacementNukingWholeSettlementOfHexOne(tileCoordinates.getRightHexCoordinates(),
+                tileCoordinates.getLeftHexCoordinates(), tileCoordinates.getVolcanoCoordinates());
+    }
+
+    protected boolean isTilePlacementNukingWholeSettlementOfHexOne(Tuple location1, Tuple location2, Tuple location3){
+        Hex hexOfSettlement = gameBoard.getHex(location1);
+
+        if (hexOfSettlement.getOccupiedBy() != Hex.gamePieces.empty) {
+            if (hexOfSettlement.getTeam() == Hex.Team.Black) {
+                int nukeCount = 1;
+                SettlementDataFrame settlement = getBlackSettlementFromLocation(location1);
+                if (settlement == null) {
+                } else {
+                    if(isInSettlement(location2, settlement))
+                        nukeCount++;
+                    if(isInSettlement(location3, settlement))
+                        nukeCount++;
+                    if(settlement.getSettlementSize() == nukeCount)
+                        return true;
+                }
+            } else if (hexOfSettlement.getTeam() == Hex.Team.White) {
+                int nukeCount = 1;
+                SettlementDataFrame settlement = getWhiteSettlementFromLocation(location1);
+                if (settlement == null) {
+                } else {
+                   if(isInSettlement(location2, settlement))
+                       nukeCount++;
+                   if(isInSettlement(location3, settlement))
+                       nukeCount++;
+                   if(settlement.getSettlementSize() == nukeCount)
+                       return true;
+                }
+            }
+        }
+        return false;
     }
 
     public boolean isTileDestinationValid(Tile tile, Tuple destCoordPair){
