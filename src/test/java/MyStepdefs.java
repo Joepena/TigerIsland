@@ -65,6 +65,7 @@ public class MyStepdefs {
         Orientation.Orientations leftOrientation = Orientation.Orientations.downLeft;
         testTile = new Tile(1,terrainLeft,terrainRight,leftOrientation);
         testPair = Orientation.getOrigin();
+        GameAPIUtil.setGameAPI(testAPI);
     }
 
     @When("^the first player places a tile")

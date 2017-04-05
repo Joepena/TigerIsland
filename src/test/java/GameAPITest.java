@@ -17,6 +17,7 @@ public class GameAPITest {
 
         game = new GameAPI();
         testTile = new Tile(3, Terrain.terrainType.Jungle, Terrain.terrainType.Lake, Orientation.Orientations.left);
+        GameAPIUtil.setGameAPI(game);
 
     }
 
@@ -69,7 +70,7 @@ public class GameAPITest {
         Tile newTile = new Tile(3, Terrain.terrainType.Jungle, Terrain.terrainType.Grassland, Orientation.Orientations.downLeft);
         TilePositionCoordinates tilePosition = new TilePositionCoordinates(Orientation.getOrigin(), Orientation.Orientations.downLeft);
 
-        Assert.assertEquals("Placing new tile right on top of entire present tile", false, GameAPIUtil.isValidTileNukingPosition(tilePosition, game));
+        Assert.assertEquals("Placing new tile right on top of entire present tile", false, GameAPIUtil.isValidTileNukingPosition(tilePosition));
     }
 
     @Test
@@ -83,7 +84,7 @@ public class GameAPITest {
 
         TilePositionCoordinates testPosition = new TilePositionCoordinates(Orientation.upRightOf(Orientation.getOrigin()), Orientation.Orientations.left);
 
-        Assert.assertEquals("Placing tile on uneven hex levels", false, GameAPIUtil.isValidTileNukingPosition(testPosition, game));
+        Assert.assertEquals("Placing tile on uneven hex levels", false, GameAPIUtil.isValidTileNukingPosition(testPosition));
     }
 
     @Test
@@ -96,7 +97,7 @@ public class GameAPITest {
         TilePositionCoordinates additionPosition = new TilePositionCoordinates(Orientation.upRightOf(Orientation.getOrigin()), Orientation.Orientations.downLeft);
 
 
-        Assert.assertEquals("Placing tile on top of Totoro", false, GameAPIUtil.isValidTileNukingPosition(additionPosition, game));
+        Assert.assertEquals("Placing tile on top of Totoro", false, GameAPIUtil.isValidTileNukingPosition(additionPosition));
 
     }
 
@@ -110,7 +111,7 @@ public class GameAPITest {
         TilePositionCoordinates additionPosition = new TilePositionCoordinates(Orientation.upRightOf(Orientation.getOrigin()), Orientation.Orientations.downLeft);
 
 
-        Assert.assertEquals("Placing tile on top of Tiger", false, GameAPIUtil.isValidTileNukingPosition(additionPosition, game));
+        Assert.assertEquals("Placing tile on top of Tiger", false, GameAPIUtil.isValidTileNukingPosition(additionPosition));
     }
 
     @Test
@@ -127,7 +128,7 @@ public class GameAPITest {
         TilePositionCoordinates additionPosition = new TilePositionCoordinates(Orientation.upRightOf(Orientation.getOrigin()), Orientation.Orientations.downLeft);
 
 
-        Assert.assertEquals("Placing tile on top of level One Settlement", false, GameAPIUtil.isValidTileNukingPosition(additionPosition, game));
+        Assert.assertEquals("Placing tile on top of level One Settlement", false, GameAPIUtil.isValidTileNukingPosition(additionPosition));
     }
 
     @Test
@@ -159,7 +160,7 @@ public class GameAPITest {
 
         TilePositionCoordinates tilePlacement = new TilePositionCoordinates(Orientation.getOrigin(), Orientation.Orientations.downRight);
 
-        Assert.assertEquals("Nuking entire level 2 settlement", false, GameAPIUtil.isValidTileNukingPosition(tilePlacement, game));
+        Assert.assertEquals("Nuking entire level 2 settlement", false, GameAPIUtil.isValidTileNukingPosition(tilePlacement));
 
 
     }
@@ -321,7 +322,7 @@ public class GameAPITest {
                 new TilePositionCoordinates(Orientation.getOrigin(), Orientation.Orientations.downRight);
 
         boolean valid = GameAPIUtil.isTilePlacementNukingWholeSettlementOfHexOne(tilePositionCoordinates.getLeftHexCoordinates(),
-                tilePositionCoordinates.getVolcanoCoordinates(), tilePositionCoordinates.getRightHexCoordinates(), game);
+                tilePositionCoordinates.getVolcanoCoordinates(), tilePositionCoordinates.getRightHexCoordinates());
 
         Assert.assertTrue("Checks if settlement under leftHex is totally nuked, in this scenario it is", valid);
     }
@@ -348,7 +349,7 @@ public class GameAPITest {
                 new TilePositionCoordinates(Orientation.getOrigin(), Orientation.Orientations.downRight);
 
         boolean valid = GameAPIUtil.isTilePlacementNukingWholeSettlementOfHexOne(tilePositionCoordinates.getLeftHexCoordinates(),
-                tilePositionCoordinates.getVolcanoCoordinates(), tilePositionCoordinates.getRightHexCoordinates(), game);
+                tilePositionCoordinates.getVolcanoCoordinates(), tilePositionCoordinates.getRightHexCoordinates());
 
         Assert.assertFalse("Checks if settlement under leftHex is totally nuked, in this scenario it is not", valid);
     }

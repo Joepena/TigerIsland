@@ -68,14 +68,11 @@ public class GameAPI {
   }
 
 
-
-
-
     void placeTile(Tile tile, Tuple coordinates) {
 
         Orientation.Orientations rightOrient = Orientation.getRightHexMapping(tile.getLeftHexOrientation());
 
-        if (GameAPIUtil.isTileDestinationValid(tile, coordinates, this.gameBoard)){
+        if (GameAPIUtil.isTileDestinationValid(tile, coordinates)){
 
             gameBoard.setHex(tile.getVolcano(), coordinates);
             gameBoard.setHex(tile.getLeft(), Orientation.addCoordinatesByOrientation(coordinates, tile.getLeftHexOrientation()));
@@ -95,14 +92,8 @@ public class GameAPI {
 
 
     protected void updateSettlements() {
-      GameAPIUtil.updateBothSettlement(whiteSettlements, blackSettlements, this.gameBoard);
+      GameAPIUtil.updateBothSettlement(whiteSettlements, blackSettlements);
     }
-
-
-
-
-
-
 
     ArrayList<Tuple> getValidNukingLocations() {
         if(gameBoard.isOriginEmpty()){
@@ -120,10 +111,10 @@ public class GameAPI {
 
         while(!bfsQueue.isEmpty()){
             Tuple coordinates = bfsQueue.remove();
-            if(GameAPIUtil.isValidNukingCoordinates(coordinates, this)){
+            if(GameAPIUtil.isValidNukingCoordinates(coordinates)){
                 validNukingLocations.add(coordinates);
             }
-            neighbors = GameAPIUtil.getNeighbors(coordinates, this.gameBoard);
+            neighbors = GameAPIUtil.getNeighbors(coordinates);
 
             for(Hex neighbor : neighbors) {
                 if(!traversedLocations.containsKey(neighbor.getLocation())) {
@@ -137,17 +128,6 @@ public class GameAPI {
 
         return validNukingLocations;
     }
-
-
-
-
-
-
-
-
-
-
-
 
     public boolean canSelectBuildTotoro() {
 
