@@ -21,7 +21,7 @@ public class TilePlacementTests {
     public void isTileDestinationValidTest_OriginEmpty(){
         Tuple originCoords = Orientation.getOrigin();
 
-        Assert.assertEquals("test",true,GameAPIUtil.isTileDestinationValid(testTile, originCoords));
+        Assert.assertEquals("test",true,game.APIUtils.isTileDestinationValid(testTile, originCoords));
     }
 
     @Test
@@ -29,7 +29,7 @@ public class TilePlacementTests {
         Tuple originCoords = Orientation.getOrigin();
         game.placeTile(existingTile, originCoords);
 
-        Assert.assertEquals("test",true,GameAPIUtil.isTileDestinationValid(testTile, originCoords));
+        Assert.assertEquals("test",true,game.APIUtils.isTileDestinationValid(testTile, originCoords));
     }
 
     @Test
@@ -41,7 +41,7 @@ public class TilePlacementTests {
         Tuple testCoords = Orientation.addCoordinatesByOrientation(originCoords, Orientation.Orientations.upRight);
         testCoords = Orientation.addCoordinatesByOrientation(testCoords, Orientation.Orientations.right);
 
-        Assert.assertEquals("test",true,GameAPIUtil.isTileDestinationValid(testTile, testCoords));
+        Assert.assertEquals("test",true,game.APIUtils.isTileDestinationValid(testTile, testCoords));
 
     }
 
@@ -53,7 +53,7 @@ public class TilePlacementTests {
         Tuple testCoords = Orientation.addCoordinatesByOrientation(originCoords, Orientation.Orientations.upRight);
         testCoords = Orientation.addCoordinatesByOrientation(testCoords, Orientation.Orientations.upRight);
 
-        Assert.assertEquals("test",true,GameAPIUtil.isTileDestinationValid(testTile, testCoords));
+        Assert.assertEquals("test",true,game.APIUtils.isTileDestinationValid(testTile, testCoords));
 
     }
 
@@ -66,7 +66,7 @@ public class TilePlacementTests {
         testCoords = Orientation.addCoordinatesByOrientation(testCoords, Orientation.Orientations.downRight);
         testCoords = Orientation.addCoordinatesByOrientation(testCoords, Orientation.Orientations.downRight);
 
-        Assert.assertEquals("test",false,GameAPIUtil.isTileDestinationValid(testTile, testCoords));
+        Assert.assertEquals("test",false,game.APIUtils.isTileDestinationValid(testTile, testCoords));
 
     }
 

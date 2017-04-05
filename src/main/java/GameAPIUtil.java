@@ -5,19 +5,21 @@ import java.util.Collections;
  * Created by Nicholas on 3/24/2017.
  */
 public class GameAPIUtil {
-    private static final int BOARD_EDGE = 97;
+    private final int BOARD_EDGE = 97;
 
-    private static GameAPI game;
+    private Board gameBoard;
+    private GameAPI game;
 
-    public static void setGameAPI(GameAPI game){
-        GameAPIUtil.game = game;
-    }
+  public GameAPIUtil(GameAPI gameAPI) {
+    this.game = gameAPI;
+    this.gameBoard = gameAPI.gameBoard;
+  }
 
-    public static void updateBothSettlement(Settlements whiteSettlements, Settlements blackSettlements) {
+  public void updateBothSettlement() {
         Settlements settlement = new Settlements();
         settlement.wipeSettlementSet();
         // create a copy of the availability array
-        boolean[][][] array = game.gameBoard.getGameBoardAvailability();
+        boolean[][][] array = gameBoard.getGameBoardAvailability();
         boolean[][][] copyArr = new boolean[array.length][][];
 
         for (int i = 0; i < array.length; i++) {
@@ -30,21 +32,21 @@ public class GameAPIUtil {
         }
 
         dfsSearch(copyArr, Orientation.getOrigin(), settlement, new SettlementDataFrame(0,new Tuple(0,0,0)));
-        Settlements.retriveWhiteSettlements(settlement, whiteSettlements);
-        Settlements.retriveBlackSettlements(settlement, blackSettlements);
+        Settlements.retriveWhiteSettlements(settlement, game.getWhiteSettlements());
+        Settlements.retriveBlackSettlements(settlement, game.getBlackSettlements());
     }
 
-    protected static void dfsSearch(boolean[][][] availabilityGrid, Tuple coord, Settlements settlement, SettlementDataFrame df) {
+    protected void dfsSearch(boolean[][][] availabilityGrid, Tuple coord, Settlements settlement, SettlementDataFrame df) {
         int xCord = coord.getX();
         int yCord = coord.getY();
         int zCord = coord.getZ();
-        Tuple offset = game.gameBoard.calculateOffset(coord);
+        Tuple offset = gameBoard.calculateOffset(coord);
         //edge case
         if(xCord >= BOARD_EDGE || xCord <= -BOARD_EDGE|| yCord >= BOARD_EDGE || yCord <= -BOARD_EDGE || zCord >= BOARD_EDGE|| zCord <= -BOARD_EDGE
                 || !availabilityGrid[offset.getX()][offset.getY()][offset.getZ()]) return;
 
         //invalidate the position
-        Hex h = game.gameBoard.getHex(coord);
+        Hex h = gameBoard.getHex(coord);
 
 
         if (h.getTeam() != Hex.Team.Neutral) {
@@ -90,7 +92,7 @@ public class GameAPIUtil {
                 if (orientation == Orientation.Orientations.origin) continue;
                 // get adjacent hex
                 Tuple hexLocation = Orientation.addCoordinatesByOrientation(coord,orientation);
-                Hex adjacentHex = game.gameBoard.getHex(hexLocation);
+                Hex adjacentHex = gameBoard.getHex(hexLocation);
 
                 if(adjacentHex == null || adjacentHex.getTeam() != dfTeam) continue;
                 // same team recurse through it
@@ -117,7 +119,7 @@ public class GameAPIUtil {
 
     }
 
-    public static  boolean isValidNukingCoordinates(Tuple volcanoCoordinates){
+    public boolean isValidNukingCoordinates(Tuple volcanoCoordinates){
         if(isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.downLeft)))
             return true;
         if(isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.downRight)))
@@ -134,17 +136,16 @@ public class GameAPIUtil {
         return false;
     }
 
-    public static boolean isValidTileNukingPosition(TilePositionCoordinates tilePositionCoordinates){
+    public boolean isValidTileNukingPosition(TilePositionCoordinates tilePositionCoordinates){
 
-        Hex hexUnderVolcano = game.gameBoard.getHex(tilePositionCoordinates.getVolcanoCoordinates());
-        Hex hexUnderLeft = game.gameBoard.getHex(tilePositionCoordinates.getLeftHexCoordinates());
-        Hex hexUnderRight = game.gameBoard.getHex(tilePositionCoordinates.getRightHexCoordinates());
+        Hex hexUnderVolcano = gameBoard.getHex(tilePositionCoordinates.getVolcanoCoordinates());
+        Hex hexUnderLeft = gameBoard.getHex(tilePositionCoordinates.getLeftHexCoordinates());
+        Hex hexUnderRight = gameBoard.getHex(tilePositionCoordinates.getRightHexCoordinates());
 
         if(hexUnderLeft == null || hexUnderRight == null || hexUnderVolcano == null)
             return false;
 
-        if(!HexValidation.isValidVolcanoPlacement(tilePositionCoordinates.getVolcanoCoordinates(),
-                game.gameBoard))
+        if(!HexValidation.isValidVolcanoPlacement(tilePositionCoordinates.getVolcanoCoordinates(), gameBoard))
             return false;
 
         if(hexUnderVolcano.getLevel() != hexUnderLeft.getLevel() || hexUnderLeft.getLevel() != hexUnderRight.getLevel())
@@ -162,28 +163,27 @@ public class GameAPIUtil {
         if(isRightHexNukingWholeSettlement(tilePositionCoordinates))
             return false;
 
-        if(GameAPIUtil.hasTigerTotoro(hexUnderVolcano) || GameAPIUtil.hasTigerTotoro(hexUnderLeft) ||
-                GameAPIUtil.hasTigerTotoro(hexUnderRight))
+        if(hasTigerTotoro(hexUnderVolcano) || hasTigerTotoro(hexUnderLeft) || hasTigerTotoro(hexUnderRight))
             return false;
 
         return true;
     }
 
-    protected static boolean isVolcanoNukingWholeSettlement(TilePositionCoordinates tileCoordinates) {
+    protected boolean isVolcanoNukingWholeSettlement(TilePositionCoordinates tileCoordinates) {
         return isTilePlacementNukingWholeSettlementOfHexOne(tileCoordinates.getVolcanoCoordinates(),
                 tileCoordinates.getLeftHexCoordinates(), tileCoordinates.getRightHexCoordinates());
     }
-    protected static boolean isLeftHexNukingWholeSettlement(TilePositionCoordinates tileCoordinates) {
+    protected boolean isLeftHexNukingWholeSettlement(TilePositionCoordinates tileCoordinates) {
         return isTilePlacementNukingWholeSettlementOfHexOne(tileCoordinates.getLeftHexCoordinates(),
                 tileCoordinates.getVolcanoCoordinates(), tileCoordinates.getRightHexCoordinates());
     }
-    protected static boolean isRightHexNukingWholeSettlement(TilePositionCoordinates tileCoordinates) {
+    protected boolean isRightHexNukingWholeSettlement(TilePositionCoordinates tileCoordinates) {
         return isTilePlacementNukingWholeSettlementOfHexOne(tileCoordinates.getRightHexCoordinates(),
                 tileCoordinates.getLeftHexCoordinates(), tileCoordinates.getVolcanoCoordinates());
     }
 
-    protected static boolean isTilePlacementNukingWholeSettlementOfHexOne(Tuple location1, Tuple location2, Tuple location3){
-        Hex hexOfSettlement = game.gameBoard.getHex(location1);
+    protected boolean isTilePlacementNukingWholeSettlementOfHexOne(Tuple location1, Tuple location2, Tuple location3){
+        Hex hexOfSettlement = gameBoard.getHex(location1);
 
         if (hexOfSettlement.getOccupiedBy() != Hex.gamePieces.empty) {
             if (hexOfSettlement.getTeam() == Hex.Team.Black) {
@@ -215,11 +215,11 @@ public class GameAPIUtil {
         return false;
     }
 
-    protected static boolean isInSettlement(Tuple coordinates, SettlementDataFrame settlement){
+    protected boolean isInSettlement(Tuple coordinates, SettlementDataFrame settlement){
         return settlement.getListOfHexLocations().contains(coordinates);
     }
 
-    protected static SettlementDataFrame getBlackSettlementFromLocation(Tuple coordinates, Settlements blackSettlements){
+    protected SettlementDataFrame getBlackSettlementFromLocation(Tuple coordinates, Settlements blackSettlements){
         ArrayList<SettlementDataFrame> listOfBlackSettlements = blackSettlements.getListOfSettlements();
 
         for(int i = 0; i < listOfBlackSettlements.size(); i++){
@@ -232,7 +232,7 @@ public class GameAPIUtil {
         return null;
     }
 
-    protected static SettlementDataFrame getWhiteSettlementFromLocation(Tuple coordinates, Settlements whiteSettlements){
+    protected SettlementDataFrame getWhiteSettlementFromLocation(Tuple coordinates, Settlements whiteSettlements){
         ArrayList<SettlementDataFrame> listOfWhiteSettlements = whiteSettlements.getListOfSettlements();
 
         for(int i = 0; i < listOfWhiteSettlements.size(); i++){
@@ -247,7 +247,7 @@ public class GameAPIUtil {
     }
 
 
-    public static boolean isTileDestinationValid(Tile tile, Tuple destCoordPair){
+    public boolean isTileDestinationValid(Tile tile, Tuple destCoordPair){
         // Pair<Integer,Integer> originvalue = Orientation.getOriginValue();
         // Pair<Integer, Integer> absDestCoordPair = Orientation.addPairs(destCoordPair, originvalue);
 
@@ -265,7 +265,7 @@ public class GameAPIUtil {
         return false;
     }
 
-    public static boolean isTileConnected(Tile tile, Tuple absDestCoordPair){
+    public boolean isTileConnected(Tile tile, Tuple absDestCoordPair){
 
         Tuple leftCoordPair = Orientation.addCoordinatesByOrientation(absDestCoordPair, tile.getLeftHexOrientation());
         Tuple rightCoordPair = Orientation.addCoordinatesByOrientation(absDestCoordPair, Orientation.getRightHexMapping(tile.getLeftHexOrientation()));
@@ -277,34 +277,7 @@ public class GameAPIUtil {
 
     }
 
-    public static boolean isSameTeam(Hex hex1, Hex hex2){
-
-        if(hex1 == null || hex2 == null)
-            return false;
-
-        Hex.Team team1 = hex1.getTeam();
-        Hex.Team team2 = hex2.getTeam();
-
-
-
-        return (team1 == team2);
-    }
-
-    public static boolean hasTigerTotoro(Hex hex){
-        return hex.getOccupiedBy() == Hex.gamePieces.Totoro || hex.getOccupiedBy() == Hex.gamePieces.Tiger;
-
-    }
-
-    public static boolean isEmpty(Hex hex) {
-        return hex.getOccupiedBy() == Hex.gamePieces.empty;
-    }
-
-
-
-
-
-
-    public static ArrayList<Hex> getNeighbors (Tuple coordinates) {
+    public ArrayList<Hex> getNeighbors (Tuple coordinates) {
         ArrayList<Hex> neighbors = new ArrayList<>();
         Board gameBoard = game.gameBoard;
 
@@ -320,5 +293,27 @@ public class GameAPIUtil {
         return neighbors;
 
     }
+
+    public static boolean isSameTeam(Hex hex1, Hex hex2){
+
+      if(hex1 == null || hex2 == null)
+        return false;
+
+      Hex.Team team1 = hex1.getTeam();
+      Hex.Team team2 = hex2.getTeam();
+
+
+
+      return (team1 == team2);
+    }
+
+    public static boolean hasTigerTotoro(Hex hex){
+      return hex.getOccupiedBy() == Hex.gamePieces.Totoro || hex.getOccupiedBy() == Hex.gamePieces.Tiger;
+
+    }
+
+    public static boolean isEmpty(Hex hex) {
+    return hex.getOccupiedBy() == Hex.gamePieces.empty;
+  }
 
 }

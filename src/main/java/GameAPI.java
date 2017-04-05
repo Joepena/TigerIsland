@@ -12,7 +12,7 @@ public class GameAPI {
     private int victoryPoints;
     private Settlements whiteSettlements;
     private Settlements blackSettlements;
-
+    protected GameAPIUtil APIUtils;
 
     public GameAPI() {
         villagerCount = 20;
@@ -22,6 +22,7 @@ public class GameAPI {
         gameBoard = new Board();
         whiteSettlements = new Settlements();
         blackSettlements = new Settlements();
+        APIUtils = new GameAPIUtil(this);
     }
 
 
@@ -72,7 +73,7 @@ public class GameAPI {
 
         Orientation.Orientations rightOrient = Orientation.getRightHexMapping(tile.getLeftHexOrientation());
 
-        if (GameAPIUtil.isTileDestinationValid(tile, coordinates)){
+        if (APIUtils.isTileDestinationValid(tile, coordinates)){
 
             gameBoard.setHex(tile.getVolcano(), coordinates);
             gameBoard.setHex(tile.getLeft(), Orientation.addCoordinatesByOrientation(coordinates, tile.getLeftHexOrientation()));
@@ -92,7 +93,7 @@ public class GameAPI {
 
 
     protected void updateSettlements() {
-      GameAPIUtil.updateBothSettlement(whiteSettlements, blackSettlements);
+      APIUtils.updateBothSettlement();
     }
 
     ArrayList<Tuple> getValidNukingLocations() {
@@ -111,10 +112,10 @@ public class GameAPI {
 
         while(!bfsQueue.isEmpty()){
             Tuple coordinates = bfsQueue.remove();
-            if(GameAPIUtil.isValidNukingCoordinates(coordinates)){
+            if(APIUtils.isValidNukingCoordinates(coordinates)){
                 validNukingLocations.add(coordinates);
             }
-            neighbors = GameAPIUtil.getNeighbors(coordinates);
+            neighbors = APIUtils.getNeighbors(coordinates);
 
             for(Hex neighbor : neighbors) {
                 if(!traversedLocations.containsKey(neighbor.getLocation())) {

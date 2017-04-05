@@ -14,7 +14,6 @@ public class TotoroValidationTest {
     @Before
     public void setUp() throws Exception {
         gameAPI = new GameAPI();
-        GameAPIUtil.setGameAPI(gameAPI);
     }
 
     @Test
