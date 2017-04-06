@@ -56,10 +56,19 @@ public class messageFieldsTest {
     @Test
     public void MatchBeginningMessageTest () throws Exception {
         this.mf = new messageFields("NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER ABC");
-        MatchBeginningMessage message = new MatchBeginningMessage("END OF ROUND 99 OF 112");
+        MatchBeginningMessage message = new MatchBeginningMessage("NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER ABC");
 
         Assert.assertTrue("MatchBeginningMessage Generation from server string" , message.equals((MatchBeginningMessage)mf.getMessage()));
-        Assert.assertTrue("MatchBeginningMessage sets MessageFields type field correctly", mf.getMessage().getMessageType() == Message.MessageType.EndRound);
+        Assert.assertTrue("MatchBeginningMessage sets MessageFields type field correctly", mf.getMessage().getMessageType() == Message.MessageType.MatchBeginning);
+    }
+
+    @Test
+    public void MoveFoundSettlementMessageTest () throws Exception {
+        this.mf = new messageFields("GAME ABC MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 FOUNDED SETTLEMENT AT 12 23 -1");
+        MoveMessage message = new MoveMessage("GAME ABC MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 FOUNDED SETTLEMENT AT 12 23 -1");
+
+        Assert.assertTrue("MatchBeginningMessage Generation from server string" , message.equals((MoveMessage)mf.getMessage()));
+        Assert.assertTrue("MatchBeginningMessage sets MessageFields type field correctly", mf.getMessage().getMessageType() == Message.MessageType.MatchBeginning);
     }
 
     @Test

@@ -66,6 +66,12 @@ public class messageFields {
             case "BEGIN":
                 this.message = new BeginRoundMessage(message);
                 break;
+            case "GAME":
+                scanner.next();
+                String temp = scanner.next();
+                if(temp.equals("MOVE"))
+                    this.message = new MoveMessage(message);
+                break;
 
 
 
