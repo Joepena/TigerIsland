@@ -353,6 +353,16 @@ public class GameAPITest {
         Assert.assertFalse("Checks if settlement under leftHex is totally nuked, in this scenario it is not", valid);
     }
 
+    @Test
+    public void isNukingTileCoveringTilesOfEqualLevel() throws Exception{
+        game.placeFirstTile();
+
+        testTile = new Tile(3, Terrain.terrainType.Jungle, Terrain.terrainType.Lake, Orientation.Orientations.upLeft);
+        game.placeTile(testTile, Orientation.getOrigin());
+
+        Assert.assertEquals("failed placement; origin should have tileID 1", 1, game.gameBoard.getHex(Orientation.getOrigin()).getTileId());
+    }
+
   public void createLandMass() throws Exception {
     Tuple origin = Orientation.getOrigin();
     Tuple tile1Loc = Orientation.rightOf(Orientation.upRightOf(origin));

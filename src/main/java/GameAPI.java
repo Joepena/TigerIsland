@@ -119,10 +119,10 @@ public class GameAPI {
 
         Tuple originCoords = new Tuple(0,0,0);
         gameBoard.setHex(new Hex(1, Terrain.terrainType.Volcano), originCoords);
-        gameBoard.setHex(new Hex(1, Terrain.terrainType.Jungle), Orientation.addCoordinatesByOrientation(originCoords, Orientation.Orientations.upLeft));
-        gameBoard.setHex(new Hex(1, Terrain.terrainType.Lake), Orientation.addCoordinatesByOrientation(originCoords, Orientation.Orientations.upRight));
-        gameBoard.setHex(new Hex(1, Terrain.terrainType.Rocky), Orientation.addCoordinatesByOrientation(originCoords, Orientation.Orientations.downLeft));
-        gameBoard.setHex(new Hex(1, Terrain.terrainType.Grassland), Orientation.addCoordinatesByOrientation(originCoords, Orientation.Orientations.downRight));
+        gameBoard.setHex(new Hex(1, Terrain.terrainType.Jungle), Orientation.upLeftOf(originCoords));
+        gameBoard.setHex(new Hex(1, Terrain.terrainType.Lake), Orientation.upRightOf(originCoords));
+        gameBoard.setHex(new Hex(1, Terrain.terrainType.Rocky), Orientation.downLeftOf(originCoords));
+        gameBoard.setHex(new Hex(1, Terrain.terrainType.Grassland), Orientation.downRightOf(originCoords));
     }
 
 
@@ -385,12 +385,9 @@ public class GameAPI {
     }
 
     public boolean isTileDestinationValid(Tile tile, Tuple destCoordPair){
-       // Pair<Integer,Integer> originvalue = Orientation.getOriginValue();
-       // Pair<Integer, Integer> absDestCoordPair = Orientation.addPairs(destCoordPair, originvalue);
-
-        Tuple originValue = Orientation.getOrigin();
-
-
+        if (isValidNukingCoordinates(destCoordPair) && isTileConnected(tile, destCoordPair)){
+            return true;
+        }
         if (isTileConnected(tile, destCoordPair)){
             return true;
         }
