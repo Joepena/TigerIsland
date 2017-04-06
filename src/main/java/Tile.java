@@ -41,4 +41,8 @@ public class Tile {
   public String toString(){
     return "Terrains(V, L, R):  " + volcano.getTerrain() + ", " + left.getTerrain() + ", " + right.getTerrain() + "\n" + "Orientation: " + leftHexOrientation + "\ntileId: " + tileId;
   }
+
+  public boolean equals(Tile tile){
+    return (tile.getLeft() == left) && (tile.getRight() == right) && tile.getLeftHexOrientation() == leftHexOrientation;
+  }
 }

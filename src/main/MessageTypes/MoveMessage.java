@@ -7,6 +7,11 @@ public class MoveMessage extends Message {
     private int gid;
     private int moveNumber;
     private String pid;
+    private MoveType moveType;
+
+    public static enum MoveType{
+        Found, Expand, Totoro, Tiger, Forfeit
+    }
 
 
     public int getGid() {
@@ -21,8 +26,9 @@ public class MoveMessage extends Message {
         return pid;
     }
 
-    MoveMessage(String message){
+    MoveMessage(String message, MoveType moveType){
         super(Message.MessageType.Move);
+        this.moveType = moveType;
         Scanner scanner = new Scanner(message).useDelimiter(" ");
         if(!scanner.hasNext())
             return;
@@ -37,6 +43,7 @@ public class MoveMessage extends Message {
         scanner.close();
 
     }
+
 
     public boolean equals(BeginRoundMessage message){
         return(this.rounds == message.getRounds() &&

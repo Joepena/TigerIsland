@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 /**
  * Created by TomasK on 4/6/2017.
  */
@@ -19,5 +21,50 @@ public class Message {
 
     public MessageType getMessageType(){
         return this.messageType;
+    }
+
+    protected Tile makeTileFromString(String tileString, int tileNo, Orientation.Orientations orientation){
+        Scanner scanner = new Scanner(tileString).useDelimiter("\\+");
+        String rightTerrain = scanner.next();
+        String leftTerrain = scanner.next():
+
+        return new Tile(tileNo, stringToTerrain(leftTerrain), stringToTerrain(rightTerrain), orientation);
+
+    }
+
+    private Terrain.terrainType stringToTerrain (String terrain){
+        switch(terrain){
+            case "LAKE":
+                return Terrain.terrainType.Lake;
+                break;
+            case "JUNGLE":
+                return Terrain.terrainType.Jungle;
+                break;
+            case "GRASS":
+                return Terrain.terrainType.Grassland;
+                break;
+            case "ROCK":
+                return Terrain.terrainType.Rocky;
+                break;
+        }
+    }
+
+    protected Orientation.Orientations numberToOrientation(int number){
+        switch(number){
+            case 1:
+                return Orientation.Orientations.upRight;
+            case 2:
+                return Orientation.Orientations.right;
+            case 3:
+                return Orientation.Orientations.downRight;
+            case 4:
+                return Orientation.Orientations.downLeft;
+            case 5:
+                return Orientation.Orientations.left;
+            case 6:
+                return Orientation.Orientations.upLeft;
+            default:
+                return Orientation.Orientations.upRight;
+        }
     }
 }
