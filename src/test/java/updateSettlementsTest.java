@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import javafx.util.Pair;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,13 +32,12 @@ public class updateSettlementsTest {
     }
     else{
       for(int i= 0; i < whiteActual.size(); i++) {
-        SettlementDataFrame dfActual = whiteActual.get(0);
-        SettlementDataFrame dfExpected = whiteExpected.get(0);
+        SettlementDataFrame dfActual = whiteActual.get(i);
+        SettlementDataFrame dfExpected = whiteExpected.get(i);
         if(dfActual.getOwnedBy() != dfExpected.getOwnedBy() || dfActual.getSettlementSize() != dfExpected.getSettlementSize()) {
           whiteActualFlag = false;
           break;
         }
-
       }
     }
     if(blackActual.size() != blackExpected.size()){
@@ -47,13 +45,12 @@ public class updateSettlementsTest {
     }
     else{
       for(int i= 0; i < blackActual.size(); i++) {
-        SettlementDataFrame dfActual = blackActual.get(0);
-        SettlementDataFrame dfExpected = blackExpected.get(0);
+        SettlementDataFrame dfActual = blackActual.get(i);
+        SettlementDataFrame dfExpected = blackExpected.get(i);
         if(dfActual.getOwnedBy() != dfExpected.getOwnedBy() || dfActual.getSettlementSize() != dfExpected.getSettlementSize()) {
           blackActualFlag = false;
           break;
         }
-
       }
     }
     Assert.assertTrue("White settlement verification scenario 1",whiteActualFlag);
@@ -78,8 +75,8 @@ public class updateSettlementsTest {
     }
     else{
       for(int i= 0; i < whiteActual.size(); i++) {
-        SettlementDataFrame dfActual = whiteActual.get(0);
-        SettlementDataFrame dfExpected = whiteExpected.get(0);
+        SettlementDataFrame dfActual = whiteActual.get(i);
+        SettlementDataFrame dfExpected = whiteExpected.get(i);
         if(dfActual.getOwnedBy() != dfExpected.getOwnedBy() || dfActual.getSettlementSize() != dfExpected.getSettlementSize()) {
           whiteActualFlag = false;
           break;
@@ -92,8 +89,8 @@ public class updateSettlementsTest {
     }
     else{
       for(int i= 0; i < blackActual.size(); i++) {
-        SettlementDataFrame dfActual = blackActual.get(0);
-        SettlementDataFrame dfExpected = blackExpected.get(0);
+        SettlementDataFrame dfActual = blackActual.get(i);
+        SettlementDataFrame dfExpected = blackExpected.get(i);
         if(dfActual.getOwnedBy() != dfExpected.getOwnedBy() || dfActual.getSettlementSize() != dfExpected.getSettlementSize()) {
           blackActualFlag = false;
           break;
@@ -123,8 +120,8 @@ public class updateSettlementsTest {
     }
     else{
       for(int i= 0; i < whiteActual.size(); i++) {
-        SettlementDataFrame dfActual = whiteActual.get(0);
-        SettlementDataFrame dfExpected = whiteExpected.get(0);
+        SettlementDataFrame dfActual = whiteActual.get(i);
+        SettlementDataFrame dfExpected = whiteExpected.get(i);
         if(dfActual.getOwnedBy() != dfExpected.getOwnedBy() || dfActual.getSettlementSize() != dfExpected.getSettlementSize()) {
           whiteActualFlag = false;
           break;
@@ -137,8 +134,8 @@ public class updateSettlementsTest {
     }
     else{
       for(int i= 0; i < blackActual.size(); i++) {
-        SettlementDataFrame dfActual = blackActual.get(0);
-        SettlementDataFrame dfExpected = blackExpected.get(0);
+        SettlementDataFrame dfActual = blackActual.get(i);
+        SettlementDataFrame dfExpected = blackExpected.get(i);
         if(dfActual.getOwnedBy() != dfExpected.getOwnedBy() || dfActual.getSettlementSize() != dfExpected.getSettlementSize()) {
           blackActualFlag = false;
           break;
@@ -161,19 +158,19 @@ public class updateSettlementsTest {
     Tile tile3 = new Tile(3,Terrain.terrainType.Grassland,Terrain.terrainType.Jungle,Orientation.Orientations.downRight);
     tile3.getLeft().setTeam(Hex.Team.Black);
     tile3.getRight().setTeam(Hex.Team.Black);
-    gameAPI.placeTile(originTile,Orientation.getRelativeOriginValue());
-    gameAPI.placeTile(tile2,Orientation.addPairByOrientation(Orientation.getRelativeOriginValue(),Orientation.Orientations.upLeft));
-    gameAPI.placeTile(tile3,Orientation.addPairByOrientation(Orientation.getRelativeOriginValue(),Orientation.Orientations.upRight));
+    gameAPI.placeTile(originTile,Orientation.getOrigin());
+    gameAPI.placeTile(tile2,Orientation.upLeftOf(Orientation.getOrigin()));
+    gameAPI.placeTile(tile3,Orientation.upRightOf(Orientation.getOrigin()));
   }
   private void setUpExpectedForScenario1(ArrayList<SettlementDataFrame> whiteExpected, ArrayList<SettlementDataFrame> blackExpected) {
-    whiteExpected.add(new SettlementDataFrame(1, new Pair<>(0,0)));
+    whiteExpected.add(new SettlementDataFrame(1, Orientation.getOrigin()));
     whiteExpected.get(0).setOwnedBy(Hex.Team.White);
-    whiteExpected.add(new SettlementDataFrame(1, new Pair<>(0,0)));
+    whiteExpected.add(new SettlementDataFrame(1, Orientation.getOrigin()));
     whiteExpected.get(1).setOwnedBy(Hex.Team.White);
 
-    blackExpected.add(new SettlementDataFrame(3, new Pair<>(0,0)));
+    blackExpected.add(new SettlementDataFrame(3, Orientation.getOrigin()));
     blackExpected.get(0).setOwnedBy(Hex.Team.Black);
-    blackExpected.add(new SettlementDataFrame(1, new Pair<>(0,0)));
+    blackExpected.add(new SettlementDataFrame(1, Orientation.getOrigin()));
     blackExpected.get(1).setOwnedBy(Hex.Team.Black);
   }
 
@@ -187,23 +184,23 @@ public class updateSettlementsTest {
     Tile tile3 = new Tile(3,Terrain.terrainType.Grassland,Terrain.terrainType.Jungle,Orientation.Orientations.downRight);
     tile3.getLeft().setTeam(Hex.Team.White);
     tile3.getRight().setTeam(Hex.Team.Black);
-    gameAPI.placeTile(originTile,Orientation.getRelativeOriginValue());
-    gameAPI.placeTile(tile2,Orientation.addPairByOrientation(Orientation.getRelativeOriginValue(),Orientation.Orientations.upLeft));
-    gameAPI.placeTile(tile3,Orientation.addPairByOrientation(Orientation.getRelativeOriginValue(),Orientation.Orientations.upRight));
+    gameAPI.placeTile(originTile,Orientation.getOrigin());
+    gameAPI.placeTile(tile2,Orientation.addCoordinatesByOrientation(Orientation.getOrigin(),Orientation.Orientations.upLeft));
+    gameAPI.placeTile(tile3,Orientation.addCoordinatesByOrientation(Orientation.getOrigin(),Orientation.Orientations.upRight));
   }
   private void setUpExpectedForScenario2(ArrayList<SettlementDataFrame> whiteExpected, ArrayList<SettlementDataFrame> blackExpected) {
-    whiteExpected.add(new SettlementDataFrame(1, new Pair<>(0,0)));
+    whiteExpected.add(new SettlementDataFrame(1, Orientation.getOrigin()));
     whiteExpected.get(0).setOwnedBy(Hex.Team.White);
-    whiteExpected.add(new SettlementDataFrame(1, new Pair<>(0,0)));
+    whiteExpected.add(new SettlementDataFrame(1, Orientation.getOrigin()));
     whiteExpected.get(1).setOwnedBy(Hex.Team.White);
-    whiteExpected.add(new SettlementDataFrame(1, new Pair<>(0,0)));
+    whiteExpected.add(new SettlementDataFrame(1, Orientation.getOrigin()));
     whiteExpected.get(2).setOwnedBy(Hex.Team.White);
 
-    blackExpected.add(new SettlementDataFrame(1, new Pair<>(0,0)));
+    blackExpected.add(new SettlementDataFrame(1, Orientation.getOrigin()));
     blackExpected.get(0).setOwnedBy(Hex.Team.Black);
-    blackExpected.add(new SettlementDataFrame(1, new Pair<>(0,0)));
+    blackExpected.add(new SettlementDataFrame(1, Orientation.getOrigin()));
     blackExpected.get(1).setOwnedBy(Hex.Team.Black);
-    blackExpected.add(new SettlementDataFrame(1, new Pair<>(0,0)));
+    blackExpected.add(new SettlementDataFrame(1, Orientation.getOrigin()));
     blackExpected.get(2).setOwnedBy(Hex.Team.Black);
   }
 
@@ -217,18 +214,18 @@ public class updateSettlementsTest {
     Tile tile3 = new Tile(3,Terrain.terrainType.Grassland,Terrain.terrainType.Jungle,Orientation.Orientations.downRight);
     tile3.getLeft().setTeam(Hex.Team.White);
     tile3.getRight().setTeam(Hex.Team.White);
-    gameAPI.placeTile(originTile,Orientation.getRelativeOriginValue());
-    gameAPI.placeTile(tile2,Orientation.addPairByOrientation(Orientation.getRelativeOriginValue(),Orientation.Orientations.upLeft));
-    gameAPI.placeTile(tile3,Orientation.addPairByOrientation(Orientation.getRelativeOriginValue(),Orientation.Orientations.upRight));
+    gameAPI.placeTile(originTile,Orientation.getOrigin());
+    gameAPI.placeTile(tile2,Orientation.addCoordinatesByOrientation(Orientation.getOrigin(),Orientation.Orientations.upLeft));
+    gameAPI.placeTile(tile3,Orientation.addCoordinatesByOrientation(Orientation.getOrigin(),Orientation.Orientations.upRight));
   }
 
   private void setUpExpectedForScenario3(ArrayList<SettlementDataFrame> whiteExpected, ArrayList<SettlementDataFrame> blackExpected) {
-    whiteExpected.add(new SettlementDataFrame(4, new Pair<>(0,0)));
+    whiteExpected.add(new SettlementDataFrame(4, Orientation.getOrigin()));
     whiteExpected.get(0).setOwnedBy(Hex.Team.White);
-    whiteExpected.add(new SettlementDataFrame(1, new Pair<>(0,0)));
+    whiteExpected.add(new SettlementDataFrame(1, Orientation.getOrigin()));
     whiteExpected.get(1).setOwnedBy(Hex.Team.White);
 
-    blackExpected.add(new SettlementDataFrame(1, new Pair<>(0,0)));
+    blackExpected.add(new SettlementDataFrame(1, Orientation.getOrigin()));
     blackExpected.get(0).setOwnedBy(Hex.Team.Black);
   }
 

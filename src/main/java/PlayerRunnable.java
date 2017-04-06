@@ -3,14 +3,15 @@
  */
 public class PlayerRunnable implements Runnable {
 
-
+    private boolean gameOver;
+    private boolean hasTile;
     private Tile newTile;
-    private Boolean hasTile;
-    private Boolean gameOver;
 
 
     @Override
     public void run() {
+        gameOver = false;
+        hasTile = false;
         GameAPI game = new GameAPI();
         System.out.println("Villager count of " + this.toString() + " is: " + game.getVillagerCount());
         System.out.println("Totoro count of " + this.toString() + " is: " + game.getTotoroCount());
@@ -23,7 +24,7 @@ public class PlayerRunnable implements Runnable {
             while (!hasTile);
 
             //Check for tile placement options
-            
+
             //Check for nuking options
 
             //Decide normal place or nuke
@@ -36,8 +37,6 @@ public class PlayerRunnable implements Runnable {
 
             //End Turn
         }
-
-
     }
 
     public Tile getNewTile() {

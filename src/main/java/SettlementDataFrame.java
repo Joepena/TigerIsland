@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import javafx.util.Pair;
 
 /**
@@ -6,7 +7,9 @@ import javafx.util.Pair;
  */
 public class SettlementDataFrame implements Comparable<SettlementDataFrame>{
   private Integer settlementSize;
-  private Pair<Integer,Integer> settlementStartingLocation;
+  private Tuple settlementStartingLocation;
+
+  private ArrayList<Tuple> listOfHexes;
   private Hex.Team ownedBy;
   private Hex.gamePieces gamePiece;
 
@@ -19,16 +22,17 @@ public class SettlementDataFrame implements Comparable<SettlementDataFrame>{
   }
 
   public SettlementDataFrame(int settlementSize,
-    Pair<Integer, Integer> settlementStartingLocation) {
+    Tuple settlementStartingLocation) {
     this.settlementSize = settlementSize;
     this.settlementStartingLocation = settlementStartingLocation;
+    this.listOfHexes = new ArrayList<>();
   }
 
   public Integer getSettlementSize() {
     return settlementSize;
   }
 
-  public Pair<Integer, Integer> getSettlementStartingLocation() {
+  public Tuple getSettlementStartingLocation() {
     return settlementStartingLocation;
   }
 
@@ -37,7 +41,7 @@ public class SettlementDataFrame implements Comparable<SettlementDataFrame>{
   }
 
   public void setSettlementStartingLocation(
-    Pair<Integer, Integer> settlementStartingLocation) {
+    Tuple settlementStartingLocation) {
     this.settlementStartingLocation = settlementStartingLocation;
   }
 
@@ -47,6 +51,13 @@ public class SettlementDataFrame implements Comparable<SettlementDataFrame>{
 
   public Hex.Team getOwnedBy() {
     return ownedBy;
+  }
+
+  public ArrayList<Tuple> getListOfHexLocations() {
+    return listOfHexes;
+  }
+  public void addLocationListOfHexes(Tuple locationOfHex) {
+    listOfHexes.add(locationOfHex);
   }
 
   @Override

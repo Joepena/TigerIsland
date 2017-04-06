@@ -1,3 +1,4 @@
+
 import org.junit.*;
 import javafx.util.Pair;
 
@@ -18,55 +19,54 @@ public class TilePlacementTests {
 
     @Test
     public void isTileDestinationValidTest_OriginEmpty(){
-        Pair<Integer, Integer> originCoords = Orientation.getRelativeOriginValue();
+        Tuple originCoords = Orientation.getOrigin();
 
-        Assert.assertEquals("test",true,game.isTileDestinationValid(testTile, originCoords));
+        Assert.assertEquals("test",true,game.APIUtils.isTileDestinationValid(testTile, originCoords));
     }
 
     @Test
     public void isTileDestinationValidTest_OriginNotEmpty(){
-        Pair<Integer, Integer> originCoords = Orientation.getRelativeOriginValue();
+        Tuple originCoords = Orientation.getOrigin();
         game.placeTile(existingTile, originCoords);
 
-        Assert.assertEquals("test",true,game.isTileDestinationValid(testTile, originCoords));
+        Assert.assertEquals("test",true,game.APIUtils.isTileDestinationValid(testTile, originCoords));
     }
 
     @Test
     public void isTileDestinationValidTest_VolcanoConnected(){
-        Pair<Integer, Integer> originCoords = Orientation.getRelativeOriginValue();
-        game.placeTile(existingTile, originCoords);
+        Tuple originCoords = Orientation.getOrigin();
+        Tile tempTile = new Tile(1,Terrain.terrainType.Jungle,Terrain.terrainType.Rocky,Orientation.Orientations.upRight);
+        game.placeTile(tempTile, originCoords);
 
-        Pair<Integer, Integer> testCoords = Orientation.addPairByOrientation(originCoords, Orientation.Orientations.upRight);
-        testCoords = Orientation.addPairByOrientation(testCoords, Orientation.Orientations.right);
+        Tuple testCoords = Orientation.addCoordinatesByOrientation(originCoords, Orientation.Orientations.upRight);
+        testCoords = Orientation.addCoordinatesByOrientation(testCoords, Orientation.Orientations.right);
 
-        Assert.assertEquals("test",true,game.isTileDestinationValid(testTile, testCoords));
+        Assert.assertEquals("test",true,game.APIUtils.isTileDestinationValid(testTile, testCoords));
 
     }
 
     @Test
     public void isTileDestinationValidTest_VolcanoNotConnected(){
-        Pair<Integer, Integer> originCoords = Orientation.getRelativeOriginValue();
+        Tuple originCoords = Orientation.getOrigin();
         game.placeTile(existingTile, originCoords);
 
-        Pair<Integer, Integer> testCoords = Orientation.addPairByOrientation(originCoords, Orientation.Orientations.upRight);
-        testCoords = Orientation.addPairByOrientation(testCoords, Orientation.Orientations.upRight);
-        testCoords = Orientation.addPairByOrientation(testCoords, Orientation.Orientations.upRight);
+        Tuple testCoords = Orientation.addCoordinatesByOrientation(originCoords, Orientation.Orientations.upRight);
+        testCoords = Orientation.addCoordinatesByOrientation(testCoords, Orientation.Orientations.upRight);
 
-        game.gameBoard.printSectionedBoard();
-
-        Assert.assertEquals("test",true,game.isTileDestinationValid(testTile, testCoords));
+        Assert.assertEquals("test",true,game.APIUtils.isTileDestinationValid(testTile, testCoords));
 
     }
 
     @Test
     public void isTileDestinationValidTest_NoHexConnected(){
-        Pair<Integer, Integer> originCoords = Orientation.getRelativeOriginValue();
+        Tuple originCoords = Orientation.getOrigin();
         game.placeTile(existingTile, originCoords);
 
-        Pair<Integer, Integer> testCoords = Orientation.addPairByOrientation(originCoords, Orientation.Orientations.downLeft);
-        testCoords = Orientation.addPairByOrientation(testCoords, Orientation.Orientations.downRight);
+        Tuple testCoords = Orientation.addCoordinatesByOrientation(originCoords, Orientation.Orientations.downLeft);
+        testCoords = Orientation.addCoordinatesByOrientation(testCoords, Orientation.Orientations.downRight);
+        testCoords = Orientation.addCoordinatesByOrientation(testCoords, Orientation.Orientations.downRight);
 
-        Assert.assertEquals("test",false,game.isTileDestinationValid(testTile, testCoords));
+        Assert.assertEquals("test",false,game.APIUtils.isTileDestinationValid(testTile, testCoords));
 
     }
 
