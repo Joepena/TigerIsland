@@ -3,7 +3,7 @@ CEN3031 Term Project
 
 
 <h1>HOW TO NETWORK IF UR INTO THAT</h1>
-<b>Step 1</b>
+<b>Stepz</b>
 <ul>Go to (src/main/java/) GameClient</ul>
 <ul>Host can be changed to "localhost" for testing on your machine</ul>
 <ul>If you want to test on my computer lmk and I'll turn it on</ul>
@@ -12,8 +12,10 @@ CEN3031 Term Project
 <ul>Open two terminals of ur choice</ul>
 <ul><ul>On the first, compile then run ServerTest</ul></ul>
 <ul><ul>On the second, compile then run GameClient</ul></ul>
-<b>Note:</b> If u wild n u want to see different strings, change the outputLine variable's value
-
+<b>Note:</b> 
+<ul>If u wild n u want to see different strings, change the outputLine variable's value</ul>
+<h3>End of networking tutorial, have fun kiddos</h3>
+<br></br>
 Added toString() to tuple class for debugging purposes
 addPairTest() -> add overwridden equals() to Tuple because .assertEquals compares references
 
