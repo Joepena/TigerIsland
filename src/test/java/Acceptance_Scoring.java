@@ -1,16 +1,13 @@
-import cucumber.api.PendingException;
-import javafx.util.Pair;
-import org.junit.Assert;
 import cucumber.api.java.en.Given;
-import cucumber.api.java.en.When;
 import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import org.junit.Assert;
+
 
 /**
- * Created by Joe on 3/18/17.
+ * Created by Nicholas on 4/6/2017.
  */
-
-public class MyStepdefs {
-
+public class Acceptance_Scoring {
     Board testBoard;
     GameAPI testAPI;
     HexValidation validate;
@@ -19,45 +16,7 @@ public class MyStepdefs {
     Tuple testPair;
     Tuple hex2Loc;
 
-
-
-
-
-
-
-
-
-
-    @Given("^there a settlement of size five or greater for the player's team")
-    public void there_a_settlement_of_size_5_or_greater_for_the_player_s_team() throws Throwable {
-
-    }
-
-    @When("^the player selects the option to build a totoro and a valid location exists")
-    public void the_player_selects_the_option_to_build_a_totoro_and_a_valid_location_exists() throws Throwable {
-
-    }
-
-    @Then("^a totoro will be placed on the board in a valid hex")
-    public void a_totoro_will_be_placed_on_the_board_in_a_valid_hex() throws Throwable {
-
-    }
-
-    @Given("^there is not settlement of size five or greater for the player's team")
-    public void there_is_not_settlement_of_size_five_or_greater_for_the_player_s_team() throws Throwable {
-
-    }
-
-    @When("^the player selects the option to build a totoro when no valid location exists")
-    public void the_player_selects_the_option_to_build_a_totoro_when_no_valid_location_exists() throws Throwable {
-
-    }
-
-    @Then("^a totoro will not be allowed to be placed on the board")
-    public void a_totoro_will_not_be_allowed_to_be_placed_on_the_board() throws Throwable {
-
-    }
-
+    //MeepleScoring.feature
     @Given("^a player places a meeple on the board")
     public void a_player_places_a_meeple_on_the_board() throws Throwable {
 
@@ -73,6 +32,7 @@ public class MyStepdefs {
 
     }
 
+    //TotoroScoring.feature
     @Given("^a player places a totoro on the board")
     public void a_player_places_a_totoro_on_the_board() throws Throwable {
 
@@ -88,6 +48,7 @@ public class MyStepdefs {
 
     }
 
+    //TigerScoring.feature
     @Given("^a player places a tiger on the board")
     public void a_player_places_a_tiger_on_the_board() throws Throwable {
 
@@ -102,5 +63,4 @@ public class MyStepdefs {
     public void player_s_score_goes_up_by_75_points() throws Throwable {
 
     }
-
 }
