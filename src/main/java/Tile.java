@@ -37,4 +37,8 @@ public class Tile {
   }
 
   public void setLeftHexOrientation(Orientation.Orientations leftHexOrientation){ this.leftHexOrientation = leftHexOrientation;}
+
+  public String toString(){
+    return "Terrains(V, L, R):  " + volcano.getTerrain() + ", " + left.getTerrain() + ", " + right.getTerrain() + "\n" + "Orientation: " + leftHexOrientation + "\ntileId: " + tileId;
+  }
 }
