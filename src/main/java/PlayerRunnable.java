@@ -39,11 +39,6 @@ public class PlayerRunnable implements Runnable {
 
             //Check for tile placement options
 
-            //Check for nuking options
-
-            //Check for tile placement options
-
-            //End Turn
 
             //Check for nuking options
             ArrayList<Tuple> eruptionOptions = new ArrayList<>();

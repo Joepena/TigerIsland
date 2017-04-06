@@ -11,9 +11,8 @@ public class GameClient {
 
 //    This will be for when we actually run the project I guess?
     public static void main(String[] args) {
-        String host = "localhost";
-        int port = 3000;
-        String serverString;
+        String host = "10.136.60.73";
+        int port = 8000;
 
         try {
             Socket socket = new Socket(host, port);
@@ -21,7 +20,6 @@ public class GameClient {
             String serverMessage;
             while ((serverMessage = in.readLine()) != null) {
                 System.out.println("Server says: " + serverMessage);
-                serverString = serverMessage;
             }
         } catch (Exception e) {
             e.printStackTrace();
