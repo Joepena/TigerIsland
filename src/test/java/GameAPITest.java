@@ -158,6 +158,33 @@ public class GameAPITest {
 
     }
 
+    @Test
+    public void testFoundSettlement() throws Exception {
+        createLandMass();
+        Hex hex = game.gameBoard.getHex(Orientation.upRightOf(Orientation.getOrigin()));
+        game.foundSettlement(hex.getLocation());
+
+        Assert.assertEquals(Hex.gamePieces.Meeple, game.gameBoard.getHex(hex.getLocation()).getOccupiedBy());
+    }
+
+    @Test
+    public void testCreateTotoroSanctuary() throws Exception {
+        createLandMass();
+        Hex hex = game.gameBoard.getHex(Orientation.upRightOf(Orientation.getOrigin()));
+        game.createTotoroSanctuary(hex.getLocation());
+
+        Assert.assertEquals(Hex.gamePieces.Totoro, game.gameBoard.getHex(hex.getLocation()).getOccupiedBy());
+    }
+
+    @Test
+    public void testCreateTigerPlayground() throws Exception {
+        createLandMass();
+        Hex hex = game.gameBoard.getHex(Orientation.upRightOf(Orientation.getOrigin()));
+        game.createTigerPlayground(hex.getLocation());
+
+        Assert.assertEquals(Hex.gamePieces.Tiger, game.gameBoard.getHex(hex.getLocation()).getOccupiedBy());
+    }
+
   public void createLandMass() throws Exception {
     Tuple origin = Orientation.getOrigin();
     Tuple tile1Loc = Orientation.rightOf(Orientation.upRightOf(origin));

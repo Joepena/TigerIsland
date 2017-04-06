@@ -351,6 +351,7 @@ public class GameAPI {
 
     public boolean canSelectBuildTotoro() {
         ArrayList<Tuple> validTotoroLocations = validTotoroPlacements();
+        System.out.println(validTotoroLocations);
 
         if(!validTotoroLocations.isEmpty()){
             return true;
@@ -370,11 +371,7 @@ public class GameAPI {
 
     public ArrayList<Tuple> validTotoroPlacements() {
         ArrayList<SettlementDataFrame> ourSettlements = getBlackSettlements().getListOfSettlements();
-        for(int i = 0; i < ourSettlements.size(); i++) {
-            System.out.println(ourSettlements.get(i).getListOfHexLocations());
-        }
-
-        ArrayList<Tuple> validLocations = findSizeNSettlements(ourSettlements, 5);
+        ArrayList<Tuple> validLocations = findSizeNSettlements(ourSettlements, 5, Hex.gamePieces.Totoro);
         validLocations = findValidTotoroLocations(validLocations);
 
         return removeDuplicateTuples(validLocations);
@@ -382,7 +379,7 @@ public class GameAPI {
 
     public ArrayList<Tuple> validTigerPlacements() {
         ArrayList<SettlementDataFrame> ourSettlements = getBlackSettlements().getListOfSettlements();
-        ArrayList<Tuple> validLocations = findSizeNSettlements(ourSettlements, 1);
+        ArrayList<Tuple> validLocations = findSizeNSettlements(ourSettlements, 1, Hex.gamePieces.Tiger);
         validLocations = findValidTigerLocations(validLocations);
 
         return removeDuplicateTuples(validLocations);
@@ -399,13 +396,19 @@ public class GameAPI {
         return uniqueList;
     }
 
-    public ArrayList<Tuple> findSizeNSettlements(ArrayList<SettlementDataFrame> ourSettlements, int n) {
+    public ArrayList<Tuple> findSizeNSettlements(ArrayList<SettlementDataFrame> ourSettlements, int n, Hex.gamePieces gamePiece) {
         ArrayList<Tuple> tuplesInSettlements = new ArrayList<>();
+        boolean existingPiece = false;
 
         for(int i = 0; i < ourSettlements.size(); i++) {
-            if(ourSettlements.get(i).getSettlementSize() >= n)
-                for(int j = 0; j < ourSettlements.get(i).getSettlementSize(); j++)
+            if(ourSettlements.get(i).getSettlementSize() >= n) {
+                existingPiece = false;
+                for (int j = 0; j < ourSettlements.get(i).getSettlementSize(); j++)
+                    if (gameBoard.getHex(ourSettlements.get(i).getListOfHexLocations().get(j)).getOccupiedBy() == gamePiece)
+                        existingPiece = true;
+                for (int j = 0; j < ourSettlements.get(i).getSettlementSize() && !existingPiece; j++)
                     tuplesInSettlements.add(ourSettlements.get(i).getListOfHexLocations().get(j));
+            }
         }
 
         return tuplesInSettlements;
@@ -474,4 +477,17 @@ public class GameAPI {
 
         return validLocations;
     }
+
+    public void foundSettlement(Tuple tuple) {
+        gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Meeple);
+    }
+
+    public void createTotoroSanctuary(Tuple tuple) {
+        gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Totoro);
+    }
+
+    public void createTigerPlayground(Tuple tuple) {
+        gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Tiger);
+    }
+
 }
