@@ -29,6 +29,28 @@ public class TigerValidationTest {
     }
 
     @Test
+    public void canSelectBuildTigerTestPass() {
+        setUpTigerValidationScenario1();
+        gameAPI.updateSettlements();
+        boolean pass = gameAPI.canSelectBuildTiger();
+
+        Assert.assertEquals(true, pass);
+    }
+
+    @Test
+    public void canSelectBuildTigerTestFail() {
+        setUpTigerValidationScenario1();
+        hex10.setLevel(2);
+        hex5.setLevel(2);
+        gameAPI.updateSettlements();
+        boolean pass = gameAPI.canSelectBuildTiger();
+
+        Assert.assertEquals(false, pass);
+    }
+
+
+
+    @Test
     public void tigerValidation () throws Exception {
         setUpTigerValidationScenario1();
         gameAPI.updateSettlements();
@@ -37,15 +59,6 @@ public class TigerValidationTest {
 
         Assert.assertEquals(expectedResults, validLocations);
     }
-
-
-
-
-
-
-
-
-
 
     private void setUpTigerValidationScenario1() {
         hex1 = new Hex(1, Terrain.terrainType.Volcano);
