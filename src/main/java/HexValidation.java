@@ -1,5 +1,3 @@
-import javafx.util.Pair;
-
 /**
  * Created by WIIZZARD on 3/19/2017.
  */
@@ -40,10 +38,10 @@ public class HexValidation {
 
     public static boolean isValidHexEruption(Tuple testingLocation, Board gameBoard) {
         Hex targetHex = gameBoard.getHex(testingLocation);
-        if(TempHexHelpers.hasTigerTotoro(targetHex)){
+        if(GameAPIUtil.hasTigerTotoro(targetHex)){
             return false;
         }
-        else if(TempHexHelpers.isEmpty(targetHex)){
+        else if(GameAPIUtil.isEmpty(targetHex)){
             return true;
         }
         else{
@@ -61,12 +59,12 @@ public class HexValidation {
         Hex hexDownLeftOf =  gameBoard.getHex(Orientation.downLeftOf(testingLocation));
         Hex hexDownRightOf =  gameBoard.getHex(Orientation.downRightOf(testingLocation));
 
-        boolean valid = TempHexHelpers.isSameTeam(hexLeftOf, targetHex);
-        valid = valid || TempHexHelpers.isSameTeam(hexRightOf, targetHex);
-        valid = valid || TempHexHelpers.isSameTeam(hexUpLeftOf, targetHex);
-        valid = valid || TempHexHelpers.isSameTeam(hexUpRightOf, targetHex);
-        valid = valid || TempHexHelpers.isSameTeam(hexDownLeftOf, targetHex);
-        valid = valid || TempHexHelpers.isSameTeam(hexDownRightOf, targetHex);
+        boolean valid = GameAPIUtil.isSameTeam(hexLeftOf, targetHex);
+        valid = valid || GameAPIUtil.isSameTeam(hexRightOf, targetHex);
+        valid = valid || GameAPIUtil.isSameTeam(hexUpLeftOf, targetHex);
+        valid = valid || GameAPIUtil.isSameTeam(hexUpRightOf, targetHex);
+        valid = valid || GameAPIUtil.isSameTeam(hexDownLeftOf, targetHex);
+        valid = valid || GameAPIUtil.isSameTeam(hexDownRightOf, targetHex);
 
         return valid;
     }
