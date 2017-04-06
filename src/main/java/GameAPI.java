@@ -286,6 +286,7 @@ public class GameAPI {
     }
 
 
+    //Checking if any tile rotations are valid
     public boolean isValidNukingCoordinates(Tuple volcanoCoordinates){
         if(isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.downLeft)))
             return true;
@@ -385,9 +386,6 @@ public class GameAPI {
     }
 
     public boolean isTileDestinationValid(Tile tile, Tuple destCoordPair){
-        if (isValidNukingCoordinates(destCoordPair) && isTileConnected(tile, destCoordPair)){
-            return true;
-        }
         if (isTileConnected(tile, destCoordPair)){
             return true;
         }
