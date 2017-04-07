@@ -119,6 +119,59 @@ public class GameAPIUtil {
 
     }
 
+    protected void conglomerateAdjacentSettlements(Hex.Team team){
+      Settlements listSettlements;
+
+      if( team == Hex.Team.White){
+          listSettlements = game.getWhiteSettlements();
+      } else if (team == Hex.Team.Black){
+          listSettlements = game.getBlackSettlements();
+      } else{
+          return;
+      }
+
+
+        //Loops through each dataframe
+        for (SettlementDataFrame currentDataFrame : listSettlements.getListOfSettlements()) {
+            //Loops through each hexLoc in dataframe
+            for (Tuple currentHexLoc : currentDataFrame.getListOfHexLocations()){
+                Hex currentHex = gameBoard.getHex(currentHexLoc);
+                ArrayList<Hex> adjacentHexList = getNeighbors(currentHexLoc);
+                //Loops through each neighbor of hex in dataframe
+                for (Hex adjacentHex : adjacentHexList){
+                    Tuple adjacentHexCoords = adjacentHex.getLocation();
+
+                    //We found an adjacent hex of same team in a different settlement.
+                    if (!currentDataFrame.getListOfHexLocations().contains(adjacentHexCoords) && isSameTeam(adjacentHex, currentHex)){
+                        //Find the dataframe the adjacent hex belongs to.
+                        for (SettlementDataFrame adjacentDataFrame : listSettlements.getListOfSettlements()){
+                            if (adjacentDataFrame.getListOfHexLocations().contains(adjacentHexCoords)){
+
+                                ArrayList<Tuple> combinedDataFrameHexLocs = currentDataFrame.getListOfHexLocations();
+                                combinedDataFrameHexLocs.addAll(adjacentDataFrame.getListOfHexLocations());
+                                int combinedDataFrameSize = combinedDataFrameHexLocs.size();
+
+                                SettlementDataFrame combinedDataFrame = new SettlementDataFrame(combinedDataFrameSize, currentDataFrame.getSettlementStartingLocation());
+
+                                for (Tuple combinedCoords : combinedDataFrameHexLocs){
+                                    combinedDataFrame.addLocationListOfHexes(combinedCoords);
+                                }
+
+                                listSettlements.addNewSettlement(combinedDataFrame);
+                                listSettlements.removeSettlement(currentDataFrame);
+                                listSettlements.removeSettlement(adjacentDataFrame);
+
+                                break;
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
     public boolean isValidNukingCoordinates(Tuple volcanoCoordinates){
         if(isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.downLeft)))
             return true;
@@ -248,12 +301,6 @@ public class GameAPIUtil {
 
 
     public boolean isTileDestinationValid(Tile tile, Tuple destCoordPair){
-        // Pair<Integer,Integer> originvalue = Orientation.getOriginValue();
-        // Pair<Integer, Integer> absDestCoordPair = Orientation.addPairs(destCoordPair, originvalue);
-
-        Tuple originValue = Orientation.getOrigin();
-
-
         if (isTileConnected(tile, destCoordPair)){
             return true;
         }
