@@ -13,7 +13,7 @@ public class GameClient {
     public static void main(String[] args) {
         String host = "10.136.60.73";
         int port = 8000;
-        
+
 
         try {
             Socket socket = new Socket(host, port);
