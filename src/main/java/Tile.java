@@ -43,6 +43,6 @@ public class Tile {
   }
 
   public boolean equals(Tile tile){
-    return (tile.getLeft() == left) && (tile.getRight() == right) && tile.getLeftHexOrientation() == leftHexOrientation;
+    return tile.getLeft().equals(left) && tile.getRight().equals(right) && tile.getLeftHexOrientation() == leftHexOrientation;
   }
 }

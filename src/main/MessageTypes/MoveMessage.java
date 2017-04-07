@@ -26,6 +26,10 @@ public class MoveMessage extends Message {
         return pid;
     }
 
+    public MoveType getMoveType() {
+        return moveType;
+    }
+
     MoveMessage(String message, MoveType moveType){
         super(Message.MessageType.Move);
         this.moveType = moveType;
@@ -45,8 +49,10 @@ public class MoveMessage extends Message {
     }
 
 
-    public boolean equals(BeginRoundMessage message){
-        return(this.rounds == message.getRounds() &&
-                this.rid == message.getRid());
+    public boolean equals(MoveMessage message){
+        return(this.gid == message.getGid() &&
+                this.moveNumber == message.getMoveNumber() &&
+                this.pid.equals(message.getPid()) &&
+                this.moveType == message.getMoveType());
     }
 }

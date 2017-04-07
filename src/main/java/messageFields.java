@@ -69,8 +69,19 @@ public class messageFields {
             case "GAME":
                 scanner.next();
                 String temp = scanner.next();
-                if(temp.equals("MOVE"))
-                    this.message = new MoveMessage(message);
+                if(temp.equals("MOVE")) {
+                    for(int i = 0; i < 11; i++)
+                        temp = scanner.next();
+                        if(temp.equals("FOUNDED"))
+                            this.message = new FoundSettlementMessage(message);
+                        else if(temp.equals("EXPANDED"))
+                            this.message = new ExpandSettlementMessage(message);
+                        else if(temp.equals("BUILT"))
+                            if(scanner.next().equals("TOTORO"))
+                                this.message = new BuildTotoroMessage(message);
+                            else
+                                this.message = new BuildTigerMessage(message);
+                }
                 break;
 
 
@@ -81,57 +92,6 @@ public class messageFields {
 
     }
 
-    /*private void move(Scanner scanner){
-        this.gid = scanner.next();
-        switch(scanner.next()) {
-            case "MOVE":
-                this.moveNumber = scanner.nextInt();
-                scanner.next();
-                this.pid = scanner.next();
-                switch(scanner.next()){
-                    case "FORFEITED:":
-                        this.forfeited = true;
-                        this.gameOver = true;
-                        break;
-                    case "LOST:":
-                        this.lost = true;
-                        this.gameOver = true;
-                        break;
-                    default:
-                        this.tileString = scanner.next();
-                        scanner.next();
-                        this.placementLocation = new Tuple(scanner.nextInt(), scanner.nextInt(), scanner.nextInt());
-                        if(!scanner.hasNext())
-                            return;
-                        switch(scanner.next()){
-                            case "FOUND":
-                                scanner.next();
-                                scanner.next();
-                                this.moveLocation = new Tuple(scanner.nextInt(), scanner.nextInt(), scanner.nextInt());
-                                break;
-                            case "EXPAND":
-                                scanner.next();
-                                scanner.next();
-                                this.moveLocation = new Tuple(scanner.nextInt(), scanner.nextInt(), scanner.nextInt());
-                                break;
-                            case "BUILD":
-                                if(scanner.next().equals("TIGER")){
-                                    this.tiger = true;
-                                }
-                                else
-                                    this.totoro = true;
-                                this.moveLocation = new Tuple(scanner.nextInt(), scanner.nextInt(), scanner.nextInt());
-                                break;
-                            case "UNABLE":
-                                scanner.next();
-                                scanner.next();
-                                this.forfeited = true;
-                                break;
-                        }
 
-                }
-        }
-
-    }*/
 
 }

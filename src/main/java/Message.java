@@ -26,27 +26,26 @@ public class Message {
     protected Tile makeTileFromString(String tileString, int tileNo, Orientation.Orientations orientation){
         Scanner scanner = new Scanner(tileString).useDelimiter("\\+");
         String rightTerrain = scanner.next();
-        String leftTerrain = scanner.next():
+        String leftTerrain = scanner.next();
 
         return new Tile(tileNo, stringToTerrain(leftTerrain), stringToTerrain(rightTerrain), orientation);
 
     }
 
-    private Terrain.terrainType stringToTerrain (String terrain){
+    protected Terrain.terrainType stringToTerrain (String terrain){
         switch(terrain){
             case "LAKE":
                 return Terrain.terrainType.Lake;
-                break;
             case "JUNGLE":
                 return Terrain.terrainType.Jungle;
-                break;
             case "GRASS":
                 return Terrain.terrainType.Grassland;
-                break;
             case "ROCK":
                 return Terrain.terrainType.Rocky;
-                break;
+            default:
+                return Terrain.terrainType.Grassland;
         }
+
     }
 
     protected Orientation.Orientations numberToOrientation(int number){

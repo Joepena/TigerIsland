@@ -1,9 +1,10 @@
 import java.util.Scanner;
 
 /**
- * Created by TomasK on 4/6/2017.
+ * Created by T K Vicious on 4/6/2017.
  */
-public class FoundSettlementMessage extends MoveMessage {
+public class BuildTotoroMessage extends MoveMessage{
+
     private Tuple tileLocation;
     private Tuple buildLocation;
     private Tile tile;
@@ -20,8 +21,8 @@ public class FoundSettlementMessage extends MoveMessage {
         return buildLocation;
     }
 
-    FoundSettlementMessage(String message){
-        super(message, MoveMessage.MoveType.Found);
+    BuildTotoroMessage(String message){
+        super(message, MoveType.Totoro);
         Scanner scanner = new Scanner(message).useDelimiter(" ");
         if(!scanner.hasNext())
             return;
@@ -35,20 +36,24 @@ public class FoundSettlementMessage extends MoveMessage {
         scanner.next();
         scanner.next();
         scanner.next();
+        scanner.next();
         this.buildLocation = new Tuple(scanner.nextInt(), scanner.nextInt(), scanner.nextInt());
-        scanner.close();
+
 
     }
 
-    public boolean equals(FoundSettlementMessage message){
+    public boolean equals(BuildTotoroMessage message){
         return super.equals((MoveMessage)message) &&
                 (this.tileLocation.equals(message.getTileLocation()) &&
-                this.buildLocation.equals(message.getBuildLocation()) &&
-                this.tile.equals(message.getTile()));
+                        this.buildLocation.equals(message.getBuildLocation()) &&
+                        this.tile.equals(message.getTile())
+                );
     }
 
     public String toString(){
         return("tileLocation:  " + tileLocation.toString() + "\nbuildLocation:  " + buildLocation.toString() + "\ntile:  " + tile.toString());
     }
+
+
 
 }

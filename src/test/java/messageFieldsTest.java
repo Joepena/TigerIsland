@@ -64,11 +64,44 @@ public class messageFieldsTest {
 
     @Test
     public void MoveFoundSettlementMessageTest () throws Exception {
-        this.mf = new messageFields("GAME ABC MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 FOUNDED SETTLEMENT AT 12 23 -1");
-        MoveMessage message = new MoveMessage("GAME ABC MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 FOUNDED SETTLEMENT AT 12 23 -1");
+        this.mf = new messageFields("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 FOUNDED SETTLEMENT AT 12 23 1");
+        FoundSettlementMessage message = new FoundSettlementMessage("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 FOUNDED SETTLEMENT AT 12 23 1");
 
-        Assert.assertTrue("MatchBeginningMessage Generation from server string" , message.equals((MoveMessage)mf.getMessage()));
-        Assert.assertTrue("MatchBeginningMessage sets MessageFields type field correctly", mf.getMessage().getMessageType() == Message.MessageType.MatchBeginning);
+        Assert.assertTrue("FoundSettlementMessage Generation from server string" , message.equals((FoundSettlementMessage)mf.getMessage()));
+        Assert.assertTrue("FoundSettlementMessage sets MessageFields type field correctly", mf.getMessage().getMessageType() == Message.MessageType.Move);
+        Assert.assertTrue("FoundSettlementMessage sets MessageFields MoveType field correctly", ((FoundSettlementMessage)(mf.getMessage())).getMoveType() == MoveMessage.MoveType.Found);
+    }
+
+    @Test
+    public void MoveExpandSettlementMessageTest () throws Exception {
+        this.mf = new messageFields("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 EXPANDED SETTLEMENT AT 65 89 45 JUNGLE");
+        ExpandSettlementMessage message = new ExpandSettlementMessage("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 EXPANDED SETTLEMENT AT 65 89 45 JUNGLE");
+
+        Assert.assertTrue("ExpandSettlementMessage Generation from server string" , message.equals((ExpandSettlementMessage)mf.getMessage()));
+        Assert.assertTrue("ExpandSettlementMessage sets MessageFields type field correctly", mf.getMessage().getMessageType() == Message.MessageType.Move);
+        Assert.assertTrue("ExpandSettlementMessage sets MessageFields MoveType field correctly", ((ExpandSettlementMessage)(mf.getMessage())).getMoveType() == MoveMessage.MoveType.Expand);
+    }
+
+    @Test
+    public void MoveBuildTotoroMessageTest () throws Exception {
+        this.mf = new messageFields("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 BUILT TOTORO SANCTUARY AT 15 53 44");
+        BuildTotoroMessage message = new BuildTotoroMessage("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 BUILT TOTORO SANCTUARY AT 15 53 44");
+
+        Assert.assertTrue("BuildTotoroMessage Generation from server string" , message.equals((BuildTotoroMessage)mf.getMessage()));
+        Assert.assertTrue("BuildTotoroMessage sets MessageFields type field correctly", mf.getMessage().getMessageType() == Message.MessageType.Move);
+        Assert.assertTrue("BuildTotoroMessage sets MessageFields MoveType field correctly", ((BuildTotoroMessage)(mf.getMessage())).getMoveType() == MoveMessage.MoveType.Totoro);
+
+    }
+
+    @Test
+    public void MoveBuildTigerMessageTest () throws Exception {
+        this.mf = new messageFields("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 BUILT TIGER PLAYGROUND AT 15 53 44");
+        BuildTigerMessage message = new BuildTigerMessage("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 BUILT TIGER PLAYGROUND AT 15 53 44");
+
+        Assert.assertTrue("BuildTigerMessage Generation from server string" , message.equals((BuildTigerMessage)mf.getMessage()));
+        Assert.assertTrue("BuildTigerMessage sets MessageFields type field correctly", mf.getMessage().getMessageType() == Message.MessageType.Move);
+        Assert.assertTrue("BuildTigerMessage sets MessageFields MoveType field correctly", ((BuildTigerMessage)(mf.getMessage())).getMoveType() == MoveMessage.MoveType.Tiger);
+
     }
 
     @Test
@@ -88,6 +121,26 @@ public class messageFieldsTest {
         this.mf = new messageFields("THANK YOU FOR PLAYING! GOODBYE");
         Assert.assertTrue("Welcome message sets MessageFields type field correctly", mf.getMessage().getMessageType() == Message.MessageType.Goodbye);
     }
+
+
+
+
+    @Test
+    public void makeTileFromStringTest() throws Exception {
+        Message message = new Message(Message.MessageType.BeginRound);
+        Tile compareTile = new Tile(1, Terrain.terrainType.Grassland, Terrain.terrainType.Lake, Orientation.Orientations.downLeft);
+        Tile testTile = message.makeTileFromString("LAKE+GRASS", 1, Orientation.Orientations.downLeft);
+
+        Assert.assertTrue("Test correctly interprets server tile string to create tile", compareTile.equals(testTile));
+    }
+
+    @Test
+    public void stringToTerrainTest() throws Exception {
+        Message message = new Message(Message.MessageType.BeginRound);
+        Assert.assertTrue("Creating terrainType from server terrain string", Terrain.terrainType.Grassland == message.stringToTerrain("GRASS"));
+    }
+
+
 
     /*
     @Test
