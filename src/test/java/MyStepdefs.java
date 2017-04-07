@@ -231,4 +231,21 @@ public class MyStepdefs {
 
     }
 
+    @Given("^the player wants to place their tile entirely on top of one existing tile$")
+    public void thePlayerWantsToPlaceTheirTileEntirelyOnTopOfOneExistingTile() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @When("^the player tries to place the tile$")
+    public void thePlayerTriesToPlaceTheTile() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
+
+    @Then("^the player will be prevented from placing their tile$")
+    public void thePlayerWillBePreventedFromPlacingTheirTile() throws Throwable {
+        // Write code here that turns the phrase above into concrete actions
+        throw new PendingException();
+    }
 }
