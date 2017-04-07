@@ -70,8 +70,10 @@ public class messageFields {
                 scanner.next();
                 String temp = scanner.next();
                 if(temp.equals("MOVE")) {
-                    for(int i = 0; i < 11; i++)
-                        temp = scanner.next();
+                    for(int i = 0; i < 11; i++) {
+                        if(scanner.hasNext())
+                            temp = scanner.next();
+                    }
                         if(temp.equals("FOUNDED"))
                             this.message = new FoundSettlementMessage(message);
                         else if(temp.equals("EXPANDED"))
@@ -81,7 +83,15 @@ public class messageFields {
                                 this.message = new BuildTotoroMessage(message);
                             else
                                 this.message = new BuildTigerMessage(message);
+                        else
+                            this.message = new ForfeitMessage(message);
                 }
+                else{
+                    this.message = new GameOverMessage(message);
+                }
+                break;
+            case "MAKE":
+                this.message = new MakeYourMoveMessage(message);
                 break;
 
 

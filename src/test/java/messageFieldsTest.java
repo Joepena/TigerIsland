@@ -105,6 +105,36 @@ public class messageFieldsTest {
     }
 
     @Test
+    public void ForfeitMessageTest () {
+        this.mf = new messageFields("GAME 123 MOVE 12 PLAYER DGD FORFEITED: ILLEGAL TILE PLACEMENT");
+        ForfeitMessage message = new ForfeitMessage("GAME 123 MOVE 12 PLAYER DGD FORFEITED: ILLEGAL TILE PLACEMENT");
+
+        Assert.assertTrue("ForfeitMessage Generation from server string" , message.equals((ForfeitMessage)mf.getMessage()));
+        Assert.assertTrue("ForfeitMessage sets MessageFields type field correctly", mf.getMessage().getMessageType() == Message.MessageType.Move);
+        Assert.assertTrue("ForfeitMessage sets MessageFields MoveType field correctly", ((ForfeitMessage)(mf.getMessage())).getMoveType() == MoveMessage.MoveType.Forfeit);
+
+    }
+
+    @Test
+    public void GameOverMessageTest() {
+        this.mf = new messageFields("GAME 1290 OVER PLAYER ABC 23000 PLAYER DEF 230000");
+        GameOverMessage message = new GameOverMessage("GAME 1290 OVER PLAYER ABC 23000 PLAYER DEF 230000");
+
+        Assert.assertTrue("GameOverMessage Generation from server string" , message.equals((GameOverMessage)mf.getMessage()));
+        Assert.assertTrue("GameOverMessage sets MessageFields type field correctly", mf.getMessage().getMessageType() == Message.MessageType.GameOver);
+    }
+
+    @Test
+    public void MakeYourMoveMessageTest() {
+        this.mf = new messageFields("MAKE YOUR MOVE IN GAME 12345 WITHIN 1.545 SECONDS: MOVE 1234 PLACE ROCK+LAKE");
+        MakeYourMoveMessage message = new MakeYourMoveMessage("MAKE YOUR MOVE IN GAME 12345 WITHIN 1.545 SECONDS: MOVE 1234 PLACE ROCK+LAKE");
+
+        Assert.assertTrue("MakeYourMoveMessage Generation from server string" , message.equals((MakeYourMoveMessage)mf.getMessage()));
+        Assert.assertTrue("MakeYourMoveMessage sets MessageFields type field correctly", mf.getMessage().getMessageType() == Message.MessageType.MakeYourMove);
+
+    }
+
+    @Test
     public void noActionMessageTest () throws Exception {
         this.mf = new messageFields("WELCOME TO ANOTHER EDITION OF THUNDERDOME!");
         Assert.assertTrue("Welcome message sets MessageFields type field correctly", mf.getMessage().getMessageType() == Message.MessageType.Welcome);
