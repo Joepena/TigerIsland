@@ -4,10 +4,10 @@ import java.util.Scanner;
  * Created by TomasK on 4/6/2017.
  */
 public class BeginRoundMessage extends Message{
-    private int rid;
+    private String rid;
     private int rounds;
 
-    public int getRid() {
+    public String getRid() {
         return rid;
     }
 
@@ -22,7 +22,7 @@ public class BeginRoundMessage extends Message{
             return;
         scanner.next();
         scanner.next();
-        this.rid = scanner.nextInt();
+        this.rid = scanner.next();
         scanner.next();
         this.rounds = scanner.nextInt();
         scanner.close();
