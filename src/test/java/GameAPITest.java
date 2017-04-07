@@ -304,6 +304,33 @@ public class GameAPITest {
     }
 
     @Test
+
+    public void testFoundSettlement() throws Exception {
+        createLandMass();
+        Hex hex = game.gameBoard.getHex(Orientation.upRightOf(Orientation.getOrigin()));
+        game.foundSettlement(hex.getLocation());
+
+        Assert.assertEquals(Hex.gamePieces.Meeple, game.gameBoard.getHex(hex.getLocation()).getOccupiedBy());
+    }
+
+    @Test
+    public void testCreateTotoroSanctuary() throws Exception {
+        createLandMass();
+        Hex hex = game.gameBoard.getHex(Orientation.upRightOf(Orientation.getOrigin()));
+        game.createTotoroSanctuary(hex.getLocation());
+
+        Assert.assertEquals(Hex.gamePieces.Totoro, game.gameBoard.getHex(hex.getLocation()).getOccupiedBy());
+    }
+
+    @Test
+    public void testCreateTigerPlayground() throws Exception {
+        createLandMass();
+        Hex hex = game.gameBoard.getHex(Orientation.upRightOf(Orientation.getOrigin()));
+        game.createTigerPlayground(hex.getLocation());
+
+        Assert.assertEquals(Hex.gamePieces.Tiger, game.gameBoard.getHex(hex.getLocation()).getOccupiedBy());
+    }
+
     public void isTilePlacementNukingWholeSettlementOfHexOneTest() throws Exception {
         createLandMass();
 
@@ -351,6 +378,7 @@ public class GameAPITest {
                 tilePositionCoordinates.getVolcanoCoordinates(), tilePositionCoordinates.getRightHexCoordinates());
 
         Assert.assertFalse("Checks if settlement under leftHex is totally nuked, in this scenario it is not", valid);
+
     }
 
   public void createLandMass() throws Exception {
