@@ -329,6 +329,7 @@ public class GameAPITest {
         game.createTigerPlayground(hex.getLocation());
 
         Assert.assertEquals(Hex.gamePieces.Tiger, game.gameBoard.getHex(hex.getLocation()).getOccupiedBy());
+    }
 
     public void isTilePlacementNukingWholeSettlementOfHexOneTest() throws Exception {
         createLandMass();
