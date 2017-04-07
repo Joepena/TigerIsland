@@ -64,28 +64,36 @@ public class Board {
     }
 
     void printSectionedBoard(Board boardToTranscribe) {
-        // This will print out a 30x30 rectangle around the origin location
-
-        //Hex[][] gameBoard2D = transcribe2D(this);
+        // This will print out a 15x15 rectangle around the origin location
 
         Hex[][] gameBoard2D = new Hex[376][376];
 
-        for (int x = 67; x < 127; x++) {
-            for (int y = 67; y < 98; y++) {
-                for (int z = 67; z < 98; z++) {
-                    Hex currentHex = boardToTranscribe.getHex(new Tuple(x-97, y-97, z-97));
+        for (int x = 82; x < 112; x++) {
+            for (int y = 82; y < 112; y++) {
+                for (int z = 82; z < 112; z++) {
+
                     int xOffset = x - 97;
                     int yOffset = y - 97;
                     int zOffset = z - 97;
-                    if (currentHex == null && gameBoard2D[(2 * xOffset) + 188][yOffset - zOffset + 188] == null) {
-                        gameBoard2D[(2 * xOffset) + 188][yOffset - zOffset + 188] = null;
+
+                    if ((xOffset+yOffset+zOffset) != 0){
+                        continue;
+                    }
+
+                    Hex currentHex = boardToTranscribe.getHex(new Tuple(x-97, y-97, z-97));
+
+
+                    int newXCoord = (2 * xOffset) + 188;
+                    int newYCoord = yOffset - zOffset + 188;
+
+                    if (currentHex == null && gameBoard2D[newXCoord][newYCoord] == null) {
+                        gameBoard2D[newXCoord][newYCoord] = null;
                     } else {
-                        gameBoard2D[(2 * xOffset) + 188][yOffset - zOffset + 188] = currentHex;
+                        gameBoard2D[newXCoord][newYCoord] = currentHex;
                     }
                 }
             }
         }
-
 
         for (int i = 183; i < 196; i++) {
             System.out.println();
@@ -112,27 +120,6 @@ public class Board {
             }
         }
     }
-
-/*    private Hex[][] transcribe2D(Board boardToTranscribe) {
-        Hex[][] gameBoard2D = new Hex[376][376];
-
-        for (int x = 94; x < 100; x++) {
-            for (int z = 94; z < 100; z++) {
-                for (int y = 94; y < 100; y++) {
-                    Hex currentHex = boardToTranscribe.getHex(new Tuple(x-97, y-97, z-97));
-                    int xOffset = x - 97;
-                    int yOffset = y - 97;
-                    int zOffset = z - 97;
-                    if (currentHex == null) {
-                        gameBoard2D[yOffset - zOffset + 188][2 * xOffset + 188] = null;
-                    } else {
-                        gameBoard2D[yOffset - zOffset + 188][2 * xOffset + 188] = currentHex;
-                    }
-                }
-            }
-        }
-        return gameBoard2D;
-    }*/
 
 
 }

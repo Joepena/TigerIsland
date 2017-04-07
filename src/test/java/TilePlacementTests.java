@@ -37,13 +37,9 @@ public class TilePlacementTests {
         Tuple originCoords = Orientation.getOrigin();
         Tile tempTile = new Tile(0,Terrain.terrainType.Jungle,Terrain.terrainType.Rocky,Orientation.Orientations.upRight);
         game.placeTile(tempTile, originCoords);
-        game.gameBoard.printSectionedBoard(game.gameBoard);
 
         Tuple testCoords = Orientation.addCoordinatesByOrientation(originCoords, Orientation.Orientations.upRight);
         testCoords = Orientation.addCoordinatesByOrientation(testCoords, Orientation.Orientations.right);
-
-        game.placeTile(testTile, testCoords);
-        game.gameBoard.printSectionedBoard(game.gameBoard);
 
         Assert.assertEquals("test",true,game.APIUtils.isTileDestinationValid(testTile, testCoords));
 
