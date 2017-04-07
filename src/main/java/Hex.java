@@ -104,4 +104,9 @@ public class Hex {
         this.setTeam(team);
     }
 
+
+    public boolean equals(Hex hex){
+        return (this.getTerrain() == hex.getTerrain() &&
+                this.getTileId() == hex.getTileId());
+    }
 }

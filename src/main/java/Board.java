@@ -51,6 +51,7 @@ public class Board {
         int z = coordinates.getZ() + ORIGINOFFSET;
 
         return new Tuple(x, y, z);
+        
 
     }
 
