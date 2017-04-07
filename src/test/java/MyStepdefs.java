@@ -19,7 +19,7 @@ public class MyStepdefs {
     Hex testHex;
     Tile testTile;
     Tuple testPair;
-    Tuple hex2Loc;
+    Tuple secondTestPair;
 
     @Given("^there are no hexes on the board")
     public void setupBoardForHexTest () throws Throwable {
@@ -102,17 +102,17 @@ public class MyStepdefs {
         Hex hexToPlace = new Hex(1, Terrain.terrainType.Lake);
 
         Tuple firstHexLoc = testHex.getLocation();
-        hex2Loc = Orientation.upLeftOf(firstHexLoc);
+        secondTestPair = Orientation.upLeftOf(firstHexLoc);
 
-        if(validate.existsAdjacentHex(hex2Loc, testBoard))
-            testBoard.setHex(hexToPlace, hex2Loc);
+        if(validate.existsAdjacentHex(secondTestPair, testBoard))
+            testBoard.setHex(hexToPlace, secondTestPair);
 
-        hex2Loc = testBoard.calculateOffset(hex2Loc);
+        secondTestPair = testBoard.calculateOffset(secondTestPair);
     }
 
     @Then("^the hex will be placed on the board")
     public void hex_should_be_placed () throws Throwable {
-        Assert.assertTrue(testBoard.getGameBoardAvailability()[hex2Loc.getX()][hex2Loc.getY()][hex2Loc.getZ()]);
+        Assert.assertTrue(testBoard.getGameBoardAvailability()[secondTestPair.getX()][secondTestPair.getY()][secondTestPair.getZ()]);
     }
 
     @Given("^there is already a hex placed on the board")
@@ -129,17 +129,17 @@ public class MyStepdefs {
         Hex hexToPlace = new Hex(1, Terrain.terrainType.Lake);
 
         Tuple firstHexLoc = testHex.getLocation();
-        hex2Loc = Orientation.upLeftOf(Orientation.upLeftOf(firstHexLoc));
+        secondTestPair = Orientation.upLeftOf(Orientation.upLeftOf(firstHexLoc));
 
-        if(validate.existsAdjacentHex(hex2Loc, testBoard))
-            testBoard.setHex(hexToPlace, hex2Loc);
+        if(validate.existsAdjacentHex(secondTestPair, testBoard))
+            testBoard.setHex(hexToPlace, secondTestPair);
 
-        hex2Loc = testBoard.calculateOffset(hex2Loc);
+        secondTestPair = testBoard.calculateOffset(secondTestPair);
     }
 
     @Then("^the hex will be not placed on the board")
     public void hex_should_not_be_placed () throws Throwable {
-        Assert.assertFalse(testBoard.getGameBoardAvailability()[hex2Loc.getX()][hex2Loc.getY()][hex2Loc.getZ()]);
+        Assert.assertFalse(testBoard.getGameBoardAvailability()[secondTestPair.getX()][secondTestPair.getY()][secondTestPair.getZ()]);
     }
 
 
