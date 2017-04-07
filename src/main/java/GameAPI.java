@@ -133,8 +133,6 @@ public class GameAPI {
         return validNukingLocations;
     }
 
-<<<<<<< HEAD
-
     //Checking if any tile rotations are valid
     public boolean isValidNukingCoordinates(Tuple volcanoCoordinates){
         if(isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.downLeft)))
