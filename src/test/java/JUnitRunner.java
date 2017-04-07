@@ -16,7 +16,10 @@ import org.junit.runners.Suite;
   updateSettlementsTest.class,
   HexValidationTest.class,
   TotoroValidationTest.class,
-  TigerValidationTest.class
+  TigerValidationTest.class,
+  TestValidationTest.class,
+  messageParserTest.class,
+  SettlementCreationListTest.class
 })
 
 public class JUnitRunner {
