@@ -136,8 +136,11 @@ public class GameAPIUtil {
         ArrayList<SettlementDataFrame> possibleSettlements = new ArrayList<>();
 
         possibleSettlements = listSettlements.getListOfSettlements();
+        int possibleSettlementsDynamicSize = possibleSettlements.size();
         //Loops through each dataframe
-        for (SettlementDataFrame currentDataFrame : possibleSettlements) {
+        outerloop:
+        for (int i = 0; i < possibleSettlementsDynamicSize; i ++) {
+            SettlementDataFrame currentDataFrame = possibleSettlements.get(i);
 
             currentDataFrameHexLocations = currentDataFrame.getListOfHexLocations();
             //Loops through each hexLoc in dataframe
@@ -166,12 +169,18 @@ public class GameAPIUtil {
                                 }
 
                                 listSettlements.addNewSettlement(combinedDataFrame);
-                                toBeRemoved.add(currentDataFrame);
-                                toBeRemoved.add(adjacentDataFrame);
+                                listSettlements.removeSettlement(currentDataFrame);
+                                listSettlements.removeSettlement(adjacentDataFrame);
 
-                                //currentDataFrame = combinedDataFrame;
+                                //Reinitialize possible settlements list
+                                possibleSettlements = listSettlements.getListOfSettlements();
+                                //Restart search
+                                i = 0;
+                                possibleSettlementsDynamicSize--;
 
-                                break;
+
+
+                                break outerloop;
                             }
 
                         }
@@ -179,9 +188,6 @@ public class GameAPIUtil {
                 }
             }
 
-            for (SettlementDataFrame removeThis : toBeRemoved){
-                listSettlements.removeSettlement(removeThis);
-            }
         }
 
     }
