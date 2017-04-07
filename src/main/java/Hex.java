@@ -99,4 +99,8 @@ public class Hex {
         this.team = team;
     }
 
+    public boolean equals(Hex hex){
+        return (this.getTerrain() == hex.getTerrain() &&
+                this.getTileId() == hex.getTileId());
+    }
 }
