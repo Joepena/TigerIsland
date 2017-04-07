@@ -33,7 +33,7 @@ public class GameAPITest {
     public void validatePlaceFirstTile_Jungle() throws Exception {
 
         game.placeFirstTile();
-        Tuple jungleCoords = new Tuple(0, 1, -1);
+        Tuple jungleCoords = Orientation.addCoordinates(Orientation.getOrigin(), Orientation.getUPLEFT());
         Assert.assertEquals("Checking jungle", game.gameBoard.getHex(jungleCoords).getTerrain(), Terrain.terrainType.Jungle);
     }
 
@@ -41,7 +41,7 @@ public class GameAPITest {
     public void validatePlaceFirstTile_Lake() throws Exception {
 
         game.placeFirstTile();
-        Tuple lakeCoords = new Tuple(1, 0, -1);
+        Tuple lakeCoords = Orientation.addCoordinates(Orientation.getOrigin(), Orientation.getUPRIGHT());
         Assert.assertEquals("Checking lake", game.gameBoard.getHex(lakeCoords).getTerrain(), Terrain.terrainType.Lake);
     }
 
@@ -49,7 +49,7 @@ public class GameAPITest {
     public void validatePlaceFirstTile_Rocky() throws Exception {
 
         game.placeFirstTile();
-        Tuple rockyCoords = new Tuple(-1, 0, 1);
+        Tuple rockyCoords = Orientation.addCoordinates(Orientation.getOrigin(), Orientation.getDOWNLEFT());
         Assert.assertEquals("Checking rocky", game.gameBoard.getHex(rockyCoords).getTerrain(), Terrain.terrainType.Rocky);
     }
 
@@ -57,7 +57,7 @@ public class GameAPITest {
     public void validatePlaceFirstTile_Grassland() throws Exception {
 
         game.placeFirstTile();
-        Tuple grassCoords = new Tuple(0, -1, 1);
+        Tuple grassCoords = Orientation.addCoordinates(Orientation.getOrigin(), Orientation.getDOWNRIGHT());
         Assert.assertEquals("Checking grassland", game.gameBoard.getHex(grassCoords).getTerrain(), Terrain.terrainType.Grassland);
     }
 
