@@ -99,7 +99,10 @@ public class GameAPI {
       APIUtils.updateBothSettlement();
     }
 
-    ArrayList<Tuple> getValidNukingLocations() {
+    public ArrayList<ExpansionOpDataFrame> getExpansionOptions(Hex.Team targetTeam) {
+      return APIUtils.findExpansionOptionsFor(targetTeam);
+    }
+    public ArrayList<Tuple> getValidNukingLocations() {
         if(gameBoard.isOriginEmpty()){
             return null;
         }
@@ -261,6 +264,7 @@ public class GameAPI {
 
         return validLocations;
     }
+
 
     public void foundSettlement(Tuple tuple) {
         gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Meeple);

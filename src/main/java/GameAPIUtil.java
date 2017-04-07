@@ -1,6 +1,7 @@
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 
 /**
  * Created by Nicholas on 3/24/2017.
@@ -19,25 +20,29 @@ public class GameAPIUtil {
     public void updateBothSettlement() {
         Settlements settlement = new Settlements();
         settlement.wipeSettlementSet();
-        // create a copy of the availability array
-        boolean[][][] array = gameBoard.getGameBoardAvailability();
-        boolean[][][] copyArr = new boolean[array.length][][];
 
-        for (int i = 0; i < array.length; i++) {
-            copyArr[i] = new boolean[array[i].length][];
-            for (int j = 0; j < array[i].length; j++) {
-                copyArr[i][j] = new boolean[array[i][j].length];
-                System.arraycopy(array[i][j], 0, copyArr[i][j], 0,
-                        array[i][j].length);
-            }
-        }
+        boolean[][][] copyArr = copyAvailabilityGrid(gameBoard.getGameBoardAvailability());
+        dfsSearch(copyArr, Orientation.getOrigin(), settlement, new SettlementDataFrame(0,new Tuple(0,0,0)));
 
-        dfsSearch(copyArr, Orientation.getOrigin(), settlement, new SettlementDataFrame(0, new Tuple(0, 0, 0)));
         Settlements.retriveWhiteSettlements(settlement, game.getWhiteSettlements());
         Settlements.retriveBlackSettlements(settlement, game.getBlackSettlements());
 
         //conglomerateAdjacentSettlements(Hex.Team.White);
         conglomerateAdjacentSettlements(Hex.Team.Black);
+    }
+
+    private boolean[][][] copyAvailabilityGrid(boolean[][][] array) {
+      boolean[][][] copyArr = new boolean[array.length][][];
+
+      for (int i = 0; i < array.length; i++) {
+        copyArr[i] = new boolean[array[i].length][];
+        for (int j = 0; j < array[i].length; j++) {
+          copyArr[i][j] = new boolean[array[i][j].length];
+          System.arraycopy(array[i][j], 0, copyArr[i][j], 0,
+            array[i][j].length);
+        }
+      }
+      return copyArr;
     }
 
     protected void dfsSearch(boolean[][][] availabilityGrid, Tuple coord, Settlements settlement, SettlementDataFrame df) {
@@ -363,7 +368,63 @@ public class GameAPIUtil {
 
     }
 
+    public ArrayList<ExpansionOpDataFrame> findExpansionOptionsFor(Hex.Team team) {
+      // search for all hexes owned by [team] param, use settlements
+      ArrayList<SettlementDataFrame> target = new ArrayList<>();
+      if(team == Hex.Team.Black) target = game.getBlackSettlements().getListOfSettlements();
+      else if(team == Hex.Team.White) target = game.getWhiteSettlements().getListOfSettlements();
+      //iterate through each data-frame marking off already visited hexes off of a copy of availability grid
+      boolean [][][] copyArr = copyAvailabilityGrid(gameBoard.gameBoardAvailability);
+      Iterator<SettlementDataFrame> iterator = target.iterator();
+      ArrayList<ExpansionOpDataFrame> list = new ArrayList<>();
+      while (iterator.hasNext()) {
+        SettlementDataFrame df = iterator.next();
+        ArrayList<Tuple> listOfTuples = df.getListOfHexLocations();
+        for(Tuple tuple : listOfTuples) {
+          // find adjacent hex that is same terrain and not occupied
+          Terrain.terrainType currHexTerr = gameBoard.getHex(tuple).getTerrain();
+          for (Orientation.Orientations orientation : Orientation.Orientations.values()) {
+            Tuple tempTuple = Orientation.addCoordinatesByOrientation(tuple, orientation);
+            Hex tempHex = gameBoard.getHex(tempTuple);
+            if(tempHex == null) continue;
+            Terrain.terrainType tempTerrain = tempHex.getTerrain();
+            if (tempTuple == Orientation.getOrigin() || currHexTerr != tempTerrain
+              || tempHex.getTeam() != Hex.Team.Neutral)
+              continue;
+            ExpansionOpDataFrame expansionOpDataFrame = new ExpansionOpDataFrame(tempTuple,
+              tempTerrain);
+            dfsExpansionSearch(copyArr, expansionOpDataFrame, tempTerrain, tempTuple);
+            list.add(expansionOpDataFrame);
+          }
+        }
+      }
+      return list;
+    }
+
+    private void dfsExpansionSearch(boolean[][][] availabilityGrid, ExpansionOpDataFrame df, Terrain.terrainType terrain, Tuple tuple) {
+      int xCord = tuple.getX();
+      int yCord = tuple.getY();
+      int zCord = tuple.getZ();
+      Tuple offSet = gameBoard.calculateOffset(tuple);
+      if(!availabilityGrid[offSet.getX()][offSet.getY()][offSet.getZ()] || xCord >= BOARD_EDGE || xCord <= -BOARD_EDGE || yCord >= BOARD_EDGE || yCord <= -BOARD_EDGE || zCord >= BOARD_EDGE || zCord <= -BOARD_EDGE) {
+        return;
+      }
+      availabilityGrid[offSet.getX()][offSet.getY()][offSet.getZ()] = false;
+      df.incrementExpansionCost(gameBoard.getHex(tuple).getLevel());
+      for(Orientation.Orientations orientation : Orientation.Orientations.values()) {
+        Tuple tempTuple = Orientation.addCoordinatesByOrientation(tuple,orientation);
+        Tuple tempTupleOff = gameBoard.calculateOffset(tempTuple);
+        if(!availabilityGrid[tempTupleOff.getX()][tempTupleOff.getY()][tempTupleOff.getZ()]) continue;
+        Hex tempHex = gameBoard.getHex(tempTuple);
+        if(tempHex == null) continue;
+        Terrain.terrainType tempTerrain = tempHex.getTerrain();
+        if(tempTuple == Orientation.getOrigin() || terrain != tempTerrain || tempHex.getTeam() != Hex.Team.Neutral) continue;
+        dfsExpansionSearch(availabilityGrid,df,terrain,tempTuple);
+      }
+    }
+
     public static boolean isSameTeam(Hex hex1, Hex hex2) {
+
 
         if (hex1 == null || hex2 == null)
             return false;
