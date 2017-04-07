@@ -11,7 +11,7 @@ public class GameClient {
 
 //    This will be for when we actually run the project I guess?
     public static void main(String[] args) {
-        String host = "10.136.60.73";
+        String host = "10.136.60.73"; //"localhost"
         int port = 8000;
         
 
