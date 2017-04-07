@@ -61,12 +61,12 @@ public class GameAPI {
     }
 
     public Settlements getWhiteSettlements() {
-    return whiteSettlements;
-  }
+        return whiteSettlements;
+    }
 
     public Settlements getBlackSettlements() {
-    return blackSettlements;
-  }
+        return blackSettlements;
+    }
 
     boolean isBoardEmpty() {
         return gameBoard.isOriginEmpty();
@@ -88,15 +88,15 @@ public class GameAPI {
 
         Tuple originCoords = new Tuple(0,0,0);
         gameBoard.setHex(new Hex(1, Terrain.terrainType.Volcano), originCoords);
-        gameBoard.setHex(new Hex(1, Terrain.terrainType.Jungle), Orientation.upLeftOf(originCoords));
-        gameBoard.setHex(new Hex(1, Terrain.terrainType.Lake), Orientation.upRightOf(originCoords));
-        gameBoard.setHex(new Hex(1, Terrain.terrainType.Rocky), Orientation.downLeftOf(originCoords));
-        gameBoard.setHex(new Hex(1, Terrain.terrainType.Grassland), Orientation.downRightOf(originCoords));
+        gameBoard.setHex(new Hex(1, Terrain.terrainType.Jungle), Orientation.addCoordinatesByOrientation(originCoords, Orientation.Orientations.upLeft));
+        gameBoard.setHex(new Hex(1, Terrain.terrainType.Lake), Orientation.addCoordinatesByOrientation(originCoords, Orientation.Orientations.upRight));
+        gameBoard.setHex(new Hex(1, Terrain.terrainType.Rocky), Orientation.addCoordinatesByOrientation(originCoords, Orientation.Orientations.downLeft));
+        gameBoard.setHex(new Hex(1, Terrain.terrainType.Grassland), Orientation.addCoordinatesByOrientation(originCoords, Orientation.Orientations.downRight));
     }
 
 
     protected void updateSettlements() {
-      APIUtils.updateBothSettlement();
+        APIUtils.updateBothSettlement();
     }
 
     ArrayList<Tuple> getValidNukingLocations() {
@@ -133,129 +133,6 @@ public class GameAPI {
         return validNukingLocations;
     }
 
-    //Checking if any tile rotations are valid
-    public boolean isValidNukingCoordinates(Tuple volcanoCoordinates){
-        if(isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.downLeft)))
-            return true;
-        if(isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.downRight)))
-            return true;
-        if(isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.upLeft)))
-            return true;
-        if(isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.upRight)))
-            return true;
-        if(isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.left)))
-            return true;
-        if(isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.right)))
-            return true;
-
-        return false;
-    }
-
-    public boolean isValidTileNukingPosition(TilePositionCoordinates tilePositionCoordinates){
-
-        Hex hexUnderVolcano = gameBoard.getHex(tilePositionCoordinates.getVolcanoCoordinates());
-        Hex hexUnderLeft = gameBoard.getHex(tilePositionCoordinates.getLeftHexCoordinates());
-        Hex hexUnderRight = gameBoard.getHex(tilePositionCoordinates.getRightHexCoordinates());
-
-        if(hexUnderLeft == null || hexUnderRight == null || hexUnderVolcano == null)
-            return false;
-
-        if(!HexValidation.isValidVolcanoPlacement(tilePositionCoordinates.getVolcanoCoordinates(),
-          gameBoard))
-            return false;
-
-        if(hexUnderVolcano.getLevel() != hexUnderLeft.getLevel() || hexUnderLeft.getLevel() != hexUnderRight.getLevel())
-            return false;
-
-        if(hexUnderVolcano.getTileId() == hexUnderLeft.getTileId() && hexUnderRight.getTileId() == hexUnderVolcano.getTileId())
-            return false;
-
-        if(isVolcanoNukingWholeSettlement(tilePositionCoordinates))
-            return false;
-
-        if(isLeftHexNukingWholeSettlement(tilePositionCoordinates))
-            return false;
-
-        if(isRightHexNukingWholeSettlement(tilePositionCoordinates))
-            return false;
-
-        if(TempHexHelpers.hasTigerTotoro(hexUnderVolcano) || TempHexHelpers.hasTigerTotoro(hexUnderLeft) ||
-                TempHexHelpers.hasTigerTotoro(hexUnderRight))
-            return false;
-
-        return true;
-    }
-
-    protected boolean isVolcanoNukingWholeSettlement(TilePositionCoordinates tileCoordinates) {
-       return isTilePlacementNukingWholeSettlementOfHexOne(tileCoordinates.getVolcanoCoordinates(),
-                tileCoordinates.getLeftHexCoordinates(), tileCoordinates.getRightHexCoordinates());
-    }
-    protected boolean isLeftHexNukingWholeSettlement(TilePositionCoordinates tileCoordinates) {
-        return isTilePlacementNukingWholeSettlementOfHexOne(tileCoordinates.getLeftHexCoordinates(),
-                tileCoordinates.getVolcanoCoordinates(), tileCoordinates.getRightHexCoordinates());
-    }
-    protected boolean isRightHexNukingWholeSettlement(TilePositionCoordinates tileCoordinates) {
-        return isTilePlacementNukingWholeSettlementOfHexOne(tileCoordinates.getRightHexCoordinates(),
-                tileCoordinates.getLeftHexCoordinates(), tileCoordinates.getVolcanoCoordinates());
-    }
-
-    protected boolean isTilePlacementNukingWholeSettlementOfHexOne(Tuple location1, Tuple location2, Tuple location3){
-        Hex hexOfSettlement = gameBoard.getHex(location1);
-
-        if (hexOfSettlement.getOccupiedBy() != Hex.gamePieces.empty) {
-            if (hexOfSettlement.getTeam() == Hex.Team.Black) {
-                int nukeCount = 1;
-                SettlementDataFrame settlement = getBlackSettlementFromLocation(location1);
-                if (settlement == null) {
-                } else {
-                    if(isInSettlement(location2, settlement))
-                        nukeCount++;
-                    if(isInSettlement(location3, settlement))
-                        nukeCount++;
-                    if(settlement.getSettlementSize() == nukeCount)
-                        return true;
-                }
-            } else if (hexOfSettlement.getTeam() == Hex.Team.White) {
-                int nukeCount = 1;
-                SettlementDataFrame settlement = getWhiteSettlementFromLocation(location1);
-                if (settlement == null) {
-                } else {
-                   if(isInSettlement(location2, settlement))
-                       nukeCount++;
-                   if(isInSettlement(location3, settlement))
-                       nukeCount++;
-                   if(settlement.getSettlementSize() == nukeCount)
-                       return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public boolean isTileDestinationValid(Tile tile, Tuple destCoordPair){
-        if (isTileConnected(tile, destCoordPair)){
-            return true;
-        }
-
-        if (gameBoard.isOriginEmpty()){
-            return true;
-        }
-
-        return false;
-    }
-
-    public boolean isTileConnected(Tile tile, Tuple absDestCoordPair){
-
-        Tuple leftCoordPair = Orientation.addCoordinatesByOrientation(absDestCoordPair, tile.getLeftHexOrientation());
-        Tuple rightCoordPair = Orientation.addCoordinatesByOrientation(absDestCoordPair, Orientation.getRightHexMapping(tile.getLeftHexOrientation()));
-
-        boolean valid = HexValidation.existsAdjacentHex(absDestCoordPair, gameBoard);
-        valid = valid || HexValidation.existsAdjacentHex(leftCoordPair, gameBoard);
-        valid = valid || HexValidation.existsAdjacentHex(rightCoordPair, gameBoard);
-        return valid;
-
-    }
-    
     public boolean canSelectBuildTotoro() {
 
         ArrayList<SettlementDataFrame> blackSettlements = getBlackSettlements().getListOfSettlements();
