@@ -99,4 +99,14 @@ public class Hex {
         this.team = team;
     }
 
+    public void placeMeeple(Team team){
+        this.setOccupiedBy(gamePieces.Meeple);
+        this.setTeam(team);
+    }
+
+
+    public boolean equals(Hex hex){
+        return (this.getTerrain() == hex.getTerrain() &&
+                this.getTileId() == hex.getTileId());
+    }
 }
