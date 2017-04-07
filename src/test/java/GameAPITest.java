@@ -353,6 +353,35 @@ public class GameAPITest {
         Assert.assertFalse("Checks if settlement under leftHex is totally nuked, in this scenario it is not", valid);
     }
 
+    @Test
+    public void conglomerateAdjacentSettlementTest() throws Exception{
+        createLandMass();
+        game.gameBoard.setHex(new Hex (3, Terrain.terrainType.Grassland), Orientation.upRightOf(Orientation.getOrigin()));
+
+        Hex meeple = game.gameBoard.getHex(Orientation.downLeftOf(Orientation.getOrigin()));
+        meeple.placeMeeple(Hex.Team.Black);
+
+        meeple = game.gameBoard.getHex(Orientation.downRightOf(Orientation.getOrigin()));
+        meeple.placeMeeple(Hex.Team.Black);
+
+        meeple = game.gameBoard.getHex(Orientation.rightOf(Orientation.getOrigin()));
+        meeple.placeMeeple(Hex.Team.Black);
+
+        meeple = game.gameBoard.getHex(Orientation.upRightOf(Orientation.getOrigin()));
+        meeple.placeMeeple(Hex.Team.Black);
+
+        meeple = game.gameBoard.getHex(Orientation.upLeftOf(Orientation.upRightOf(Orientation.getOrigin())));
+        meeple.placeMeeple(Hex.Team.Black);
+
+        meeple = game.gameBoard.getHex(Orientation.rightOf(Orientation.rightOf(Orientation.getOrigin())));
+        meeple.placeMeeple(Hex.Team.Black);
+
+        game.updateSettlements();
+
+
+        game.gameBoard.printSectionedBoard(game.gameBoard);
+    }
+
   public void createLandMass() throws Exception {
     Tuple origin = Orientation.getOrigin();
     Tuple tile1Loc = Orientation.rightOf(Orientation.upRightOf(origin));

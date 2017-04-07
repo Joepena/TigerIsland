@@ -99,4 +99,9 @@ public class Hex {
         this.team = team;
     }
 
+    public void placeMeeple(Team team){
+        this.setOccupiedBy(gamePieces.Meeple);
+        this.setTeam(team);
+    }
+
 }
