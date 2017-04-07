@@ -4,12 +4,12 @@ import java.util.Scanner;
  * Created by T K Vicious on 4/6/2017.
  */
 public class MakeYourMoveMessage extends Message{
-    private int gid;
+    private String gid;
     private double moveTime;
     private int moveNumber;
     private Tile tile;
 
-    public int getGid() {
+    public String getGid() {
         return gid;
     }
 
@@ -30,7 +30,7 @@ public class MakeYourMoveMessage extends Message{
         Scanner scanner = new Scanner(message).useDelimiter(" ");
         for(int i = 0; i < 5; i++)
             scanner.next();
-        this.gid = scanner.nextInt();
+        this.gid = scanner.next();
         scanner.next();
         this.moveTime = scanner.nextDouble();
         scanner.next();
@@ -42,7 +42,7 @@ public class MakeYourMoveMessage extends Message{
     }
 
     public boolean equals(MakeYourMoveMessage message){
-        return(this.gid == message.getGid() &&
+        return(this.gid.equals(message.getGid()) &&
                 this.tile.equals(message.getTile()) &&
                 this.moveNumber == message.getMoveNumber() &&
                 this.moveTime == message.getMoveTime());

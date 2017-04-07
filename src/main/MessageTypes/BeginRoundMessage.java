@@ -1,3 +1,4 @@
+import java.util.Objects;
 import java.util.Scanner;
 
 /**
@@ -30,6 +31,6 @@ public class BeginRoundMessage extends Message{
 
     public boolean equals(BeginRoundMessage message){
         return(this.rounds == message.getRounds() &&
-                this.rid == message.getRid());
+                this.rid.equals(message.getRid()));
     }
 }

@@ -3,7 +3,7 @@
  */
 public class clientMoveMessages
 {
-    public void setGid(int gid) {
+    public void setGid(String gid) {
         this.gid = gid;
     }
 
@@ -31,7 +31,7 @@ public class clientMoveMessages
         this.terrain = terrain;
     }
 
-    private int gid;
+    private String gid;
     private int moveNumber;
     private Tuple tileLocation;
     private int orientation;

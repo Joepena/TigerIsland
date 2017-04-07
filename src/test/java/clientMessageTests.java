@@ -10,7 +10,7 @@ public class clientMessageTests {
     public void foundMessageTest()
     {
         clientMoveMessages message = new clientMoveMessages();
-        message.setGid(1);
+        message.setGid("1");
         message.setMoveNumber(1);
         message.setTile(new Tile(1, Terrain.terrainType.Grassland, Terrain.terrainType.Jungle, Orientation.Orientations.upLeft));
         message.setTileLocation(Orientation.getOrigin());
@@ -26,7 +26,7 @@ public class clientMessageTests {
     public void expandMessageTest()
     {
         clientMoveMessages message = new clientMoveMessages();
-        message.setGid(1);
+        message.setGid("1");
         message.setMoveNumber(1);
         message.setTile(new Tile(1, Terrain.terrainType.Grassland, Terrain.terrainType.Jungle, Orientation.Orientations.upLeft));
         message.setTileLocation(Orientation.getOrigin());
@@ -43,7 +43,7 @@ public class clientMessageTests {
     public void totoroMessageTest()
     {
         clientMoveMessages message = new clientMoveMessages();
-        message.setGid(1);
+        message.setGid("1");
         message.setMoveNumber(1);
         message.setTile(new Tile(1, Terrain.terrainType.Grassland, Terrain.terrainType.Jungle, Orientation.Orientations.upLeft));
         message.setTileLocation(Orientation.getOrigin());
@@ -59,7 +59,7 @@ public class clientMessageTests {
     public void tigerMessageTest()
     {
         clientMoveMessages message = new clientMoveMessages();
-        message.setGid(1);
+        message.setGid("1");
         message.setMoveNumber(1);
         message.setTile(new Tile(1, Terrain.terrainType.Grassland, Terrain.terrainType.Jungle, Orientation.Orientations.upLeft));
         message.setTileLocation(Orientation.getOrigin());
@@ -75,7 +75,7 @@ public class clientMessageTests {
     public void unableMessageTest()
     {
         clientMoveMessages message = new clientMoveMessages();
-        message.setGid(1);
+        message.setGid("1");
         message.setMoveNumber(1);
         message.setTile(new Tile(1, Terrain.terrainType.Grassland, Terrain.terrainType.Jungle, Orientation.Orientations.upLeft));
         message.setTileLocation(Orientation.getOrigin());
