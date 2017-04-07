@@ -96,7 +96,7 @@ public class GameAPI {
       APIUtils.updateBothSettlement();
     }
 
-    public ArrayList<Tuple> getExpansionOptions(Hex.Team targetTeam) {
+    public ArrayList<ExpansionOpDataFrame> getExpansionOptions(Hex.Team targetTeam) {
       return APIUtils.findExpansionOptionsFor(targetTeam);
     }
     public ArrayList<Tuple> getValidNukingLocations() {

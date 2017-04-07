@@ -1,3 +1,4 @@
+import java.util.Iterator;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -59,7 +60,8 @@ public class TotoroValidationTest {
     public void totoroValidationHugeTest () {
         setUpTotoroValidationScenario3();
         gameAPI.updateSettlements();
-
+        Iterator<SettlementDataFrame> it = gameAPI.getBlackSettlements().getListOfSettlements().iterator();
+        it.forEachRemaining((df) -> System.out.println("size: "+df.getListOfHexLocations().size()));
         validLocations = gameAPI.validTotoroPlacements();
 
         Assert.assertEquals(expectedResults, validLocations);

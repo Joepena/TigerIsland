@@ -5,13 +5,12 @@ public class ExpansionOpDataFrame implements Comparable<ExpansionOpDataFrame>{
   private Integer expansionCost;
   private Tuple expansionStart;
   private Terrain.terrainType terrain;
-  private Hex.Team ownedBy;
 
-  public ExpansionOpDataFrame(Tuple expansionStart, Terrain.terrainType terrain, Hex.Team ownedBy, int hexLevel) {
+
+  public ExpansionOpDataFrame(Tuple expansionStart, Terrain.terrainType terrain) {
     this.expansionStart = expansionStart;
     this.terrain = terrain;
-    this.ownedBy = ownedBy;
-    this.expansionCost = hexLevel;
+    this.expansionCost = 0;
   }
 
   public Integer getExpansionCost() {
@@ -28,10 +27,6 @@ public class ExpansionOpDataFrame implements Comparable<ExpansionOpDataFrame>{
 
   public Terrain.terrainType getTerrain() {
     return terrain;
-  }
-
-  public Hex.Team getOwnedBy() {
-    return ownedBy;
   }
 
   @Override
