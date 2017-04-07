@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class PlayerRunnable implements Runnable {
 
     private boolean gameOver;
-    private boolean hasTile;
+    private boolean gotMessage;
     private Tile newTile;
     private Tuple decisionCoords;
     private GameAPI game;
@@ -21,18 +21,12 @@ public class PlayerRunnable implements Runnable {
         System.out.println("Tiger count of " + this.toString() + " is: " + game.getTigerCount());
 
         //Player Logic
+
+        game.placeFirstTile();
+
         while(!gameOver) {
 
-            if (game.isBoardEmpty()) {
-
-                game.placeFirstTile();
-
-            } else {
-
-                //Wait to receive piece
-                while (!hasTile);
-
-            }
+            while(!gotMessage);
 
             //Update board state
             game.updateSettlements();
@@ -64,6 +58,10 @@ public class PlayerRunnable implements Runnable {
         this.gameOver = gameOver;
 
             //End Turn
+    }
+
+    public void receiveMessage(Message m) {
+        gotMessage = true;
     }
 }
 
