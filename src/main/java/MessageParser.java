@@ -24,10 +24,10 @@ public class MessageParser {
         String messageStart = scanner.next();
         switch(messageStart){
             case "WELCOME":
-                this.message = new noActionMessage(Message.MessageType.Welcome);
+                this.message = new NoActionMessage(Message.MessageType.Welcome);
                 break;
             case "TWO":
-                this.message = new noActionMessage(Message.MessageType.Enter);
+                this.message = new NoActionMessage(Message.MessageType.Enter);
                 break;
             case "NEW":
                 challengeOrMatch(message, scanner);
@@ -39,7 +39,7 @@ public class MessageParser {
                 endOfChallengeOrEndOfRound(message, scanner);
                 break;
             case "THANK":
-                this.message = new noActionMessage(Message.MessageType.Goodbye);
+                this.message = new NoActionMessage(Message.MessageType.Goodbye);
                 break;
             case "BEGIN":
                 this.message = new BeginRoundMessage(message);
