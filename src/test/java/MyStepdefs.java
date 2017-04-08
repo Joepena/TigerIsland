@@ -20,22 +20,23 @@ public class MyStepdefs {
     Tile testTile;
     Tuple testPair;
     Tuple secondTestPair;
+    ArrayList<Tuple> validHexes = new ArrayList<>();
 
     @Given("^there are no hexes on the board")
-    public void setupBoardForHexTest () throws Throwable {
-      testBoard = new Board();
-      testHex = new Hex(0, Terrain.terrainType.Jungle);
-      testPair = Orientation.getOrigin();
+    public void setupBoardForHexTest() throws Throwable {
+        testBoard = new Board();
+        testHex = new Hex(0, Terrain.terrainType.Jungle);
+        testPair = Orientation.getOrigin();
     }
 
     @When("^the first player places a hex")
-    public void place_first_hex () throws Throwable {
-      testBoard.setHex(testHex, testPair);
+    public void place_first_hex() throws Throwable {
+        testBoard.setHex(testHex, testPair);
     }
 
     @Then("^the first hex should be placed at the origin")
-    public void hex_should_be_in_origin_of_board () throws Throwable {
-      Assert.assertTrue(!testBoard.isOriginEmpty());
+    public void hex_should_be_in_origin_of_board() throws Throwable {
+        Assert.assertTrue(!testBoard.isOriginEmpty());
     }
 
 
@@ -52,7 +53,7 @@ public class MyStepdefs {
                 TilePositionCoordinates(Orientation.rightOf(Orientation.rightOf(Orientation.getOrigin())), Orientation.Orientations.left);
 
         ArrayList<Tuple> validNukeLocations = testAPI.getValidNukingLocations();
-        if( testAPI.APIUtils.isValidTileNukingPosition(placementLocation) || validNukeLocations.contains(Orientation.rightOf(Orientation.rightOf(Orientation.getOrigin()))))
+        if (testAPI.APIUtils.isValidTileNukingPosition(placementLocation) || validNukeLocations.contains(Orientation.rightOf(Orientation.rightOf(Orientation.getOrigin()))))
             testAPI.placeTile(tile, placementLocation.getVolcanoCoordinates());
     }
 
@@ -76,7 +77,7 @@ public class MyStepdefs {
                 TilePositionCoordinates(Orientation.downRightOf(Orientation.getOrigin()), Orientation.Orientations.upRight);
 
         ArrayList<Tuple> validNukeLocations = testAPI.getValidNukingLocations();
-        if( testAPI.APIUtils.isValidTileNukingPosition(placementLocation) || validNukeLocations.contains(Orientation.downRightOf(Orientation.getOrigin())))
+        if (testAPI.APIUtils.isValidTileNukingPosition(placementLocation) || validNukeLocations.contains(Orientation.downRightOf(Orientation.getOrigin())))
             testAPI.placeTile(tile, placementLocation.getVolcanoCoordinates());
     }
 
@@ -99,7 +100,7 @@ public class MyStepdefs {
                 TilePositionCoordinates(Orientation.upLeftOf(Orientation.upRightOf(Orientation.getOrigin())), Orientation.Orientations.downLeft);
 
         ArrayList<Tuple> validNukeLocations = testAPI.getValidNukingLocations();
-        if( testAPI.APIUtils.isValidTileNukingPosition(placementLocation) || validNukeLocations.contains(Orientation.upLeftOf(Orientation.upRightOf(Orientation.getOrigin()))))
+        if (testAPI.APIUtils.isValidTileNukingPosition(placementLocation) || validNukeLocations.contains(Orientation.upLeftOf(Orientation.upRightOf(Orientation.getOrigin()))))
             testAPI.placeTile(tile, placementLocation.getVolcanoCoordinates());
     }
 
@@ -120,10 +121,10 @@ public class MyStepdefs {
         Tile tile = new Tile(12, Terrain.terrainType.Grassland, Terrain.terrainType.Jungle, Orientation.Orientations.downLeft);
         TilePositionCoordinates placementLocation = new
                 TilePositionCoordinates(Orientation.upRightOf(Orientation.upRightOf(Orientation.upRightOf(Orientation.upLeftOf(Orientation.getOrigin())))),
-                                    Orientation.Orientations.downLeft);
+                Orientation.Orientations.downLeft);
 
         ArrayList<Tuple> validNukeLocations = testAPI.getValidNukingLocations();
-        if( testAPI.APIUtils.isValidTileNukingPosition(placementLocation) || validNukeLocations.contains(Orientation.upRightOf(Orientation.upRightOf(Orientation.upRightOf(Orientation.upLeftOf(Orientation.getOrigin()))))))
+        if (testAPI.APIUtils.isValidTileNukingPosition(placementLocation) || validNukeLocations.contains(Orientation.upRightOf(Orientation.upRightOf(Orientation.upRightOf(Orientation.upLeftOf(Orientation.getOrigin()))))))
             testAPI.placeTile(tile, placementLocation.getVolcanoCoordinates());
     }
 
@@ -147,7 +148,7 @@ public class MyStepdefs {
                 TilePositionCoordinates(Orientation.getOrigin(), Orientation.Orientations.downRight);
 
         ArrayList<Tuple> validNukeLocations = testAPI.getValidNukingLocations();
-        if( testAPI.APIUtils.isValidTileNukingPosition(placementLocation) && validNukeLocations.contains(Orientation.getOrigin()))
+        if (testAPI.APIUtils.isValidTileNukingPosition(placementLocation) && validNukeLocations.contains(Orientation.getOrigin()))
             testAPI.placeTile(tile, placementLocation.getVolcanoCoordinates());
     }
 
@@ -169,7 +170,7 @@ public class MyStepdefs {
         TilePositionCoordinates placementLocation = new TilePositionCoordinates(Orientation.getOrigin(), Orientation.Orientations.downRight);
 
         ArrayList<Tuple> validNukeLocations = testAPI.getValidNukingLocations();
-        if( testAPI.APIUtils.isValidTileNukingPosition(placementLocation) && validNukeLocations.contains(Orientation.getOrigin()))
+        if (testAPI.APIUtils.isValidTileNukingPosition(placementLocation) && validNukeLocations.contains(Orientation.getOrigin()))
             testAPI.placeTile(tile, placementLocation.getVolcanoCoordinates());
     }
 
@@ -180,7 +181,7 @@ public class MyStepdefs {
         Assert.assertTrue("Tile was not changed", hex.getLevel() == 2);
     }
 
-    private void setupNukeScenario(){
+    private void setupNukeScenario() {
         testAPI = new GameAPI();
         testBoard = testAPI.gameBoard;
         Tile tile2 = new Tile(2, Terrain.terrainType.Grassland, Terrain.terrainType.Rocky, Orientation.Orientations.left);
@@ -217,42 +218,44 @@ public class MyStepdefs {
         testAPI.updateSettlements();
     }
 
-  @Given("There are n tiles of the same type adjacent to the existing settlement or to tiles adjacent to those tiles of level")
-  public void thereAreNTilesOfTheSameTypeAdjacentToTheExistingSettlementOrToTilesAdjacentToThoseTilesOfLevelK() throws Throwable {
-    GameAPI gameAPI = new GameAPI();
-    Tile originTile = new Tile(1,Terrain.terrainType.Rocky,Terrain.terrainType.Jungle,Orientation.Orientations.downLeft);
-    originTile.getLeft().setTeam(Hex.Team.Black);
-    originTile.getRight().setTeam(Hex.Team.Black);
-    Hex hex1 = new Hex(1,Terrain.terrainType.Jungle);
-    Hex hex2 = new Hex(1,Terrain.terrainType.Jungle);
-    Hex hex3 = new Hex(1,Terrain.terrainType.Jungle);
-    Hex hex4 = new Hex(1,Terrain.terrainType.Rocky);
-    Hex hex5 = new Hex(1,Terrain.terrainType.Jungle);
-    Hex hex6 = new Hex(1,Terrain.terrainType.Rocky);
-    Hex hex7 = new Hex(1, Terrain.terrainType.Volcano);
-    gameAPI.placeTile(originTile,Orientation.getOrigin());
-    gameAPI.gameBoard.setHex(hex1,Orientation.getDOWNRIGHT());
-    gameAPI.gameBoard.setHex(hex2,Orientation.getRIGHT());
-    gameAPI.gameBoard.setHex(hex3,Orientation.getUPRIGHT());
-    gameAPI.gameBoard.setHex(hex4,Orientation.getUPLEFT());
-    gameAPI.gameBoard.setHex(hex5,Orientation.upRightOf(hex4.getLocation()));
-    gameAPI.gameBoard.setHex(hex6,Orientation.getLEFT());
-    gameAPI.gameBoard.setHex(hex7,Orientation.upLeftOf(hex6.getLocation()));
-    gameAPI.updateSettlements();
-    ArrayList<ExpansionOpDataFrame> list = gameAPI.getExpansionOptions(Hex.Team.Black);
-    Assert.assertEquals("Scenario 2 assert terrain-2 is rocky", Terrain.terrainType.Rocky, list.get(0).getTerrain());
-    Assert.assertEquals("Scenario 2 assert cost-2 is 3", 2, (int)list.get(0).getExpansionCost());
-    Assert.assertEquals("Scenario 2 assert terrain-1 is jungle", Terrain.terrainType.Jungle, list.get(1).getTerrain());
-    Assert.assertEquals("Scenario 2 assert cost-1 is 4", 3, (int)list.get(1).getExpansionCost());
-  }
+    @Given("^There are n tiles of the same type adjacent to the existing settlement or to tiles adjacent to those tiles of level")
+    public void thereAreNTilesOfTheSameTypeAdjacentToTheExistingSettlementOrToTilesAdjacentToThoseTilesOfLevelK() throws Throwable {
+        GameAPI gameAPI = new GameAPI();
+        Tile originTile = new Tile(1, Terrain.terrainType.Rocky, Terrain.terrainType.Jungle, Orientation.Orientations.downLeft);
+        originTile.getLeft().setTeam(Hex.Team.Black);
+        originTile.getRight().setTeam(Hex.Team.Black);
+        Hex hex1 = new Hex(1, Terrain.terrainType.Jungle);
+        Hex hex2 = new Hex(1, Terrain.terrainType.Jungle);
+        Hex hex3 = new Hex(1, Terrain.terrainType.Jungle);
+        Hex hex4 = new Hex(1, Terrain.terrainType.Rocky);
+        Hex hex5 = new Hex(1, Terrain.terrainType.Jungle);
+        Hex hex6 = new Hex(1, Terrain.terrainType.Rocky);
+        Hex hex7 = new Hex(1, Terrain.terrainType.Volcano);
+        gameAPI.placeTile(originTile, Orientation.getOrigin());
+        gameAPI.gameBoard.setHex(hex1, Orientation.getDOWNRIGHT());
+        gameAPI.gameBoard.setHex(hex2, Orientation.getRIGHT());
+        gameAPI.gameBoard.setHex(hex3, Orientation.getUPRIGHT());
+        gameAPI.gameBoard.setHex(hex4, Orientation.getUPLEFT());
+        gameAPI.gameBoard.setHex(hex5, Orientation.upRightOf(hex4.getLocation()));
+        gameAPI.gameBoard.setHex(hex6, Orientation.getLEFT());
+        gameAPI.gameBoard.setHex(hex7, Orientation.upLeftOf(hex6.getLocation()));
+        gameAPI.updateSettlements();
+        ArrayList<ExpansionOpDataFrame> list = gameAPI.getExpansionOptions(Hex.Team.Black);
+        Assert.assertEquals("Scenario 2 assert terrain-2 is rocky", Terrain.terrainType.Rocky, list.get(0).getTerrain());
+        Assert.assertEquals("Scenario 2 assert cost-2 is 3", 2, (int) list.get(0).getExpansionCost());
+        Assert.assertEquals("Scenario 2 assert terrain-1 is jungle", Terrain.terrainType.Jungle, list.get(1).getTerrain());
+        Assert.assertEquals("Scenario 2 assert cost-1 is 4", 3, (int) list.get(1).getExpansionCost());
+    }
 
-  @When("I expand the settlement")
-  public void iExpandTheSettlement() throws Throwable {
-    Assert.assertEquals("Coming soon", true, true);
-  }
+    @When("^I expand the settlement")
+    public void iExpandTheSettlement() throws Throwable {
+        Assert.assertEquals("Coming soon", true, true);
+    }
 
-  @Then("meeples are placed on each of those n tiles")
-  public void kMeeplesArePlacedOnEachOfThoseNTiles() throws Throwable {
-    Assert.assertEquals("Coming soon", true, true);
-  }
+    @Then("^meeples are placed on each of those n tiles")
+    public void kMeeplesArePlacedOnEachOfThoseNTiles() throws Throwable {
+        Assert.assertEquals("Coming soon", true, true);
+    }
+
+
 }
