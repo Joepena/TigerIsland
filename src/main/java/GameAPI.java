@@ -136,9 +136,8 @@ public class GameAPI {
         return validNukingLocations;
     }
 
-    public boolean canSelectBuildTotoro() {
-        ArrayList<Tuple> validTotoroLocations = validTotoroPlacements();
-        System.out.println(validTotoroLocations);
+    public boolean canSelectBuildTotoro(Hex.Team team) {
+        ArrayList<Tuple> validTotoroLocations = validTotoroPlacements(team);
 
         if(!validTotoroLocations.isEmpty()){
             return true;
@@ -146,8 +145,8 @@ public class GameAPI {
         return false;
     }
 
-    public boolean canSelectBuildTiger() {
-        ArrayList<Tuple> validTigerLocations = validTigerPlacements();
+    public boolean canSelectBuildTiger(Hex.Team team) {
+        ArrayList<Tuple> validTigerLocations = validTigerPlacements(team);
 
         if(!validTigerLocations.isEmpty()){
             return true;
@@ -156,16 +155,26 @@ public class GameAPI {
     }
 
 
-    public ArrayList<Tuple> validTotoroPlacements() {
-        ArrayList<SettlementDataFrame> ourSettlements = getBlackSettlements().getListOfSettlements();
+    public ArrayList<Tuple> validTotoroPlacements(Hex.Team team) {
+        ArrayList<SettlementDataFrame> ourSettlements = new ArrayList<>();
+        if (team == Hex.Team.White)
+            ourSettlements = getWhiteSettlements().getListOfSettlements();
+        else if (team == Hex.Team.Black)
+            ourSettlements = getBlackSettlements().getListOfSettlements();
+
         ArrayList<Tuple> validLocations = findSizeNSettlements(ourSettlements, 5, Hex.gamePieces.Totoro);
         validLocations = findValidTotoroLocations(validLocations);
 
         return removeDuplicateTuples(validLocations);
     }
 
-    public ArrayList<Tuple> validTigerPlacements() {
-        ArrayList<SettlementDataFrame> ourSettlements = getBlackSettlements().getListOfSettlements();
+    public ArrayList<Tuple> validTigerPlacements(Hex.Team team) {
+        ArrayList<SettlementDataFrame> ourSettlements = new ArrayList<>();
+        if (team == Hex.Team.White)
+            ourSettlements = getWhiteSettlements().getListOfSettlements();
+        else if (team == Hex.Team.Black)
+            ourSettlements = getBlackSettlements().getListOfSettlements();
+
         ArrayList<Tuple> validLocations = findSizeNSettlements(ourSettlements, 1, Hex.gamePieces.Tiger);
         validLocations = findValidTigerLocations(validLocations);
 
@@ -186,7 +195,6 @@ public class GameAPI {
     public ArrayList<Tuple> findSizeNSettlements(ArrayList<SettlementDataFrame> ourSettlements, int n, Hex.gamePieces gamePiece) {
         ArrayList<Tuple> tuplesInSettlements = new ArrayList<>();
         boolean existingPiece = false;
-
         for(int i = 0; i < ourSettlements.size(); i++) {
             if(ourSettlements.get(i).getSettlementSize() >= n) {
                 existingPiece = false;

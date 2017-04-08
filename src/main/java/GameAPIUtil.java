@@ -27,7 +27,7 @@ public class GameAPIUtil {
         Settlements.retriveWhiteSettlements(settlement, game.getWhiteSettlements());
         Settlements.retriveBlackSettlements(settlement, game.getBlackSettlements());
 
-        //conglomerateAdjacentSettlements(Hex.Team.White);
+        conglomerateAdjacentSettlements(Hex.Team.White);
         conglomerateAdjacentSettlements(Hex.Team.Black);
     }
 
