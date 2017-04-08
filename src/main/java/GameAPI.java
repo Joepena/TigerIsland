@@ -269,10 +269,8 @@ public class GameAPI {
                     && gameBoard.getHex(Orientation.downRightOf(currentTuple)).getLevel() >= 3)
                 validLocations.add(Orientation.downRightOf(currentTuple));
         } // the above loop looks around every hex in the settlements for an empty placed hex above level 3
-
         return validLocations;
     }
-
 
     public void foundSettlement(Tuple tuple) {
         gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Meeple);
