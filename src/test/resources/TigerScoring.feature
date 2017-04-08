@@ -1,4 +1,4 @@
-Feature: To test that tigers placed will add points to the players score
+Feature: Tigers placed will add points to the players score
 
   Scenario: A tiger is placed on the board
     Given a player places a tiger on the board
