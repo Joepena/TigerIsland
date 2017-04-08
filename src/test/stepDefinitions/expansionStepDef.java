@@ -8,7 +8,7 @@ import cucumber.api.java.en.Then;
 /**
  * Created by Joe on 4/8/17.
  */
-public class expansionStepDef {
+public class ExpansionStepDef {
 
   private GameAPI gameAPI;
   private Hex hex1;

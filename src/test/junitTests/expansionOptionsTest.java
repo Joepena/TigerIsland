@@ -7,7 +7,7 @@ import org.junit.Test;
 /**
  * Created by Joe on 4/6/17.
  */
-public class expansionOptionsTest {
+public class ExpansionOptionsTest {
   GameAPI gameAPI;
 
   @Before

@@ -6,7 +6,7 @@ import org.junit.Test;
 /**
  * Created by T K Vicious on 4/5/2017.
  */
-public class messageParserTest {
+public class MessageParserTest {
     MessageParser mf;
 
     @Before
