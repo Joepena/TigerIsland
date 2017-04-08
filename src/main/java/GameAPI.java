@@ -45,12 +45,12 @@ public class GameAPI {
     }
 
     public Settlements getWhiteSettlements() {
-    return whiteSettlements;
-  }
+        return whiteSettlements;
+    }
 
     public Settlements getBlackSettlements() {
-    return blackSettlements;
-  }
+        return blackSettlements;
+    }
 
     boolean isBoardEmpty() {
         return gameBoard.isOriginEmpty();
@@ -84,7 +84,7 @@ public class GameAPI {
 
 
     protected void updateSettlements() {
-      APIUtils.updateBothSettlement();
+        APIUtils.updateBothSettlement();
     }
 
     public ArrayList<ExpansionOpDataFrame> getExpansionOptions(Hex.Team targetTeam) {

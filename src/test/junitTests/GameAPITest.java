@@ -416,6 +416,7 @@ public class GameAPITest {
         Assert.assertEquals("Settlements successfully conglomerated", 6, settlementSize);
     }
 
+
   public void createLandMass() throws Exception {
     Tuple origin = Orientation.getOrigin();
     Tuple tile1Loc = Orientation.rightOf(Orientation.upRightOf(origin));

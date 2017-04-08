@@ -1,6 +1,6 @@
-Feature: To test if the first tile will be correctly placed at the origin
+Feature: Board will be properly initialized with 5-hex tile
 
-  Scenario: The game is initialized and the board is initialized, it is the players turn
+  Scenario: The game is initialized and the board is initialized
     Given there are no tiles on the board
-    When the first player places a tile
-    Then the first tile should be placed at the origin in whatever orientation the player chooses
+    When the initial tile is placed
+    Then the initial tile should be placed at the origin in a specific orientation

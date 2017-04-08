@@ -1,4 +1,4 @@
-Feature: To create a new tile and test that it has all its necessary fields
+Feature: Can create a new tile with 3 joined hexes
 
   Scenario: The game is initialized and the board is initialized, it is the players turn
     Given the game is being played
