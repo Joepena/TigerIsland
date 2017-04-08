@@ -1,4 +1,4 @@
-Feature: To test that meeples placed will add points to the players score
+Feature: Meeples placed will add points to the players score
 
   Scenario: A meeple is placed on the board
     Given a player places a meeple on the board

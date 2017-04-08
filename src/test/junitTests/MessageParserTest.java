@@ -6,8 +6,13 @@ import org.junit.Test;
 /**
  * Created by T K Vicious on 4/5/2017.
  */
+<<<<<<< HEAD:src/test/java/messageParserTest.java
 public class messageParserTest {
     MessageParser mP;
+=======
+public class MessageParserTest {
+    MessageParser mf;
+>>>>>>> TotoroFunc:src/test/junitTests/MessageParserTest.java
 
     @Before
     public void setUp() throws Exception {

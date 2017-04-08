@@ -5,9 +5,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-/**
- * Created by TomasK on 3/27/2017.
- */
 public class GameAPITest {
     Tile testTile;
     GameAPI game = new GameAPI();
@@ -405,8 +402,6 @@ public class GameAPITest {
         meeple = game.gameBoard.getHex(Orientation.rightOf(Orientation.rightOf(Orientation.getOrigin())));
         meeple.placeMeeple(Hex.Team.Black);
 
-        game.gameBoard.printSectionedBoard(game.gameBoard);
-
         game.updateSettlements();
 
         Settlements resultingBlackSettlements = game.getBlackSettlements();
@@ -416,6 +411,7 @@ public class GameAPITest {
 
         Assert.assertEquals("Settlements successfully conglomerated", 6, settlementSize);
     }
+
 
   public void createLandMass() throws Exception {
     Tuple origin = Orientation.getOrigin();
