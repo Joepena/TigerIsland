@@ -127,6 +127,10 @@ public class GameAPI {
         return validNukingLocations;
     }
 
+  public ArrayList<Tuple> findListOfValidSettlementLocations() {
+    return APIUtils.findListOfValidSettlementLocation(Orientation.getOrigin(), new boolean[194][194][194], new ArrayList<Tuple>());
+  }
+
     public boolean canSelectBuildTotoro() {
         ArrayList<Tuple> validTotoroLocations = validTotoroPlacements();
         System.out.println(validTotoroLocations);

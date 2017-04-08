@@ -465,6 +465,51 @@ public class GameAPIUtil {
       }
     }
 
+
+
+  public ArrayList<Tuple> findListOfValidSettlementLocation(Tuple coordPoint, boolean[][][] settlementChecked, ArrayList<Tuple> settlementList) {
+    Hex currentHex = gameBoard.getHex(coordPoint);
+    if(currentHex == null) return settlementList;
+    Hex[] neighborHex = getNeighborHexes(coordPoint,gameBoard);
+    Tuple[] neighborCoord = getNeighborCoords(coordPoint);
+    if(currentHex.getLevel() == 1 && currentHex.getTeam() == Hex.Team.Neutral)
+    {
+      settlementList.add(coordPoint);
+    }
+    Tuple offsetTuple = gameBoard.calculateOffset(coordPoint);
+    settlementChecked[offsetTuple.getX()][offsetTuple.getY()][offsetTuple.getZ()] = true;;
+    for(int i=0; i < neighborCoord.length; i++) {
+      Tuple offSetTemp = gameBoard.calculateOffset(neighborCoord[i]);
+      if (!settlementChecked[offSetTemp.getX()][offSetTemp.getY()][offSetTemp.getZ()] && neighborHex[i] != null)
+        findListOfValidSettlementLocation(neighborCoord[i], settlementChecked, settlementList);
+    }
+    return settlementList;
+  }
+
+  protected Hex[] getNeighborHexes(Tuple coordPoint, Board gameBoard) {
+    Hex[] neighbors = new Hex[6];
+
+    neighbors[0] = gameBoard.getHex(Orientation.leftOf(coordPoint));
+    neighbors[1] = gameBoard.getHex(Orientation.rightOf(coordPoint));
+    neighbors[2] = gameBoard.getHex(Orientation.upLeftOf(coordPoint));
+    neighbors[3] = gameBoard.getHex(Orientation.upRightOf(coordPoint));
+    neighbors[4] = gameBoard.getHex(Orientation.downLeftOf(coordPoint));
+    neighbors[5] = gameBoard.getHex(Orientation.downRightOf(coordPoint));
+
+    return neighbors;
+  }
+
+    private Tuple[] getNeighborCoords(Tuple coordPoint) {
+      Tuple[] neighbors = new Tuple[6];
+      neighbors[0] = (Orientation.leftOf(coordPoint));
+      neighbors[1] = (Orientation.rightOf(coordPoint));
+      neighbors[2] = (Orientation.upLeftOf(coordPoint));
+      neighbors[3] = (Orientation.upRightOf(coordPoint));
+      neighbors[4] = (Orientation.downLeftOf(coordPoint));
+      neighbors[5] = (Orientation.downRightOf(coordPoint));
+      return neighbors;
+  }
+
     public static boolean isSameTeam(Hex hex1, Hex hex2) {
 
 
