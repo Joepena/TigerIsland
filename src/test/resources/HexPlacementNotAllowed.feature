@@ -1,4 +1,4 @@
-Feature: To test if attempting to place a hex in a invalid position will allow the hex to be placed
+Feature: Placing a hex in an invalid position will not allow the hex to be placed
 
   Scenario: The game is initialized and the board is initialized with one hex already placed, it is the players turn
     Given there is already a hex placed on the board

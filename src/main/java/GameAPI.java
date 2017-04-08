@@ -61,12 +61,12 @@ public class GameAPI {
     }
 
     public Settlements getWhiteSettlements() {
-    return whiteSettlements;
-  }
+        return whiteSettlements;
+    }
 
     public Settlements getBlackSettlements() {
-    return blackSettlements;
-  }
+        return blackSettlements;
+    }
 
     boolean isBoardEmpty() {
         return gameBoard.isOriginEmpty();
@@ -96,10 +96,13 @@ public class GameAPI {
 
 
     protected void updateSettlements() {
-      APIUtils.updateBothSettlement();
+        APIUtils.updateBothSettlement();
     }
 
-    ArrayList<Tuple> getValidNukingLocations() {
+    public ArrayList<ExpansionOpDataFrame> getExpansionOptions(Hex.Team targetTeam) {
+      return APIUtils.findExpansionOptionsFor(targetTeam);
+    }
+    public ArrayList<Tuple> getValidNukingLocations() {
         if(gameBoard.isOriginEmpty()){
             return null;
         }
@@ -261,6 +264,7 @@ public class GameAPI {
 
         return validLocations;
     }
+
 
     public void foundSettlement(Tuple tuple) {
         gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Meeple);
