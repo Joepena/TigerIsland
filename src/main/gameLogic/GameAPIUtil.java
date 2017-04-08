@@ -2,6 +2,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Vector;
 
 /**
  * Created by Nicholas on 3/24/2017.
@@ -422,6 +423,254 @@ public class GameAPIUtil {
         dfsExpansionSearch(availabilityGrid,df,terrain,tempTuple);
       }
     }
+    public void performLandGrab(Tuple tuple) {
+      boolean[][][] copyArr = copyAvailabilityGrid(gameBoard.gameBoardAvailability);
+      Terrain.terrainType terrain = gameBoard.getHex(tuple).getTerrain();
+
+      for (Orientation.Orientations orientation : Orientation.Orientations.values()) {
+        Tuple tempTuple = Orientation.addCoordinatesByOrientation(tuple, orientation);
+        Hex tempHex = gameBoard.getHex(tempTuple);
+        if(tempHex == null) continue;
+        Terrain.terrainType tempTerrain = tempHex.getTerrain();
+        if (tempTuple == Orientation.getOrigin() || terrain != tempTerrain || tempHex.getTeam() != Hex.Team.Neutral) continue;
+
+        dfsExpansionGrab(copyArr, tempTerrain, tempTuple);
+      }
+    }
+    private void dfsExpansionGrab(boolean[][][] availabilityGrid, Terrain.terrainType terrain, Tuple tuple) {
+      int xCord = tuple.getX();
+      int yCord = tuple.getY();
+      int zCord = tuple.getZ();
+      Tuple offSet = gameBoard.calculateOffset(tuple);
+      if (!availabilityGrid[offSet.getX()][offSet.getY()][offSet.getZ()] || xCord >= BOARD_EDGE
+        || xCord <= -BOARD_EDGE || yCord >= BOARD_EDGE || yCord <= -BOARD_EDGE
+        || zCord >= BOARD_EDGE || zCord <= -BOARD_EDGE) {
+        return;
+      }
+      availabilityGrid[offSet.getX()][offSet.getY()][offSet.getZ()] = false;
+      game.foundSettlement(tuple);
+      for (Orientation.Orientations orientation : Orientation.Orientations.values()) {
+        Tuple tempTuple = Orientation.addCoordinatesByOrientation(tuple, orientation);
+        Tuple tempTupleOff = gameBoard.calculateOffset(tempTuple);
+        if (!availabilityGrid[tempTupleOff.getX()][tempTupleOff.getY()][tempTupleOff.getZ()])
+          continue;
+        Hex tempHex = gameBoard.getHex(tempTuple);
+        if (tempHex == null)
+          continue;
+        Terrain.terrainType tempTerrain = tempHex.getTerrain();
+        if (tempTuple == Orientation.getOrigin() || terrain != tempTerrain
+          || tempHex.getTeam() != Hex.Team.Neutral)
+          continue;
+        dfsExpansionGrab(availabilityGrid, terrain, tempTuple);
+
+      }
+    }
+
+
+
+  public ArrayList<Tuple> findListOfValidSettlementLocation(Tuple coordPoint, boolean[][][] settlementChecked, ArrayList<Tuple> settlementList) {
+    Hex currentHex = gameBoard.getHex(coordPoint);
+    if(currentHex == null) return settlementList;
+    Hex[] neighborHex = getNeighborHexes(coordPoint,gameBoard);
+    Tuple[] neighborCoord = getNeighborCoords(coordPoint);
+    if(currentHex.getLevel() == 1 && currentHex.getTeam() == Hex.Team.Neutral)
+    {
+      settlementList.add(coordPoint);
+    }
+    Tuple offsetTuple = gameBoard.calculateOffset(coordPoint);
+    settlementChecked[offsetTuple.getX()][offsetTuple.getY()][offsetTuple.getZ()] = true;;
+    for(int i=0; i < neighborCoord.length; i++) {
+      Tuple offSetTemp = gameBoard.calculateOffset(neighborCoord[i]);
+      if (!settlementChecked[offSetTemp.getX()][offSetTemp.getY()][offSetTemp.getZ()] && neighborHex[i] != null)
+        findListOfValidSettlementLocation(neighborCoord[i], settlementChecked, settlementList);
+    }
+    return settlementList;
+  }
+
+  protected Hex[] getNeighborHexes(Tuple coordPoint, Board gameBoard) {
+    Hex[] neighbors = new Hex[6];
+
+    neighbors[0] = gameBoard.getHex(Orientation.leftOf(coordPoint));
+    neighbors[1] = gameBoard.getHex(Orientation.rightOf(coordPoint));
+    neighbors[2] = gameBoard.getHex(Orientation.upLeftOf(coordPoint));
+    neighbors[3] = gameBoard.getHex(Orientation.upRightOf(coordPoint));
+    neighbors[4] = gameBoard.getHex(Orientation.downLeftOf(coordPoint));
+    neighbors[5] = gameBoard.getHex(Orientation.downRightOf(coordPoint));
+
+    return neighbors;
+  }
+
+    private Tuple[] getNeighborCoords(Tuple coordPoint) {
+      Tuple[] neighbors = new Tuple[6];
+      neighbors[0] = (Orientation.leftOf(coordPoint));
+      neighbors[1] = (Orientation.rightOf(coordPoint));
+      neighbors[2] = (Orientation.upLeftOf(coordPoint));
+      neighbors[3] = (Orientation.upRightOf(coordPoint));
+      neighbors[4] = (Orientation.downLeftOf(coordPoint));
+      neighbors[5] = (Orientation.downRightOf(coordPoint));
+      return neighbors;
+  }
+
+  public void tileValidationListFinder(Tuple testingLocation, boolean[][][] hexCheckedforPlacement, ArrayList<Tuple> availableTilePlacement)
+  {
+    Hex testingLocHex;
+    testingLocHex = gameBoard.getHex(testingLocation);
+
+    Tuple coordLeft = (Orientation.leftOf(testingLocation));
+    Tuple coordRight = (Orientation.rightOf(testingLocation));
+    Tuple coordUpLeft = (Orientation.upLeftOf(testingLocation));
+    Tuple coordUpRight = (Orientation.upRightOf(testingLocation));
+    Tuple coordDownLeft = (Orientation.downLeftOf(testingLocation));
+    Tuple coordDownRight = (Orientation.downRightOf(testingLocation));
+
+    if(testingLocHex != null)
+    {
+      setHexChecked(testingLocation, hexCheckedforPlacement);
+      if(!checkAlreadyVisited(coordUpLeft, hexCheckedforPlacement))
+        tileValidationListFinder(Orientation.upLeftOf(testingLocation), hexCheckedforPlacement, availableTilePlacement);
+      if(!checkAlreadyVisited(coordUpRight, hexCheckedforPlacement))
+        tileValidationListFinder(Orientation.upRightOf(testingLocation), hexCheckedforPlacement, availableTilePlacement);
+      if(!checkAlreadyVisited(coordLeft, hexCheckedforPlacement))
+        tileValidationListFinder(Orientation.leftOf(testingLocation), hexCheckedforPlacement, availableTilePlacement);
+      if(!checkAlreadyVisited(coordRight, hexCheckedforPlacement))
+        tileValidationListFinder(Orientation.rightOf(testingLocation), hexCheckedforPlacement, availableTilePlacement);
+      if(!checkAlreadyVisited(coordDownLeft, hexCheckedforPlacement))
+        tileValidationListFinder(Orientation.downLeftOf(testingLocation), hexCheckedforPlacement, availableTilePlacement);
+      if(!checkAlreadyVisited(coordDownRight, hexCheckedforPlacement))
+        tileValidationListFinder(Orientation.downRightOf(testingLocation), hexCheckedforPlacement, availableTilePlacement);
+    }
+    else {
+
+      Hex hexLeftOf = gameBoard.getHex(Orientation.leftOf(testingLocation));
+      Hex hexRightOf = gameBoard.getHex(Orientation.rightOf(testingLocation));
+      Hex hexUpLeftOf = gameBoard.getHex(Orientation.upLeftOf(testingLocation));
+      Hex hexUpRightOf = gameBoard.getHex(Orientation.upRightOf(testingLocation));
+      Hex hexDownLeftOf = gameBoard.getHex(Orientation.downLeftOf(testingLocation));
+      Hex hexDownRightOf = gameBoard.getHex(Orientation.downRightOf(testingLocation));
+
+      setHexChecked(testingLocation, hexCheckedforPlacement);
+
+      if(hexLeftOf == null && hexUpLeftOf == null)
+      {
+        if(!checkAlreadyVisited(coordLeft, hexCheckedforPlacement) && !existsInSetAlready(coordLeft, availableTilePlacement))
+          availableTilePlacement.add(coordLeft);
+        if(!checkAlreadyVisited(coordUpLeft, hexCheckedforPlacement) && !existsInSetAlready(coordUpLeft,availableTilePlacement))
+          availableTilePlacement.add(coordUpLeft);
+        if(!existsInSetAlready(testingLocation, availableTilePlacement))
+          availableTilePlacement.add(testingLocation);
+        setHexChecked(testingLocation, hexCheckedforPlacement);
+
+      }
+      if(hexLeftOf == null && hexDownLeftOf == null)
+      {
+        if(!checkAlreadyVisited(coordLeft, hexCheckedforPlacement) && !existsInSetAlready(coordLeft, availableTilePlacement))
+          availableTilePlacement.add(coordLeft);
+        if(!checkAlreadyVisited(coordDownLeft, hexCheckedforPlacement) && !existsInSetAlready(coordDownLeft, availableTilePlacement))
+          availableTilePlacement.add(coordDownLeft);
+        if(!existsInSetAlready(testingLocation, availableTilePlacement))
+          availableTilePlacement.add(testingLocation);
+      }
+      if(hexUpLeftOf == null && hexUpRightOf == null)
+      {
+        if(!checkAlreadyVisited(coordUpLeft, hexCheckedforPlacement) && !existsInSetAlready(coordUpLeft, availableTilePlacement))
+          availableTilePlacement.add(coordUpLeft);
+        if(!checkAlreadyVisited(coordUpRight, hexCheckedforPlacement) && !existsInSetAlready(coordUpRight, availableTilePlacement))
+          availableTilePlacement.add(coordUpRight);
+        if(!existsInSetAlready(testingLocation, availableTilePlacement))
+          availableTilePlacement.add(testingLocation);
+      }
+      if(hexUpRightOf == null && hexRightOf == null)
+      {
+        if(!checkAlreadyVisited(coordUpRight, hexCheckedforPlacement) && !existsInSetAlready(coordUpRight, availableTilePlacement))
+          availableTilePlacement.add(coordUpRight);
+        if(!checkAlreadyVisited(coordRight, hexCheckedforPlacement) && !existsInSetAlready(coordRight,availableTilePlacement))
+          availableTilePlacement.add(coordRight);
+        if(!existsInSetAlready(testingLocation, availableTilePlacement))
+          availableTilePlacement.add(testingLocation);
+      }
+      if(hexRightOf == null && hexDownRightOf == null)
+      {
+        if(!checkAlreadyVisited(coordRight, hexCheckedforPlacement) && !existsInSetAlready(coordRight,availableTilePlacement))
+          availableTilePlacement.add(coordRight);
+        if(!checkAlreadyVisited(coordDownRight, hexCheckedforPlacement) && !existsInSetAlready(coordDownRight,availableTilePlacement))
+          availableTilePlacement.add(coordDownRight);
+        if(!existsInSetAlready(testingLocation, availableTilePlacement))
+          availableTilePlacement.add(testingLocation);
+      }
+      if(hexDownRightOf == null && hexDownLeftOf == null)
+      {
+        if(!checkAlreadyVisited(coordDownRight, hexCheckedforPlacement) && !existsInSetAlready(coordDownRight,availableTilePlacement))
+          availableTilePlacement.add(coordDownRight);
+        if(!checkAlreadyVisited(coordDownLeft, hexCheckedforPlacement) && !existsInSetAlready(coordDownLeft,availableTilePlacement))
+          availableTilePlacement.add(coordDownLeft);
+        if(!existsInSetAlready(testingLocation, availableTilePlacement))
+          availableTilePlacement.add(testingLocation);
+
+      }
+
+    }
+  }
+
+
+  private void setHexChecked(Tuple locationVisited, boolean[][][] hexCheckedforPlacement)
+  {
+    hexCheckedforPlacement[locationVisited.getX()+97][locationVisited.getY()+97][locationVisited.getZ()+97] = true;
+  }
+
+  public boolean checkAlreadyVisited(Tuple coordPoint, boolean[][][] hexCheckedforPlacement)
+  {
+    return hexCheckedforPlacement[coordPoint.getX()+ 97][coordPoint.getY()+97][coordPoint.getZ()+97];
+  }
+
+  public boolean existsInSetAlready(Tuple coordPoint, ArrayList<Tuple> availableTilePlacement)
+  {
+    boolean exists = false;
+    for (Tuple s : availableTilePlacement) {
+      if(coordPoint.getX() == s.getX() && coordPoint.getY() == s.getY() && coordPoint.getZ() == s.getZ()) exists = true;
+    }
+
+    return exists;
+  }
+
+  public Vector<Integer> findValidOrientationsAtPoint(Tuple testingLocation)
+  {
+
+    Hex hexTestingLocation = gameBoard.getHex(testingLocation);
+    Vector<Integer> validOrientations = new Vector<Integer>();
+
+    if(hexTestingLocation != null)
+    {
+      validOrientations.add(-1);
+    }
+    else {
+      Hex hexLeftOf = gameBoard.getHex(Orientation.leftOf(testingLocation));
+      Hex hexRightOf = gameBoard.getHex(Orientation.rightOf(testingLocation));
+      Hex hexUpLeftOf = gameBoard.getHex(Orientation.upLeftOf(testingLocation));
+      Hex hexUpRightOf = gameBoard.getHex(Orientation.upRightOf(testingLocation));
+      Hex hexDownLeftOf = gameBoard.getHex(Orientation.downLeftOf(testingLocation));
+      Hex hexDownRightOf = gameBoard.getHex(Orientation.downRightOf(testingLocation));
+
+      if (hexUpLeftOf == null && hexUpRightOf == null) {
+        validOrientations.add(1);
+      }
+      if (hexUpRightOf == null && hexRightOf == null) {
+        validOrientations.add(2);
+      }
+      if (hexRightOf == null && hexDownRightOf == null) {
+        validOrientations.add(3);
+      }
+      if (hexDownRightOf == null && hexDownLeftOf == null) {
+        validOrientations.add(4);
+      }
+      if (hexLeftOf == null && hexDownLeftOf == null) {
+        validOrientations.add(5);
+      }
+      if (hexLeftOf == null && hexUpLeftOf == null) {
+        validOrientations.add(6);
+      }
+    }
+    return validOrientations;
+  }
 
     public static boolean isSameTeam(Hex hex1, Hex hex2) {
 
@@ -444,5 +693,7 @@ public class GameAPIUtil {
     public static boolean isEmpty(Hex hex) {
         return hex.getOccupiedBy() == Hex.gamePieces.empty;
     }
+
+
 
 }

@@ -7,7 +7,7 @@ import org.junit.Assert;
 /**
  * Created by Nicholas on 4/6/2017.
  */
-public class Acceptance_Scoring {
+public class Scoring {
     Board testBoard;
     GameAPI testAPI;
     HexValidation validate;

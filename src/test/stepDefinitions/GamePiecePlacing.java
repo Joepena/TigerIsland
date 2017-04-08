@@ -6,7 +6,7 @@ import org.junit.Assert;
 /**
  * Created by Nicholas on 4/6/2017.
  */
-public class Acceptance_GamePiecePlacing {
+public class GamePiecePlacing {
     Board testBoard;
     GameAPI testAPI;
     HexValidation validate;

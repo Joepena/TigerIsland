@@ -6,7 +6,7 @@ import org.junit.Test;
 /**
  * Created by Joe on 3/28/17.
  */
-public class updateSettlementsTest {
+public class UpdateSettlementsTest {
   GameAPI gameAPI;
 
   @Before

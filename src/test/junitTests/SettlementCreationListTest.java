@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import org.junit.*;
 
 import java.util.Vector;
@@ -6,7 +7,14 @@ import java.util.Vector;
  * Created by Megans on 4/3/2017.
  */
 public class SettlementCreationListTest {
-    Board gameBoard = new Board();
+    GameAPI gameAPI;
+    Board gameBoard;
+
+    @Before
+    public void setUp(){
+      gameAPI = new GameAPI();
+      gameBoard = gameAPI.gameBoard;
+    }
 
     public void setHexesAroundCoordinates(Tuple coordinates){
 
@@ -19,17 +27,15 @@ public class SettlementCreationListTest {
 
     }
     @Test
-    public void settlementDFSTest()
-    {
-        SettlementCreationList settlementList = new SettlementCreationList();
+    public void settlementDFSTest(){
         gameBoard.setHex(new Hex(0, Terrain.terrainType.Jungle), Orientation.getOrigin());
         setHexesAroundCoordinates(Orientation.getOrigin());
-        Hex[] neighbors = settlementList.getNeighborHexes(Orientation.getOrigin(), gameBoard);
+        Hex[] neighbors = gameAPI.APIUtils.getNeighborHexes(Orientation.getOrigin(), gameBoard);
         neighbors[0].setTeam(Hex.Team.Black);
         neighbors[1].incrementLevel();
         neighbors[2].setTeam(Hex.Team.Black);
         neighbors[3].setTeam(Hex.Team.White);
-        Vector<Tuple> settles = settlementList.findListOfValidSettlementLocation(Orientation.getOrigin(), gameBoard);
+        ArrayList<Tuple> settles = gameAPI.findListOfValidSettlementLocations();
         Vector<Tuple> actualSettlement = new Vector<>();
         actualSettlement.add(Orientation.getOrigin());
         actualSettlement.add(Orientation.downRightOf(Orientation.getOrigin()));
@@ -43,9 +49,8 @@ public class SettlementCreationListTest {
         gameBoard.setHex(new Hex(0, Terrain.terrainType.Jungle), Orientation.getOrigin());
         Hex originHex = gameBoard.getHex(Orientation.getOrigin());
         originHex.incrementLevel();
-        Vector<Tuple> actualSettleList = new Vector<>();
-        SettlementCreationList settleCreation = new SettlementCreationList();
-        Vector<Tuple> settleList = settleCreation.findListOfValidSettlementLocation(Orientation.getOrigin(), gameBoard);
+        ArrayList<Tuple> actualSettleList = new ArrayList<>();
+        ArrayList<Tuple> settleList = gameAPI.findListOfValidSettlementLocations();
         Assert.assertEquals(actualSettleList, settleList);
     }
 
@@ -63,8 +68,7 @@ public class SettlementCreationListTest {
         actualSettleList.add(new Tuple(1, -2, 1));
         actualSettleList.add(new Tuple(0, -2, 2));
         actualSettleList.add(new Tuple(-1, -1, 2));
-        SettlementCreationList settleCreation = new SettlementCreationList();
-        Vector<Tuple> settleList = settleCreation.findListOfValidSettlementLocation(Orientation.getOrigin(), gameBoard);
+        ArrayList<Tuple> settleList = gameAPI.findListOfValidSettlementLocations();
         Assert.assertEquals(actualSettleList, settleList);
 
     }
@@ -72,7 +76,6 @@ public class SettlementCreationListTest {
     @Test
     public void settlementTestingList()
     {
-        SettlementCreationList settleCreation = new SettlementCreationList();
         gameBoard.setHex(new Hex(0, Terrain.terrainType.Jungle), Orientation.getOrigin());
         gameBoard.setHex(new Hex(0, Terrain.terrainType.Jungle), new Tuple(1,-1,0));
         gameBoard.setHex(new Hex(0, Terrain.terrainType.Jungle), new Tuple(1,-2,1));
@@ -85,7 +88,7 @@ public class SettlementCreationListTest {
         actualSettleList.add(new Tuple(1, -1, 0));
         actualSettleList.add(new Tuple(1, -2, 1));
         actualSettleList.add(new Tuple(-1, -1, 2));
-        Vector<Tuple> settleList = settleCreation.findListOfValidSettlementLocation(Orientation.getOrigin(), gameBoard);
+        ArrayList<Tuple> settleList = gameAPI.findListOfValidSettlementLocations();
         Assert.assertEquals(actualSettleList, settleList);
 
     }
