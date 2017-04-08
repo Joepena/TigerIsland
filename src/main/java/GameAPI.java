@@ -32,32 +32,16 @@ public class GameAPI {
         return villagerCount;
     }
 
-    public void setVillagerCount(int villagerCount) {
-        this.villagerCount = villagerCount;
-    }
-
     public int getTotoroCount() {
         return totoroCount;
-    }
-
-    public void setTotoroCount(int totoroCount) {
-        this.totoroCount = totoroCount;
     }
 
     public int getTigerCount() {
         return tigerCount;
     }
 
-    public void setTigerCount(int tigerCount) {
-        this.tigerCount = tigerCount;
-    }
-
     public int getVictoryPoints() {
         return victoryPoints;
-    }
-
-    public void setVictoryPoints(int victoryPoints) {
-        this.victoryPoints = victoryPoints;
     }
 
     public Settlements getWhiteSettlements() {
@@ -70,6 +54,10 @@ public class GameAPI {
 
     boolean isBoardEmpty() {
         return gameBoard.isOriginEmpty();
+    }
+
+    void decrementVillagersBy(int hexLevel) {
+      villagerCount-=hexLevel;
     }
 
     void placeTile(Tile tile, Tuple coordinates) {
@@ -101,6 +89,9 @@ public class GameAPI {
 
     public ArrayList<ExpansionOpDataFrame> getExpansionOptions(Hex.Team targetTeam) {
       return APIUtils.findExpansionOptionsFor(targetTeam);
+    }
+    public void performLandGrab(Tuple tuple, Hex.Team team) {
+      APIUtils.performLandGrab(tuple, team);
     }
     public ArrayList<Tuple> getValidNukingLocations() {
         if(gameBoard.isOriginEmpty()){
@@ -135,6 +126,18 @@ public class GameAPI {
 
         return validNukingLocations;
     }
+
+
+  public ArrayList<Tuple> findListOfValidSettlementLocations() {
+    return APIUtils.findListOfValidSettlementLocation(Orientation.getOrigin(), new boolean[194][194][194], new ArrayList<Tuple>());
+  }
+
+  public ArrayList<Tuple> getAvailableTilePlacement() {
+    ArrayList<Tuple> list = new ArrayList<>();
+    boolean[][][] hexCheckedforPlacement = new boolean[194][194][194];
+    APIUtils.tileValidationListFinder(Orientation.getOrigin(),hexCheckedforPlacement,list);
+    return list;
+  }
 
     public boolean canSelectBuildTotoro(Hex.Team team) {
         ArrayList<Tuple> validTotoroLocations = validTotoroPlacements(team);
@@ -184,6 +187,7 @@ public class GameAPI {
     public void foundSettlement(Tuple tuple, Hex.Team team) {
         gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Meeple);
         gameBoard.getHex(tuple).setTeam(team);
+        decrementVillagersBy(gameBoard.getHex(tuple).getLevel());
     }
 
     public void createTotoroSanctuary(Tuple tuple, Hex.Team team) {

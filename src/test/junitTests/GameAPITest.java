@@ -5,9 +5,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-/**
- * Created by TomasK on 3/27/2017.
- */
 public class GameAPITest {
     Tile testTile;
     GameAPI game = new GameAPI();
