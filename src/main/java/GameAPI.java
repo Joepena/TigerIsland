@@ -32,32 +32,16 @@ public class GameAPI {
         return villagerCount;
     }
 
-    public void setVillagerCount(int villagerCount) {
-        this.villagerCount = villagerCount;
-    }
-
     public int getTotoroCount() {
         return totoroCount;
-    }
-
-    public void setTotoroCount(int totoroCount) {
-        this.totoroCount = totoroCount;
     }
 
     public int getTigerCount() {
         return tigerCount;
     }
 
-    public void setTigerCount(int tigerCount) {
-        this.tigerCount = tigerCount;
-    }
-
     public int getVictoryPoints() {
         return victoryPoints;
-    }
-
-    public void setVictoryPoints(int victoryPoints) {
-        this.victoryPoints = victoryPoints;
     }
 
     public Settlements getWhiteSettlements() {
@@ -70,6 +54,10 @@ public class GameAPI {
 
     boolean isBoardEmpty() {
         return gameBoard.isOriginEmpty();
+    }
+
+    void decrementVillagersBy(int hexLevel) {
+      villagerCount-=hexLevel;
     }
 
     void placeTile(Tile tile, Tuple coordinates) {
@@ -101,6 +89,9 @@ public class GameAPI {
 
     public ArrayList<ExpansionOpDataFrame> getExpansionOptions(Hex.Team targetTeam) {
       return APIUtils.findExpansionOptionsFor(targetTeam);
+    }
+    public void performLandGrab(Tuple tuple) {
+      APIUtils.performLandGrab(tuple);
     }
     public ArrayList<Tuple> getValidNukingLocations() {
         if(gameBoard.isOriginEmpty()){
@@ -268,6 +259,7 @@ public class GameAPI {
 
     public void foundSettlement(Tuple tuple) {
         gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Meeple);
+        decrementVillagersBy(gameBoard.getHex(tuple).getLevel());
     }
 
     public void createTotoroSanctuary(Tuple tuple) {

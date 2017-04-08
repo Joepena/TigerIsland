@@ -422,6 +422,48 @@ public class GameAPIUtil {
         dfsExpansionSearch(availabilityGrid,df,terrain,tempTuple);
       }
     }
+    public void performLandGrab(Tuple tuple) {
+      boolean[][][] copyArr = copyAvailabilityGrid(gameBoard.gameBoardAvailability);
+      Terrain.terrainType terrain = gameBoard.getHex(tuple).getTerrain();
+
+      for (Orientation.Orientations orientation : Orientation.Orientations.values()) {
+        Tuple tempTuple = Orientation.addCoordinatesByOrientation(tuple, orientation);
+        Hex tempHex = gameBoard.getHex(tempTuple);
+        if(tempHex == null) continue;
+        Terrain.terrainType tempTerrain = tempHex.getTerrain();
+        if (tempTuple == Orientation.getOrigin() || terrain != tempTerrain || tempHex.getTeam() != Hex.Team.Neutral) continue;
+
+        dfsExpansionGrab(copyArr, tempTerrain, tempTuple);
+      }
+    }
+    private void dfsExpansionGrab(boolean[][][] availabilityGrid, Terrain.terrainType terrain, Tuple tuple) {
+      int xCord = tuple.getX();
+      int yCord = tuple.getY();
+      int zCord = tuple.getZ();
+      Tuple offSet = gameBoard.calculateOffset(tuple);
+      if (!availabilityGrid[offSet.getX()][offSet.getY()][offSet.getZ()] || xCord >= BOARD_EDGE
+        || xCord <= -BOARD_EDGE || yCord >= BOARD_EDGE || yCord <= -BOARD_EDGE
+        || zCord >= BOARD_EDGE || zCord <= -BOARD_EDGE) {
+        return;
+      }
+      availabilityGrid[offSet.getX()][offSet.getY()][offSet.getZ()] = false;
+      game.foundSettlement(tuple);
+      for (Orientation.Orientations orientation : Orientation.Orientations.values()) {
+        Tuple tempTuple = Orientation.addCoordinatesByOrientation(tuple, orientation);
+        Tuple tempTupleOff = gameBoard.calculateOffset(tempTuple);
+        if (!availabilityGrid[tempTupleOff.getX()][tempTupleOff.getY()][tempTupleOff.getZ()])
+          continue;
+        Hex tempHex = gameBoard.getHex(tempTuple);
+        if (tempHex == null)
+          continue;
+        Terrain.terrainType tempTerrain = tempHex.getTerrain();
+        if (tempTuple == Orientation.getOrigin() || terrain != tempTerrain
+          || tempHex.getTeam() != Hex.Team.Neutral)
+          continue;
+        dfsExpansionGrab(availabilityGrid, terrain, tempTuple);
+
+      }
+    }
 
     public static boolean isSameTeam(Hex hex1, Hex hex2) {
 
@@ -444,5 +486,7 @@ public class GameAPIUtil {
     public static boolean isEmpty(Hex hex) {
         return hex.getOccupiedBy() == Hex.gamePieces.empty;
     }
+
+
 
 }
