@@ -31,13 +31,12 @@ public class PlayerRunnable implements Runnable {
         this.decisionCoords = null;
         this.game = new GameAPI();
         this.moveMessage = null;
+        this.playerTeam = Hex.Team.Black;
+        this.opponentTeam = Hex.Team.White;
     }
 
     @Override
     public void run() {
-        gameOver = false;
-        hasMove = false;
-        game = new GameAPI();
         System.out.println("Villager count of " + this.toString() + " is: " + game.getVillagerCount());
         System.out.println("Totoro count of " + this.toString() + " is: " + game.getTotoroCount());
         System.out.println("Tiger count of " + this.toString() + " is: " + game.getTigerCount());

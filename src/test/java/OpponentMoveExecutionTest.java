@@ -21,24 +21,23 @@ public class OpponentMoveExecutionTest {
         mP.parseString("GAME GAME1 MOVE 12 PLAYER B PLACED LAKE+ROCK AT 1 0 -1 3 FOUNDED SETTLEMENT AT 1 1 -2");
         player.executeMessage(mP.getMessage());
 
-        Assert.assertTrue("GID is different so move is ignored", player.getGame().gameBoard.getHex(new Tuple(1, 1, -2)).getLevel() == 1);
+        Assert.assertTrue("GID is different so move is ignored", player.getGame().gameBoard.getHex(new Tuple(1, 0, -1)).getLevel() == 1);
     }
 
-  /*  @Test
+    @Test
     public void foundSettlementFromMessageTest () throws Exception {
         createLandMass();
-        System.out.println(player.toString());
 
         FoundSettlementMessage message = (FoundSettlementMessage)mP.parseString("GAME GAME0 MOVE 12 PLAYER B PLACED LAKE+ROCK AT 1 0 -1 3 FOUNDED SETTLEMENT AT 1 1 -2");
         player.executeMessage(mP.getMessage());
 
-        message.toString();
 
-
-
-        Assert.assertTrue("Tile placed at 1 0 -1 and settlement founded at 1 1 -2",
-                player.getGame().gameBoard.getHex(new Tuple(1, 1, -2)).getLevel() == 2);
-    }*/
+        Assert.assertTrue("Tile placed at 1 0 -1",
+                player.getGame().gameBoard.getHex(new Tuple(1, 0, -1)).getLevel() == 2);
+        Assert.assertTrue("Settlement founded at 1 1 -2",
+                player.getGame().gameBoard.getHex(new Tuple(1, 1, -2)).getOccupiedBy() == Hex.gamePieces.Meeple &&
+                        player.getGame().gameBoard.getHex(new Tuple(1, 1, -2)).getTeam() == Hex.Team.White);
+    }
 
     public void createLandMass() throws Exception {
         Tuple origin = Orientation.getOrigin();
