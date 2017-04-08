@@ -19,7 +19,8 @@ import org.junit.runners.Suite;
   TigerValidationTest.class,
   ExpansionOptionsTest.class,
   TileValidationTest.class,
-  SettlementCreationListTest.class
+  SettlementCreationListTest.class,
+  MessageParserTest.class
 })
 
 public class JUnitRunner {
