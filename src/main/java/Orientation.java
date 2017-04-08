@@ -8,12 +8,14 @@ import java.util.Map;
 public class Orientation {
   public static enum Orientations {
     origin,
+    downLeft,
+    downRight,
+    right,
     upRight,
     upLeft,
-    right,
     left,
-    downRight,
-    downLeft
+
+
   }
   private static final Tuple Origin = new Tuple(0,0,0);
 

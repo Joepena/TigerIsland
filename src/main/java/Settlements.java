@@ -27,6 +27,12 @@ public class Settlements {
     Collections.sort(listOfSettlements);
   }
 
+  public void removeSettlement(SettlementDataFrame df){
+    setOfSettlements.remove(df);
+    listOfSettlements.remove(df);
+    Collections.sort(listOfSettlements);
+  }
+
   public void wipeSettlementSet() {
     listOfSettlements = new ArrayList<>();
     setOfSettlements = new HashSet<>();
