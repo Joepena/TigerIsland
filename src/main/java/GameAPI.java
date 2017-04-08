@@ -268,17 +268,20 @@ public class GameAPI {
     }
 
 
-    public void foundSettlement(Tuple tuple) {
+    public void foundSettlement(Tuple tuple, Hex.Team team) {
         gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Meeple);
         decrementVillagersBy(gameBoard.getHex(tuple).getLevel());
+        gameBoard.getHex(tuple).setTeam(team);
     }
 
-    public void createTotoroSanctuary(Tuple tuple) {
+    public void createTotoroSanctuary(Tuple tuple, Hex.Team team) {
         gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Totoro);
+        gameBoard.getHex(tuple).setTeam(team);
     }
 
-    public void createTigerPlayground(Tuple tuple) {
+    public void createTigerPlayground(Tuple tuple, Hex.Team team) {
         gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Tiger);
+        gameBoard.getHex(tuple).setTeam(team);
     }
 
 }

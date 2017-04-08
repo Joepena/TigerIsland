@@ -5,10 +5,10 @@ import javafx.util.Pair;
  */
 public class Main {
     public static void main(String[] args) {
-        Thread player1 = new Thread(new PlayerRunnable());
+        Thread player1 = new Thread(new PlayerRunnable("A", "B", "ABC"));
         player1.start();
 
-        Thread player2 = new Thread(new PlayerRunnable());
+        Thread player2 = new Thread(new PlayerRunnable("B", "A", "ABC"));
         player2.start();
     }
 }
