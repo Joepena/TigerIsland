@@ -130,8 +130,14 @@ public class GameAPI {
   public ArrayList<Tuple> findListOfValidSettlementLocations() {
     return APIUtils.findListOfValidSettlementLocation(Orientation.getOrigin(), new boolean[194][194][194], new ArrayList<Tuple>());
   }
+  public ArrayList<Tuple> getAvailableTilePlacement() {
+    ArrayList<Tuple> list = new ArrayList<>();
+    boolean[][][] hexCheckedforPlacement = new boolean[194][194][194];
+    APIUtils.tileValidationListFinder(Orientation.getOrigin(),hexCheckedforPlacement,list);
+    return list;
+  }
 
-    public boolean canSelectBuildTotoro() {
+  public boolean canSelectBuildTotoro() {
         ArrayList<Tuple> validTotoroLocations = validTotoroPlacements();
         System.out.println(validTotoroLocations);
 
