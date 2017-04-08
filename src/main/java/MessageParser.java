@@ -72,7 +72,7 @@ public class MessageParser {
                 this.message = new WaitToBeginMessage(message);
                 break;
             case "NEXT":
-                this.message = new noActionMessage(Message.MessageType.WaitForNext);
+                this.message = new NoActionMessage(Message.MessageType.WaitForNext);
                 break;
         }
     }
@@ -81,7 +81,7 @@ public class MessageParser {
         scanner.next();
         switch(scanner.next()){
             case "CHALLENGES":
-                this.message = new noActionMessage(Message.MessageType.EndOfChallenges);
+                this.message = new NoActionMessage(Message.MessageType.EndOfChallenges);
                 break;
             case "ROUND":
                 this.message = new EndRoundMessage(message);
