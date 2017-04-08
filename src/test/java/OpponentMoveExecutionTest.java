@@ -24,7 +24,7 @@ public class OpponentMoveExecutionTest {
         Assert.assertTrue("GID is different so move is ignored", player.getGame().gameBoard.getHex(new Tuple(1, 1, -2)).getLevel() == 1);
     }
 
-    @Test
+  /*  @Test
     public void foundSettlementFromMessageTest () throws Exception {
         createLandMass();
         System.out.println(player.toString());
@@ -38,7 +38,7 @@ public class OpponentMoveExecutionTest {
 
         Assert.assertTrue("Tile placed at 1 0 -1 and settlement founded at 1 1 -2",
                 player.getGame().gameBoard.getHex(new Tuple(1, 1, -2)).getLevel() == 2);
-    }
+    }*/
 
     public void createLandMass() throws Exception {
         Tuple origin = Orientation.getOrigin();
