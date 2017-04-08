@@ -61,7 +61,7 @@ public class PlayerRunnable implements Runnable {
         game.placeFirstTile();
 
         while(!gameOver) {
-            
+
 
             //Update board state
             game.updateSettlements();
