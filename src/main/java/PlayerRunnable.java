@@ -12,7 +12,26 @@ public class PlayerRunnable implements Runnable {
     private GameAPI game;
     private Hex.Team playerTeam;
     private Hex.Team opponentTeam;
+    private String playerID;
+    private String opponentID;
+    private String gameID;
+    private clientMessages moveMessage;
 
+    public GameAPI getGame() {
+        return game;
+    }
+
+    public PlayerRunnable (String playerID, String opponentID, String gameID){
+        this.playerID = playerID;
+        this.opponentID = opponentID;
+        this.gameID = gameID;
+        this.newTile = null;
+        this.gameOver = false;
+        this.hasMove = false;
+        this.decisionCoords = null;
+        this.game = new GameAPI();
+        this.moveMessage = null;
+    }
 
     @Override
     public void run() {
@@ -64,117 +83,101 @@ public class PlayerRunnable implements Runnable {
     }
 
     public void executeMessage(Message message){
-        //Get type of message
-        //Execute changes
+
         Message.MessageType type = message.getMessageType();
 
-        //if noAction message return
-        if(type == Message.MessageType.Welcome || type == Message.MessageType.Enter ||
-                type == Message.MessageType.Goodbye || type == Message.MessageType.WaitForNext ||
-                type == Message.MessageType.EndOfChallenges)
-            return;
-
         switch(type){
-            case BeginRound:
-                executeBeginRound((BeginRoundMessage) message);
-                break;
-            case EndRound:
-                executeEndRound((EndRoundMessage) message);
-                break;
             case GameOver:
-                executeGameOver((GameOverMessage) message);
+                GameOverMessage gameOverMessage = (GameOverMessage)message;
+                if(!gameOverMessage.getGid().equals(this.gameID))
+                    return;
+                GameOver(gameOverMessage);
                 break;
             case MakeYourMove:
-                executeMakeYourMove((MakeYourMoveMessage) message);
-                break;
-            case MatchBeginning:
-                executeMatchBeginning((MatchBeginningMessage) message);
+                MakeYourMoveMessage makeYourMove = (MakeYourMoveMessage) message;
+                if(!makeYourMove.getGid().equals(this.gameID))
+                    return;
+                MakeYourMove(makeYourMove);
                 break;
             case Move:
-                executeMove((MoveMessage) message);
-                break;
-            case NewChallenge:
-                executeNewChallenge((NewChallengeMessage) message);
-                break;
-            case WaitToBegin:
-                executeWaitToBegin((WaitToBeginMessage) message);
+                MoveMessage move = (MoveMessage) message;
+                if(!move.getGid().equals(this.gameID))
+                    return;
+                Move(move);
                 break;
         }
     }
 
-
-    private void executeBeginRound(BeginRoundMessage message){
-
+    private void GameOver(GameOverMessage message){
+        this.gameOver = true;
     }
 
-    private void executeEndRound(EndRoundMessage message){
-
-    }
-
-    private void executeGameOver(GameOverMessage message){
-
-    }
-
-    private void executeMakeYourMove(MakeYourMoveMessage message){
-
+    private void MakeYourMove(MakeYourMoveMessage message){
+        this.newTile = message.getTile();
+        this.hasMove = true;
     }
 
 
-
-    private void executeNewChallenge(NewChallengeMessage message){
-
-    }
-
-    private void executeWaitToBegin(WaitToBeginMessage message){
-
-    }
-
-    private void executeMatchBeginning(MatchBeginningMessage message){
-
-    }
-
-    private void executeMove(MoveMessage message){
+    private void Move(MoveMessage message){
         switch(message.getMoveType()){
             case Found:
-                executeFoundMove((FoundSettlementMessage) message);
+                FoundMove((FoundSettlementMessage) message);
                 break;
             case Expand:
-                executeExpand((ExpandSettlementMessage) message);
+                Expand((ExpandSettlementMessage) message);
                 break;
             case Forfeit:
-                executeForfeit((ForfeitMessage) message);
+                Forfeit((ForfeitMessage) message);
                 break;
             case Tiger:
-                executeTiger((BuildTigerMessage) message);
+                Tiger((BuildTigerMessage) message);
                 break;
             case Totoro:
-                executeTotoro((BuildTotoroMessage) message);
+                Totoro((BuildTotoroMessage) message);
                 break;
         }
     }
 
-    private void executeFoundMove(FoundSettlementMessage message){
+    private void FoundMove(FoundSettlementMessage message){
+        if(message.getPid().equals(this.playerID))
+            return;
         game.placeTile(message.getTile(), message.getTileLocation());
         game.foundSettlement(message.getBuildLocation(), this.opponentTeam);
     }
 
-    private void executeExpand(ExpandSettlementMessage message){
+    private void Expand(ExpandSettlementMessage message){
+        if(message.getPid().equals(this.playerID))
+            return;
+        game.placeTile(message.getTile(), message.getTileLocation());
+        //game.expandSettlement();
 
     }
 
-    private void executeForfeit(ForfeitMessage message){
-
+    private void Forfeit(ForfeitMessage message){
+        return;
     }
 
-    private void executeTiger(BuildTigerMessage message){
-
+    private void Tiger(BuildTigerMessage message){
+        if(message.getPid().equals(this.playerID))
+            return;
+        game.placeTile(message.getTile(), message.getTileLocation());
+        game.createTigerPlayground(message.getBuildLocation(), this.opponentTeam);
     }
 
-    private void executeTotoro(BuildTotoroMessage message){
-            }
+    private void Totoro(BuildTotoroMessage message){
+        if(message.getPid().equals(this.playerID))
+            return;
+        game.placeTile(message.getTile(), message.getTileLocation());
+        game.createTotoroSanctuary(message.getBuildLocation(), this.opponentTeam);
+    }
 
     public void setGameOver(Boolean gameOver) {
         this.gameOver = gameOver;
+    }
+
+    public String toString(){
+        String string = ("playerID:  " + this.playerID + "\nopponentID:  " + this.opponentID + "\ngameID:  " + this.gameID);
+        return string;
     }
 }
 
