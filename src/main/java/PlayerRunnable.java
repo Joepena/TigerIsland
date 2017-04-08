@@ -14,7 +14,7 @@ public class PlayerRunnable implements Runnable {
     @Override
     public void run() {
         gameOver = false;
-        hasTile = false;
+        //hasTile = false;
         game = new GameAPI();
         System.out.println("Villager count of " + this.toString() + " is: " + game.getVillagerCount());
         System.out.println("Totoro count of " + this.toString() + " is: " + game.getTotoroCount());

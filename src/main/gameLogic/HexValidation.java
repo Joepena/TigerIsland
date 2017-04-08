@@ -1,5 +1,5 @@
 /**
- * Created by WIIZZARD on 3/19/2017.
+ * Created by Nicholas on 3/19/2017.
  */
 public class HexValidation {
 
@@ -33,6 +33,17 @@ public class HexValidation {
             Hex temp = gameBoard.getHex(coordinatePair);
         }
       return(gameBoard.getHex(coordinatePair) == null);
+    }
+
+    public static boolean isLocationFree(Tuple coordinatePair, Board gameBoard){
+        if(!isLocationNull(coordinatePair, gameBoard)) {
+            if (gameBoard.getHex(coordinatePair).getOccupiedBy() == Hex.gamePieces.empty)
+                return true;
+            else
+                return false;
+        } else {
+            return false;
+        }
     }
 
 

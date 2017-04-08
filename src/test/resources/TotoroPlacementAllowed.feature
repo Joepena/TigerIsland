@@ -1,4 +1,4 @@
-Feature: To test if a totoro can be placed in a valid board configuration
+Feature: Totoro can be placed in a valid board configuration
 
   Scenario: The game is initialized and the board is initialized and its the player's turn
     Given there a settlement of size five or greater for the player's team
