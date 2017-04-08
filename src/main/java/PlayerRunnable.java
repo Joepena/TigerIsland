@@ -13,6 +13,8 @@ public class PlayerRunnable implements Runnable {
 
     private Tile newTile;
     private Tuple decisionCoords;
+    private Tuple buildDecisionCoords;
+    private BuildDecision buildDecision;
     private GameAPI game;
     private Hex.Team playerTeam;
     private Hex.Team opponentTeam;
@@ -33,6 +35,8 @@ public class PlayerRunnable implements Runnable {
         this.gameOver = false;
         this.hasMove = false;
         this.decisionCoords = null;
+        this.buildDecision = null;
+        this.buildDecisionCoords = null;
         this.game = new GameAPI();
         this.moveMessage = null;
     }
@@ -73,6 +77,19 @@ public class PlayerRunnable implements Runnable {
             eruptionOptions = game.getValidNukingLocations();
 
             //Decide normal place or nuke
+            if (canNukeSafely()) {
+                if (canSabotageEnemySettlement()){
+
+                } else if (canRecycleOwnTotoroSettlement()){
+
+                } else {
+                    //Pick a random nuking location.
+                }
+            } else{
+                //Pick a random tile placement location.
+            }
+
+            decisionCoords = tilePlacementOptions.get(0);
 
 
 
@@ -95,8 +112,23 @@ public class PlayerRunnable implements Runnable {
             tigerPlacementOptions = game.validTigerPlacements();
 
             //Decide Build Action
+            if (canPlaceTiger()){
+                buildDecision = new BuildDecision(tigerPlacementOptions.get(0), BuildDecision.buildDecisions.Tiger);
+            } else if (tigerPiecesRemaining()){
+                buildDecision = new BuildDecision(foundSettlementOptions.get(0), BuildDecision.buildDecisions.Found);
+            } else if (canExpand()){
+                buildDecision = new BuildDecision(expandSettlementOptions.get(0).getExpansionStart(), BuildDecision.buildDecisions.Expand);
+            }else if (canPlaceTotoro()){
+                buildDecision = new BuildDecision(totoroPlacementOptions.get(0), BuildDecision.buildDecisions.Totoro);
+            } else
+            {
+                buildDecision = new BuildDecision(foundSettlementOptions.get(0), BuildDecision.buildDecisions.Found);
+            }
+
+            buildDecisionCoords = foundSettlementOptions.get(0);
 
             //Perform Build action
+            game.foundSettlement(buildDecisionCoords, Hex.Team.Black);
 
         }
     }
