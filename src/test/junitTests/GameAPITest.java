@@ -5,9 +5,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-/**
- * Created by TomasK on 3/27/2017.
- */
 public class GameAPITest {
     Tile testTile;
     GameAPI game = new GameAPI();
@@ -33,7 +30,7 @@ public class GameAPITest {
     public void validatePlaceFirstTile_Jungle() throws Exception {
 
         game.placeFirstTile();
-        Tuple jungleCoords = new Tuple(0, 1, -1);
+        Tuple jungleCoords = Orientation.addCoordinates(Orientation.getOrigin(), Orientation.getUPLEFT());
         Assert.assertEquals("Checking jungle", game.gameBoard.getHex(jungleCoords).getTerrain(), Terrain.terrainType.Jungle);
     }
 
@@ -41,7 +38,7 @@ public class GameAPITest {
     public void validatePlaceFirstTile_Lake() throws Exception {
 
         game.placeFirstTile();
-        Tuple lakeCoords = new Tuple(1, 0, -1);
+        Tuple lakeCoords = Orientation.addCoordinates(Orientation.getOrigin(), Orientation.getUPRIGHT());
         Assert.assertEquals("Checking lake", game.gameBoard.getHex(lakeCoords).getTerrain(), Terrain.terrainType.Lake);
     }
 
@@ -49,7 +46,7 @@ public class GameAPITest {
     public void validatePlaceFirstTile_Rocky() throws Exception {
 
         game.placeFirstTile();
-        Tuple rockyCoords = new Tuple(-1, 0, 1);
+        Tuple rockyCoords = Orientation.addCoordinates(Orientation.getOrigin(), Orientation.getDOWNLEFT());
         Assert.assertEquals("Checking rocky", game.gameBoard.getHex(rockyCoords).getTerrain(), Terrain.terrainType.Rocky);
     }
 
@@ -57,7 +54,7 @@ public class GameAPITest {
     public void validatePlaceFirstTile_Grassland() throws Exception {
 
         game.placeFirstTile();
-        Tuple grassCoords = new Tuple(0, -1, 1);
+        Tuple grassCoords = Orientation.addCoordinates(Orientation.getOrigin(), Orientation.getDOWNRIGHT());
         Assert.assertEquals("Checking grassland", game.gameBoard.getHex(grassCoords).getTerrain(), Terrain.terrainType.Grassland);
     }
 
@@ -308,7 +305,7 @@ public class GameAPITest {
     public void testFoundSettlement() throws Exception {
         createLandMass();
         Hex hex = game.gameBoard.getHex(Orientation.upRightOf(Orientation.getOrigin()));
-        game.foundSettlement(hex.getLocation());
+        game.foundSettlement(hex.getLocation(), Hex.Team.Black);
 
         Assert.assertEquals(Hex.gamePieces.Meeple, game.gameBoard.getHex(hex.getLocation()).getOccupiedBy());
     }
@@ -380,6 +377,42 @@ public class GameAPITest {
         Assert.assertFalse("Checks if settlement under leftHex is totally nuked, in this scenario it is not", valid);
 
     }
+
+    @Test
+    public void conglomerateAdjacentSettlementTest() throws Exception{
+        createLandMass();
+        game.gameBoard.setHex(new Hex (3, Terrain.terrainType.Grassland), Orientation.upRightOf(Orientation.getOrigin()));
+
+        Hex meeple = game.gameBoard.getHex(Orientation.downLeftOf(Orientation.getOrigin()));
+        meeple.placeMeeple(Hex.Team.Black);
+
+        meeple = game.gameBoard.getHex(Orientation.downRightOf(Orientation.getOrigin()));
+        meeple.placeMeeple(Hex.Team.Black);
+
+        meeple = game.gameBoard.getHex(Orientation.rightOf(Orientation.getOrigin()));
+        meeple.placeMeeple(Hex.Team.Black);
+
+        meeple = game.gameBoard.getHex(Orientation.upRightOf(Orientation.getOrigin()));
+        meeple.placeMeeple(Hex.Team.Black);
+
+        meeple = game.gameBoard.getHex(Orientation.upLeftOf(Orientation.upRightOf(Orientation.getOrigin())));
+        meeple.placeMeeple(Hex.Team.Black);
+
+        meeple = game.gameBoard.getHex(Orientation.rightOf(Orientation.rightOf(Orientation.getOrigin())));
+        meeple.placeMeeple(Hex.Team.Black);
+
+        game.gameBoard.printSectionedBoard(game.gameBoard);
+
+        game.updateSettlements();
+
+        Settlements resultingBlackSettlements = game.getBlackSettlements();
+        ArrayList<SettlementDataFrame> resultingBlackSettlementDFs = resultingBlackSettlements.getListOfSettlements();
+        int settlementSize = resultingBlackSettlementDFs.get(0).getSettlementSize();
+
+
+        Assert.assertEquals("Settlements successfully conglomerated", 6, settlementSize);
+    }
+
 
   public void createLandMass() throws Exception {
     Tuple origin = Orientation.getOrigin();

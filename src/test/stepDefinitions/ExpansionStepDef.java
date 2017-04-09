@@ -54,8 +54,7 @@ public class ExpansionStepDef {
   @When("I expand the settlement")
   public void iExpandTheSettlement() throws Throwable {
     ArrayList<ExpansionOpDataFrame> list = gameAPI.getExpansionOptions(Hex.Team.Black);
-    gameAPI.performLandGrab(list.get(0).getSettlementDataframe(), list.get(0).getTerrain());
-
+    gameAPI.performLandGrab(list.get(0));
     hex1 = gameAPI.gameBoard.getHex(Orientation.getDOWNRIGHT());
     hex2 = gameAPI.gameBoard.getHex(Orientation.getRIGHT());
     hex3 = gameAPI.gameBoard.getHex(Orientation.getUPRIGHT());

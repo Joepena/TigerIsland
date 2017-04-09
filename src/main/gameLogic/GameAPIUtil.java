@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -371,7 +370,7 @@ public class GameAPIUtil {
     }
 
     public ArrayList<ExpansionOpDataFrame> findExpansionOptionsFor(Hex.Team team) {
-      HashMap<Terrain.terrainType,ExpansionOpDataFrame> map = new HashMap<>();
+      HashMap<Terrain.terrainType,ExpansionOpDataFrame> map;
       // search for all hexes owned by [team] param, use settlements
       ArrayList<SettlementDataFrame> target = new ArrayList<>();
       if(team == Hex.Team.Black) target = game.getBlackSettlements().getListOfSettlements();
@@ -384,7 +383,7 @@ public class GameAPIUtil {
       while (iterator.hasNext()) {
         SettlementDataFrame df = iterator.next();
         ArrayList<Tuple> listOfTuples = df.getListOfHexLocations();
-
+        map = new HashMap<>();
         for(Tuple tuple : listOfTuples) {
           // find adjacent hex that is same terrain and not occupied
           Terrain.terrainType currHexTerr = gameBoard.getHex(tuple).getTerrain();
@@ -436,6 +435,7 @@ public class GameAPIUtil {
         dfsExpansionSearch(availabilityGrid,df,terrain,tempTuple);
       }
     }
+
     public void performLandGrab(SettlementDataFrame settlementDataFrame, Terrain.terrainType terrain) {
       boolean[][][] copyArr = copyAvailabilityGrid(gameBoard.gameBoardAvailability);
       ArrayList<Tuple> listOfLocations = settlementDataFrame.getListOfHexLocations();

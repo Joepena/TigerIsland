@@ -1,4 +1,4 @@
-Feature: To test the totoro build option will not be allowed to be selected if no valid placement exists
+Feature: Totoro can not be placed in an invalid board configuration
 
   Scenario: The game is initialized and the board is initialized and its the player's turn
     Given there is not settlement of size five or greater for the player's team
