@@ -38,6 +38,15 @@ public class clientMoveMessages
     private Tuple buildLocation;
     private Tile tile;
     private Terrain.terrainType terrain;
+    private clientMoveMessageType moveType;
+
+    public clientMoveMessageType getMoveType() {
+        return moveType;
+    }
+
+    public void setMoveType(clientMoveMessageType moveType) {
+        this.moveType = moveType;
+    }
 
     public static enum clientMoveMessageType{
         Found, Totoro, Expand, Unable, Tiger;
@@ -46,13 +55,13 @@ public class clientMoveMessages
     private String terrainToString(Terrain.terrainType terrain)
     {
         if(terrain == Terrain.terrainType.Grassland)
-            return "GRASSLAND";
+            return "GRASS";
         if(terrain == Terrain.terrainType.Jungle)
             return "JUNGLE";
         if(terrain == Terrain.terrainType.Lake)
             return "LAKE";
         if(terrain == Terrain.terrainType.Rocky)
-            return "ROCKY";
+            return "ROCK";
         return "";
     }
 
@@ -86,6 +95,25 @@ public class clientMoveMessages
 
         }
         return "";
+    }
+
+    protected int orientationToNumber(Orientation.Orientations orientation){
+        switch(orientation){
+            case upRight:
+                return 1;
+            case right:
+                return 2;
+            case downRight:
+                return 3;
+            case downLeft:
+                return 4;
+            case left:
+                return 5;
+            case upLeft:
+                return 6;
+            default:
+                return 0;
+        }
     }
 
 

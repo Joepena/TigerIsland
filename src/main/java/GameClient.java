@@ -12,10 +12,10 @@ public class GameClient {
 //    This will be for when we actually run the project I guess?
     public static void main(String[] args) {
 
-        String host = "10.136.60.73";
+        String host = "10.136.33.241";
 
         int port = 8000;
-        
+
 
         try {
             Socket socket = new Socket(host, port);

@@ -84,8 +84,8 @@ public class Board {
                     Hex currentHex = boardToTranscribe.getHex(new Tuple(x-97, y-97, z-97));
 
 
-                    int newXCoord = (2 * xOffset) + 188;
-                    int newYCoord = zOffset - yOffset + 188;
+                    int newXCoord = (2 * zOffset) + 188;
+                    int newYCoord = xOffset - yOffset + 188;
 
                     if (currentHex == null && gameBoard2D[newXCoord][newYCoord] == null) {
                         gameBoard2D[newXCoord][newYCoord] = null;

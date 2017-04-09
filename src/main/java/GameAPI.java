@@ -26,6 +26,7 @@ public class GameAPI {
     }
 
 
+
     //Getters and Setters
 
     public int getVillagerCount() {
@@ -88,7 +89,9 @@ public class GameAPI {
     }
 
     public ArrayList<ExpansionOpDataFrame> getExpansionOptions(Hex.Team targetTeam) {
-      return APIUtils.findExpansionOptionsFor(targetTeam);
+      ArrayList<ExpansionOpDataFrame> list = APIUtils.findExpansionOptionsFor(targetTeam);
+      Collections.sort(list);
+      return list;
     }
 
     public void performLandGrab(ExpansionOpDataFrame df) {
@@ -189,7 +192,7 @@ public class GameAPI {
     public void foundSettlement(Tuple tuple, Hex.Team team) {
         gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Meeple);
         gameBoard.getHex(tuple).setTeam(team);
-        decrementVillagersBy(gameBoard.getHex(tuple).getLevel());
+        if(team == Hex.Team.Black) decrementVillagersBy(gameBoard.getHex(tuple).getLevel());
     }
 
     public void createTotoroSanctuary(Tuple tuple, Hex.Team team) {

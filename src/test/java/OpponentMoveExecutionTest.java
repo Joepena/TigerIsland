@@ -11,13 +11,15 @@ public class OpponentMoveExecutionTest {
 
     @Before
     public void setUp() throws Exception {
-        player = new PlayerRunnable("A", "B", "GAME0");
+        player = new PlayerRunnable("A", "B", 1);
+        player.setGameID("GAME0");
         mP = new MessageParser();
     }
 
     @Test
     public void ignoreDifferentGidTest () throws Exception {
         createLandMass();
+
         mP.parseString("GAME GAME1 MOVE 12 PLAYER B PLACED LAKE+ROCK AT 1 0 -1 3 FOUNDED SETTLEMENT AT 1 1 -2");
         player.executeMessage(mP.getMessage());
 
@@ -39,24 +41,26 @@ public class OpponentMoveExecutionTest {
                         player.getGame().gameBoard.getHex(new Tuple(1, 1, -2)).getTeam() == Hex.Team.White);
     }
 
-    /*@Test
+    @Test
     public void expandSettlementFromMessageTest () throws Exception {
         createLandMass();
         player.getGame().gameBoard.getHex(new Tuple(-1, 0 , 1)).setOccupiedBy(Hex.gamePieces.Meeple);
-        player.getGame().gameBoard.getHex(new Tuple(-1, 0 , 1)).setTeam(Hex.Team.Black);
+        player.getGame().gameBoard.getHex(new Tuple(-1, 0 , 1)).setTeam(Hex.Team.White);
 
-        ExpandSettlementMessage message = (ExpandSettlementMessage)mP.parseString("GAME GAME0 MOVE 12 PLAYER B PLACED LAKE+ROCK AT 1 0 -1 3 EXPANDED SETTLEMENT AT -1 0 1 JUNGLE");
+        player.getGame().updateSettlements();
+
+        ExpandSettlementMessage message = (ExpandSettlementMessage)mP.parseString("GAME GAME0 MOVE 12 PLAYER B PLACED LAKE+JUNGLE AT 1 0 -1 3 EXPANDED SETTLEMENT AT -1 0 1 JUNGLE");
         player.executeMessage(mP.getMessage());
 
-
         Assert.assertTrue("Tile placed at 1 0 -1",
-                player.getGame().gameBoard.getHex(new Tuple(1, 0, -1)).getLevel() == 2);
-        Assert.assertTrue("Settlement founded at -1 0 1",
-                player.getGame().gameBoard.getHex(new Tuple(0, -1, 1)).getOccupiedBy() == Hex.gamePieces.Meeple &&
-                        player.getGame().gameBoard.getHex(new Tuple(0, -1, 1)).getTeam() == Hex.Team.Black &&
-                        player.getGame().gameBoard.getHex(new Tuple(1, -1, 0)).getOccupiedBy() == Hex.gamePieces.Meeple &&
-                        player.getGame().gameBoard.getHex(new Tuple(1, -1, 0)).getTeam() == Hex.Team.Black);
-    }*/
+                player.getGame().gameBoard.getHex(Orientation.upRightOf(Orientation.getOrigin())).getLevel() == 2);
+        Assert.assertTrue("Settlement founded at 0 -1 1",
+                player.getGame().gameBoard.getHex(Orientation.downRightOf(Orientation.getOrigin())).getOccupiedBy() == Hex.gamePieces.Meeple &&
+                        player.getGame().gameBoard.getHex(Orientation.downRightOf(Orientation.getOrigin())).getTeam() == Hex.Team.White);
+        Assert.assertTrue("Settlement founded at 1 -1 0 has Meeple",
+                        player.getGame().gameBoard.getHex(Orientation.rightOf(Orientation.getOrigin())).getOccupiedBy() == Hex.gamePieces.Meeple&&
+                        player.getGame().gameBoard.getHex(Orientation.rightOf(Orientation.getOrigin())).getTeam() == Hex.Team.White);
+    }
 
     @Test
     public void totoroParsingTest () throws Exception {
