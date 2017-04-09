@@ -22,7 +22,7 @@ public class PlayerRunnable implements Runnable {
         return game;
     }
 
-    public PlayerRunnable (String playerID, String opponentID, String gameID){
+    public PlayerRunnable (String playerID, String opponentID){
         this.playerID = playerID;
         this.opponentID = opponentID;
         this.gameID = gameID;
@@ -202,6 +202,10 @@ public class PlayerRunnable implements Runnable {
 
     public void receiveMessage(Message m) {
         gotMessage = true;
+    }
+
+    public void setGameID(String gameID) {
+        this.gameID = gameID;
     }
 }
 

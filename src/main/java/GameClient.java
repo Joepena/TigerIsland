@@ -16,7 +16,7 @@ public class GameClient {
     private static String playerID = "";
     private static int numRounds = 0;
     private static String challengeID;
-    private static String roundID;
+    private static int roundID = 0;
     private static String opponentPID = "";
     private static String game1ID;
     private static String game2ID;
@@ -33,6 +33,7 @@ public class GameClient {
         //Flags
         boolean challengeIsDone = false;
         boolean roundsAreDone = false;
+        boolean roundIsDone = false;
 
         try {
 
@@ -65,10 +66,10 @@ public class GameClient {
 
             // This loop performs an iteration for each individual opponent we play, playing a set of numRounds
             // rounds against them
-           // while(!challengeIsDone) {
+            while(!challengeIsDone) {
 
-               // int i = 0;
-               // while(i < 10) {
+               //
+                while(roundID < numRounds) {
                     //Get round ID get opponent pid
                     parsedServerMessage = parseServerInput(in, Message.MessageType.BeginRound);
                     if (parsedServerMessage instanceof BeginRoundMessage) {
@@ -77,15 +78,27 @@ public class GameClient {
                     parsedServerMessage = parseServerInput(in, Message.MessageType.MatchBeginning);
                     if (parsedServerMessage instanceof MatchBeginningMessage) {
                         opponentPID = ((MatchBeginningMessage) parsedServerMessage).getPid();
-                        System.out.println("opponent's pid: " + opponentPID);
                     }
-            //      i++;
-            //    }
+            //
+                    Thread player1 = new Thread(new PlayerRunnable(playerID, opponentPID));
+                    player1.start();
+                    Thread player2 = new Thread(new PlayerRunnable(playerID, opponentPID));
+                    player2.start();
+
+                    while(!roundIsDone) {
+                        parsedServerMessage = parseServerInput(in, Message.MessageType.MakeYourMove);
+                        if (parsedServerMessage instanceof MakeYourMoveMessage) {
+                            game1ID = ((MakeYourMoveMessage) parsedServerMessage).getGid();
+                        }
+                    }
+
+
+                }
 
                 challengeIsDone = true;
 
 
-           // }
+           }
 
 
         } catch (Exception e) {
@@ -93,6 +106,11 @@ public class GameClient {
             System.exit(1);
         }
     }
+
+    public static void sendMessageFromPlayerToServer(Message playerMessage) {
+
+    }
+
 
     private static Message parseServerInput(BufferedReader in, Message.MessageType type) throws IOException {
         String rawServerMessage;
@@ -128,7 +146,7 @@ public class GameClient {
         return challengeID;
     }
 
-    public static String getRoundID() {
+    public static int getRoundID() {
         System.out.print(roundID);
         return roundID;
     }
