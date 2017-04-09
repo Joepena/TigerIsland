@@ -88,7 +88,9 @@ public class GameAPI {
     }
 
     public ArrayList<ExpansionOpDataFrame> getExpansionOptions(Hex.Team targetTeam) {
-      return APIUtils.findExpansionOptionsFor(targetTeam);
+      ArrayList<ExpansionOpDataFrame> list = APIUtils.findExpansionOptionsFor(targetTeam);
+      Collections.sort(list);
+      return list;
     }
     public void performLandGrab(ExpansionOpDataFrame df) {
       APIUtils.performLandGrab(df.getSettlementDataframe(), df.getTerrain());
