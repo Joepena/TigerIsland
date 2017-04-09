@@ -464,7 +464,7 @@ public class GameAPIUtil {
         return;
       }
       availabilityGrid[offSet.getX()][offSet.getY()][offSet.getZ()] = false;
-      game.foundSettlement(tuple);
+      game.foundSettlement(tuple, Hex.Team.White);
       for (Orientation.Orientations orientation : Orientation.Orientations.values()) {
         Tuple tempTuple = Orientation.addCoordinatesByOrientation(tuple, orientation);
         Tuple tempTupleOff = gameBoard.calculateOffset(tempTuple);

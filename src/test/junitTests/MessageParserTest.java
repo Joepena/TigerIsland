@@ -6,13 +6,10 @@ import org.junit.Test;
 /**
  * Created by T K Vicious on 4/5/2017.
  */
-<<<<<<< HEAD:src/test/junitTests/MessageParserTest.java
+
 public class MessageParserTest {
-    MessageParser mf;
-=======
-public class messageParserTest {
     MessageParser mP;
->>>>>>> eb6d7156d44d38e3e7a4c9b00f6c21dd2fa959ea:src/test/java/messageParserTest.java
+
 
     @Before
     public void setUp() throws Exception {

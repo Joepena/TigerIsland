@@ -43,9 +43,9 @@ public class PlayerRunnable implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Villager count of " + this.toString() + " is: " + game.getVillagerCount());
-        System.out.println("Totoro count of " + this.toString() + " is: " + game.getTotoroCount());
-        System.out.println("Tiger count of " + this.toString() + " is: " + game.getTigerCount());
+       // System.out.println("Villager count of " + this.toString() + " is: " + game.getVillagerCount());
+        //System.out.println("Totoro count of " + this.toString() + " is: " + game.getTotoroCount());
+        //System.out.println("Tiger count of " + this.toString() + " is: " + game.getTigerCount());
 
         //Instantiate all ArrayLists once
         ArrayList<Tuple> tilePlacementOptions = new ArrayList<>();
@@ -87,7 +87,7 @@ public class PlayerRunnable implements Runnable {
             }
 
             moveMessage.setTileLocation(tilePlacementOptions.get(0));
-            Orientation.Orientations orientation = game.APIUtils.getViableOrientation(tilePlacementOptions.get(0))
+            Orientation.Orientations orientation = game.APIUtils.getViableOrientation(tilePlacementOptions.get(0));
             moveMessage.setOrientation(moveMessage.orientationToNumber(orientation));
 
 
@@ -124,21 +124,30 @@ public class PlayerRunnable implements Runnable {
             }
 
             buildDecisionCoords = foundSettlementOptions.get(0);
+            moveMessage.setBuildLocation(foundSettlementOptions.get(0));
+            moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Found);
 
             //Perform Build action
-            game.foundSettlement(buildDecisionCoords, Hex.Team.Black);
+            //game.foundSettlement(buildDecisionCoords, Hex.Team.Black);
+
+            //Print out moveMessage and send to Client
+
+            System.out.println(moveMessage.toString(moveMessage.getMoveType()));
 
             hasMove = false;
+            gameOver = true;
         }
     }
+
+
     private boolean canNukeSafely() {
-      // HERE //
+      return false;
     }
     private boolean canSabotageEnemySettlement() {
-      // HERE //
+        return false;
     }
     private boolean canRecycleOwnTotoroSettlement() {
-      // HERE //
+        return false;
     }
     private boolean canPlaceTiger(ArrayList<Tuple> tigerOptions) {
       return !tigerOptions.isEmpty();
