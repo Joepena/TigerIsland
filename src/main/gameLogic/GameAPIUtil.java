@@ -184,8 +184,6 @@ public class GameAPIUtil {
                                 i = 0;
                                 possibleSettlementsDynamicSize--;
 
-
-
                                 break outerloop;
                             }
 
