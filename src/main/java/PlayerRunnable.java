@@ -17,12 +17,23 @@ public class PlayerRunnable implements Runnable {
     private String opponentID;
     private String gameID;
     private clientMessages moveMessage;
+    private int playerNum;
+
+    //lisztomania
+    //Instantiate all ArrayLists once
+    ArrayList<Tuple> tilePlacementOptions;
+    ArrayList<Tuple> eruptionOptions;
+    ArrayList<Tuple> foundSettlementOptions;
+    ArrayList<ExpansionOpDataFrame> expandSettlementOptions;
+    ArrayList<Tuple> totoroPlacementOptions;
+    ArrayList<Tuple> tigerPlacementOptions;
+    ArrayList<Integer> orientationOptions;
 
     public GameAPI getGame() {
         return game;
     }
 
-    public PlayerRunnable (String playerID, String opponentID){
+    public PlayerRunnable (String playerID, String opponentID, int playerNum) {
         this.playerID = playerID;
         this.opponentID = opponentID;
         this.gameID = gameID;
@@ -34,6 +45,7 @@ public class PlayerRunnable implements Runnable {
         this.moveMessage = null;
         this.playerTeam = Hex.Team.Black;
         this.opponentTeam = Hex.Team.White;
+        this.playerNum = playerNum;
     }
 
     @Override
@@ -44,17 +56,14 @@ public class PlayerRunnable implements Runnable {
 
         game = new GameAPI();
 
-        System.out.println("Villager count of " + this.toString() + " is: " + game.getVillagerCount());
-        System.out.println("Totoro count of " + this.toString() + " is: " + game.getTotoroCount());
-        System.out.println("Tiger count of " + this.toString() + " is: " + game.getTigerCount());
-
         //Instantiate all ArrayLists once
-        ArrayList<Tuple> tilePlacementOptions = new ArrayList<>();
-        ArrayList<Tuple> eruptionOptions = new ArrayList<>();
-        ArrayList<Tuple> foundSettlementOptions = new ArrayList<>();
-        ArrayList<ExpansionOpDataFrame> expandSettlementOptions = new ArrayList<>();
-        ArrayList<Tuple> totoroPlacementOptions = new ArrayList<>();
-        ArrayList<Tuple> tigerPlacementOptions = new ArrayList<>();
+        tilePlacementOptions = new ArrayList<>();
+        eruptionOptions = new ArrayList<>();
+        foundSettlementOptions = new ArrayList<>();
+        expandSettlementOptions = new ArrayList<>();
+        totoroPlacementOptions = new ArrayList<>();
+        tigerPlacementOptions = new ArrayList<>();
+        orientationOptions = new ArrayList<>();
 
 
         //Player Logic
@@ -62,44 +71,82 @@ public class PlayerRunnable implements Runnable {
         game.placeFirstTile();
 
         while(!gameOver) {
+            try {
 
+                while(GameClient.getP1Move() == null) {
+                    Thread.sleep(50);
+                    System.out.println("Goodnight player 1");
+                }
 
-            //Update board state
-            game.updateSettlements();
+            } catch (InterruptedException e) {
+                System.out.println("Player 1 about to do stuff!");
+            }
 
-            //Check for tile placement options
-            tilePlacementOptions = game.getAvailableTilePlacement();
+            System.out.println("Troy knows how this works");
 
-            //Check for nuking options
-            eruptionOptions = game.getValidNukingLocations();
-
-            //Decide normal place or nuke
-
-
-
-            //Place tile
-            game.placeTile(newTile, decisionCoords);
-
-            //Update board state
-            game.updateSettlements();
-
-            //Check for Found Settlement options
-            foundSettlementOptions = game.findListOfValidSettlementLocations();
-
-            //Check for Expand Settlement options
-            expandSettlementOptions = game.getExpansionOptions(Hex.Team.Black);
-
-            //Check for Totoro placement options
-            totoroPlacementOptions = game.validTotoroPlacements(Hex.Team.Black);
-
-            //Check for Tiger placement options
-            tigerPlacementOptions = game.validTigerPlacements(Hex.Team.Black);
-
-            //Decide Build Action
-
-            //Perform Build action
-
+            if (GameClient.getP1Move() != null) {
+                //executeMessage(GameClient.getP1Move());
+                playTurn(1);
+                GameClient.setP1Move(null);
+            }
+//            try {
+//
+//                while(GameClient.getP2Move() == null) {
+//                    Thread.sleep(100);
+//                    System.out.println("Goodnight player 2");
+//                }
+//
+//            } catch (InterruptedException e) {
+//                System.out.println("Player 2 about to do stuff!");
+//            }
         }
+    }
+
+    private void playTurn(int playerNum) {
+        //Update board state
+        game.updateSettlements();
+
+        //Check for tile placement options
+        tilePlacementOptions = game.getAvailableTilePlacement();
+        System.out.println("Number of placement options: " + tilePlacementOptions.size());
+
+        //Check for valid orientations for first spot
+        orientationOptions = game.findValidTileOrientations(tilePlacementOptions.get(0));
+        System.out.println("Number of orientation options: " + orientationOptions.size());
+
+        //Check for nuking options
+        eruptionOptions = game.getValidNukingLocations();
+        System.out.println("Number of Nuking options: " + eruptionOptions.size());
+
+        //Decide normal place or nuke
+
+
+
+        //Place tile
+        game.gameBoard.printSectionedBoard(game.gameBoard);
+        System.out.println("Where we were thinking of placing: " + tilePlacementOptions.get(0));
+        Tile troyTestTile = new Tile(1, Terrain.terrainType.Jungle, Terrain.terrainType.Lake, Orientation.Orientations.downLeft);
+        game.placeTile(troyTestTile, tilePlacementOptions.get(0));
+        game.gameBoard.printSectionedBoard(game.gameBoard);
+
+        //Update board state
+        game.updateSettlements();
+
+        //Check for Found Settlement options
+        foundSettlementOptions = game.findListOfValidSettlementLocations();
+
+        //Check for Expand Settlement options
+        expandSettlementOptions = game.getExpansionOptions(Hex.Team.Black);
+
+        //Check for Totoro placement options
+        totoroPlacementOptions = game.validTotoroPlacements(Hex.Team.Black);
+
+        //Check for Tiger placement options
+        tigerPlacementOptions = game.validTigerPlacements(Hex.Team.Black);
+
+        //Decide Build Action
+
+        //Perform Build action
     }
 
     public void executeMessage(Message message){
@@ -206,6 +253,10 @@ public class PlayerRunnable implements Runnable {
 
     public void setGameID(String gameID) {
         this.gameID = gameID;
+    }
+
+    public String getGameID() {
+        return this.gameID;
     }
 }
 

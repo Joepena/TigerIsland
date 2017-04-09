@@ -11,7 +11,7 @@ public class OpponentMoveExecutionTest {
 
     @Before
     public void setUp() throws Exception {
-        player = new PlayerRunnable("A", "B", "GAME0");
+        player = new PlayerRunnable("A", "B", 1);
         mP = new MessageParser();
     }
 

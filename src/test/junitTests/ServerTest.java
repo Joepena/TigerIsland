@@ -25,13 +25,21 @@ public class ServerTest {
             String cid = "testTestGame";
             int rounds = 5;
             int roundID = 1;
-            String opponentPID = "player2";
-            String message1 = "WELCOME TO ANOTHER EDITION OF THUNDERDOME!";
-            String message2 = "TWO SHALL ENTER, ONE SHALL LEAVE";
-            String message3 = "WAIT FOR THE TOURNAMENT TO BEGIN " + pid;
-            String message4 = "NEW CHALLENGE " + cid + " YOU WILL PLAY " + rounds + " MATCHES";
-            String message5 = "BEGIN ROUND "+ roundID +" OF " + rounds;
-            String message6 = "NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER " + opponentPID;
+            String gid1 = "1";
+            int time = 2;
+            int moveNum = 1;
+            String tile = "LAKE+JUNGLE\r\n";
+            String opponentPID = "player2\r\n";
+            String message1 = "WELCOME TO ANOTHER EDITION OF THUNDERDOME!\r\n";
+            String message2 = "TWO SHALL ENTER, ONE SHALL LEAVE\r\n";
+            String message3 = "WAIT FOR THE TOURNAMENT TO BEGIN " + pid + "\r\n";
+            String message4 = "NEW CHALLENGE " + cid + " YOU WILL PLAY " + rounds + " MATCHES\r\n";
+            String message5 = "BEGIN ROUND "+ roundID +" OF " + rounds + "\r\n";
+            String message6 = "NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER " + opponentPID + "\r\n";
+            String message7 = "MAKE YOUR MOVE IN GAME " + gid1 + " WITHIN " + time + " SECONDS: MOVE " + moveNum + " PLACE " + tile + "\r\n";
+//            String message8 = "NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER " + opponentPID;
+//            String message9 = "NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER " + opponentPID;
+
 
 
             out.println(message1);
@@ -40,6 +48,7 @@ public class ServerTest {
             out.println(message4);
             out.println(message5);
             out.println(message6);
+            out.println(message7);
 
             while(true);
 

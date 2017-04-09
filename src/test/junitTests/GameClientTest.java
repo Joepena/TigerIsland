@@ -43,9 +43,12 @@ public class GameClientTest {
             Assert.assertEquals("PlayerID should be player1", GameClient.getPlayerID(), "player5");
             Assert.assertEquals("cid should be testGame", GameClient.getChallengeID(), "testTestGame");
             Assert.assertEquals("numRounds should be 3", GameClient.getNumRounds(),5);
-            Assert.assertEquals("roundID should be 1", GameClient.getRoundID(), "1");
+            Assert.assertEquals("roundID should be 1", GameClient.getRoundID(), 1);
             Assert.assertEquals("opponent pid should be player2",  GameClient.getOpponentPID(), "player2");
             //GameClient.closeSocket();
+            while(true);
+            //GameClient.setP1RoundIsDone(true);
+            //GameClient.setP2RoundIsDone(true);
 
         } catch (Exception e) {
             e.printStackTrace();
