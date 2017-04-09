@@ -37,7 +37,7 @@ public class ServerTest {
             String message5 = "BEGIN ROUND "+ roundID +" OF " + rounds + "\r\n";
             String message6 = "NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER " + opponentPID + "\r\n";
             String message7 = "MAKE YOUR MOVE IN GAME " + gid1 + " WITHIN " + time + " SECONDS: MOVE " + moveNum + " PLACE " + tile + "\r\n";
-//            String message8 = "NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER " + opponentPID;
+            String message8 = "GAME 1 MOVE 1 PLACE JUNGLE+LAKE AT -1 3 -2 4 FOUND SETTLEMENT AT 0 1 -1\r\n";
 //            String message9 = "NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER " + opponentPID;
 
 

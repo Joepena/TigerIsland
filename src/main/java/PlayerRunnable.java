@@ -81,8 +81,9 @@ public class PlayerRunnable implements Runnable {
         while(!gameOver) {
             try {
 
+                System.out.println(GameClient.getP1Move().toString());
                 while(GameClient.getP1Move() == null) {
-                    Thread.sleep(50);
+                    Thread.sleep(100);
                     System.out.println("Goodnight player 1");
                 }
 
@@ -91,6 +92,8 @@ public class PlayerRunnable implements Runnable {
             }
 
             System.out.println("Troy knows how this works");
+            this.gameID = GameClient.getGame1ID();
+            executeMessage(GameClient.getP1Move());
 
             if (GameClient.getP1Move() != null) {
                 //executeMessage(GameClient.getP1Move());
@@ -112,6 +115,7 @@ public class PlayerRunnable implements Runnable {
 
 
     private void playTurn(int playerNum) {
+        moveMessage = new clientMoveMessages();
         //Update board state
         game.updateSettlements();
 
@@ -119,9 +123,6 @@ public class PlayerRunnable implements Runnable {
         tilePlacementOptions = game.getAvailableTilePlacement();
         System.out.println("Number of placement options: " + tilePlacementOptions.size());
 
-        //Check for valid orientations for first spot
-        orientationOptions = game.findValidTileOrientations(tilePlacementOptions.get(0));
-        System.out.println("Number of orientation options: " + orientationOptions.size());
 
             //Decide normal place or nuke
             if (canNukeSafely()) {
@@ -138,6 +139,9 @@ public class PlayerRunnable implements Runnable {
 
             moveMessage.setTileLocation(tilePlacementOptions.get(0));
             Orientation.Orientations orientation = game.APIUtils.getViableNonNukingOrientation(tilePlacementOptions.get(0));
+            System.out.println(tilePlacementOptions.get(0));
+            game.gameBoard.printSectionedBoard(game.gameBoard);
+            newTile.setLeftHexOrientation(orientation);
             moveMessage.setOrientation(moveMessage.orientationToNumber(orientation));
             moveMessage.setTile(newTile);
             moveMessage.setGid(this.gameID);
@@ -237,20 +241,14 @@ public class PlayerRunnable implements Runnable {
         switch(type){
             case GameOver:
                 GameOverMessage gameOverMessage = (GameOverMessage)message;
-                if(!gameOverMessage.getGid().equals(this.gameID))
-                    return;
                 GameOver(gameOverMessage);
                 break;
             case MakeYourMove:
                 MakeYourMoveMessage makeYourMove = (MakeYourMoveMessage) message;
-                if(!makeYourMove.getGid().equals(this.gameID))
-                    return;
                 MakeYourMove(makeYourMove);
                 break;
             case Move:
                 MoveMessage move = (MoveMessage) message;
-                if(!move.getGid().equals(this.gameID))
-                    return;
                 Move(move);
                 break;
         }
@@ -261,6 +259,7 @@ public class PlayerRunnable implements Runnable {
     }
 
     private void MakeYourMove(MakeYourMoveMessage message){
+        System.out.println("MAKE YOUR MOVE!!");
         this.newTile = message.getTile();
         this.hasMove = true;
         this.moveNumber = message.getMoveNumber();
