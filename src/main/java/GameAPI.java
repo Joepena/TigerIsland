@@ -190,6 +190,7 @@ public class GameAPI {
         gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Meeple);
         gameBoard.getHex(tuple).setTeam(team);
         decrementVillagersBy(gameBoard.getHex(tuple).getLevel());
+
     }
 
     public void createTotoroSanctuary(Tuple tuple, Hex.Team team) {
