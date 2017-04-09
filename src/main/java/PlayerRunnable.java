@@ -112,13 +112,13 @@ public class PlayerRunnable implements Runnable {
             tigerPlacementOptions = game.validTigerPlacements();
 
             //Decide Build Action
-            if (canPlaceTiger()){
+            if (canPlaceTiger(tigerPlacementOptions)){
                 buildDecision = new BuildDecision(tigerPlacementOptions.get(0), BuildDecision.buildDecisions.Tiger);
-            } else if (tigerPiecesRemaining()){
+            } else if (tigerPiecesRemaining(game)){
                 buildDecision = new BuildDecision(foundSettlementOptions.get(0), BuildDecision.buildDecisions.Found);
-            } else if (canExpand()){
+            } else if (canExpand(expandSettlementOptions)){
                 buildDecision = new BuildDecision(expandSettlementOptions.get(0).getExpansionStart(), BuildDecision.buildDecisions.Expand);
-            }else if (canPlaceTotoro()){
+            }else if (canPlaceTotoro(totoroPlacementOptions)){
                 buildDecision = new BuildDecision(totoroPlacementOptions.get(0), BuildDecision.buildDecisions.Totoro);
             } else
             {
@@ -131,6 +131,27 @@ public class PlayerRunnable implements Runnable {
             game.foundSettlement(buildDecisionCoords, Hex.Team.Black);
 
         }
+    }
+    private boolean canNukeSafely() {
+      // HERE //
+    }
+    private boolean canSabotageEnemySettlement() {
+      // HERE //
+    }
+    private boolean canRecycleOwnTotoroSettlement() {
+      // HERE //
+    }
+    private boolean canPlaceTiger(ArrayList<Tuple> tigerOptions) {
+      return !tigerOptions.isEmpty();
+    }
+    private boolean tigerPiecesRemaining(GameAPI game) {
+      return game.getTigerCount() > 0;
+    }
+    private boolean canExpand(ArrayList<ExpansionOpDataFrame> expandSettlementOptions) {
+      return !expandSettlementOptions.isEmpty();
+    }
+    private boolean canPlaceTotoro(ArrayList<Tuple> totoroPlacementOptions) {
+      return !totoroPlacementOptions.isEmpty();
     }
 
     public void executeMessage(Message message){
