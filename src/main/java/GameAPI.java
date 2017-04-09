@@ -271,7 +271,8 @@ public class GameAPI {
 
     public void foundSettlement(Tuple tuple, Hex.Team team) {
         gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Meeple);
-        decrementVillagersBy(gameBoard.getHex(tuple).getLevel());
+        gameBoard.getHex(tuple).setTeam(team);
+        if(team == Hex.Team.Black) decrementVillagersBy(gameBoard.getHex(tuple).getLevel());
     }
 
     public void createTotoroSanctuary(Tuple tuple) {

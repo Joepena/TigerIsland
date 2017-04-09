@@ -23,10 +23,10 @@ public class ExpansionStepDef {
     setUpGivenScenario();
     gameAPI.updateSettlements();
     ArrayList<ExpansionOpDataFrame> list = gameAPI.getExpansionOptions(Hex.Team.Black);
-    Assert.assertEquals("Scenario 2 assert terrain-2 is rocky", Terrain.terrainType.Rocky, list.get(0).getTerrain());
-    Assert.assertEquals("Scenario 2 assert cost-2 is 3", 2, (int)list.get(0).getExpansionCost());
-    Assert.assertEquals("Scenario 2 assert terrain-1 is jungle", Terrain.terrainType.Jungle, list.get(1).getTerrain());
-    Assert.assertEquals("Scenario 2 assert cost-1 is 4", 3, (int)list.get(1).getExpansionCost());
+    Assert.assertEquals("Scenario 2 assert terrain-2 is rocky", Terrain.terrainType.Rocky, list.get(1).getTerrain());
+    Assert.assertEquals("Scenario 2 assert cost-2 is 3", 2, (int)list.get(1).getExpansionCost());
+    Assert.assertEquals("Scenario 2 assert terrain-1 is jungle", Terrain.terrainType.Jungle, list.get(0).getTerrain());
+    Assert.assertEquals("Scenario 2 assert cost-1 is 4", 3, (int)list.get(0).getExpansionCost());
   }
 
   private void setUpGivenScenario() {
@@ -54,7 +54,7 @@ public class ExpansionStepDef {
   @When("I expand the settlement")
   public void iExpandTheSettlement() throws Throwable {
     ArrayList<ExpansionOpDataFrame> list = gameAPI.getExpansionOptions(Hex.Team.Black);
-    gameAPI.performLandGrab(list.get(0));
+    gameAPI.performLandGrab(list.get(1));
     hex1 = gameAPI.gameBoard.getHex(Orientation.getDOWNRIGHT());
     hex2 = gameAPI.gameBoard.getHex(Orientation.getRIGHT());
     hex3 = gameAPI.gameBoard.getHex(Orientation.getUPRIGHT());
