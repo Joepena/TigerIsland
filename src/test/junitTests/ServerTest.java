@@ -18,18 +18,32 @@ public class ServerTest {
             System.out.println(serverSocket.getLocalSocketAddress());
             System.out.println(clientSocket.getRemoteSocketAddress().toString());
             String inputLine, outputLine;
-             
+
             // Initiate conversation with client
-            outputLine = "PlaceTile at 0,2,-2 Build Settlement at -3,2,1";
-            out.println(outputLine);
-            int i = 0;
-            while ((inputLine = in.readLine()) != null) {
-                outputLine = "hello number: " + i;
-                out.println(outputLine);
-                if (outputLine.equals("Bye."))
-                    break;
-                i++;
-            }
+
+            String pid = "player5";
+            String cid = "testTestGame";
+            int rounds = 5;
+            int roundID = 1;
+            String opponentPID = "player2";
+            String message1 = "WELCOME TO ANOTHER EDITION OF THUNDERDOME!";
+            String message2 = "TWO SHALL ENTER, ONE SHALL LEAVE";
+            String message3 = "WAIT FOR THE TOURNAMENT TO BEGIN " + pid;
+            String message4 = "NEW CHALLENGE " + cid + " YOU WILL PLAY " + rounds + " MATCHES";
+            String message5 = "BEGIN ROUND "+ roundID +" OF " + rounds;
+            String message6 = "NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER " + opponentPID;
+
+
+            out.println(message1);
+            out.println(message2);
+            out.println(message3);
+            out.println(message4);
+            out.println(message5);
+            out.println(message6);
+
+            while(true);
+
+
         } catch (IOException e) {
             System.out.println("Exception caught when trying to listen on port "
                 + portNumber + " or listening for a connection");
