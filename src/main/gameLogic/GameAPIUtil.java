@@ -1,6 +1,6 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -370,6 +370,7 @@ public class GameAPIUtil {
     }
 
     public ArrayList<ExpansionOpDataFrame> findExpansionOptionsFor(Hex.Team team) {
+      HashMap<Terrain.terrainType,ExpansionOpDataFrame> map;
       // search for all hexes owned by [team] param, use settlements
       ArrayList<SettlementDataFrame> target = new ArrayList<>();
       if(team == Hex.Team.Black) target = game.getBlackSettlements().getListOfSettlements();
@@ -378,24 +379,35 @@ public class GameAPIUtil {
       boolean [][][] copyArr = copyAvailabilityGrid(gameBoard.gameBoardAvailability);
       Iterator<SettlementDataFrame> iterator = target.iterator();
       ArrayList<ExpansionOpDataFrame> list = new ArrayList<>();
+
       while (iterator.hasNext()) {
         SettlementDataFrame df = iterator.next();
         ArrayList<Tuple> listOfTuples = df.getListOfHexLocations();
+        map = new HashMap<>();
         for(Tuple tuple : listOfTuples) {
           // find adjacent hex that is same terrain and not occupied
           Terrain.terrainType currHexTerr = gameBoard.getHex(tuple).getTerrain();
+
           for (Orientation.Orientations orientation : Orientation.Orientations.values()) {
             Tuple tempTuple = Orientation.addCoordinatesByOrientation(tuple, orientation);
             Hex tempHex = gameBoard.getHex(tempTuple);
-            if(tempHex == null) continue;
-            Terrain.terrainType tempTerrain = tempHex.getTerrain();
-            if (tempTuple == Orientation.getOrigin() || currHexTerr != tempTerrain
-              || tempHex.getTeam() != Hex.Team.Neutral)
+            ExpansionOpDataFrame expansionOpDataFrame;
+            if(tempHex == null) {
               continue;
-            ExpansionOpDataFrame expansionOpDataFrame = new ExpansionOpDataFrame(tempTuple,
-              tempTerrain);
+            }
+            Terrain.terrainType tempTerrain = tempHex.getTerrain();
+            if (tempTuple == Orientation.getOrigin() || currHexTerr != tempTerrain || tempHex.getTeam() != Hex.Team.Neutral) {
+              continue;
+            }
+            if (map.containsKey(tempTerrain)) {
+              expansionOpDataFrame = map.get(tempTerrain);
+            }
+            else {
+              expansionOpDataFrame = new ExpansionOpDataFrame(df,tempTerrain, tuple);
+              map.put(tempTerrain,expansionOpDataFrame);
+              list.add(expansionOpDataFrame);
+            }
             dfsExpansionSearch(copyArr, expansionOpDataFrame, tempTerrain, tempTuple);
-            list.add(expansionOpDataFrame);
           }
         }
       }
@@ -423,19 +435,25 @@ public class GameAPIUtil {
         dfsExpansionSearch(availabilityGrid,df,terrain,tempTuple);
       }
     }
-    public void performLandGrab(Tuple tuple, Hex.Team team) {
+
+
+    public void performLandGrab(SettlementDataFrame settlementDataFrame, Terrain.terrainType terrain) {
       boolean[][][] copyArr = copyAvailabilityGrid(gameBoard.gameBoardAvailability);
-      Terrain.terrainType terrain = gameBoard.getHex(tuple).getTerrain();
+      ArrayList<Tuple> listOfLocations = settlementDataFrame.getListOfHexLocations();
+      for(Tuple location : listOfLocations){
+        Hex hexAtLocation = gameBoard.getHex(location);
+        if(hexAtLocation.getTerrain() != terrain) continue;
+        for (Orientation.Orientations orientation : Orientation.Orientations.values()) {
+          Tuple tempTuple = Orientation.addCoordinatesByOrientation(location, orientation);
+          Hex tempHex = gameBoard.getHex(tempTuple);
+          if(tempHex == null) continue;
+          Terrain.terrainType tempTerrain = tempHex.getTerrain();
+          if (tempTuple == Orientation.getOrigin() || terrain != tempTerrain || tempHex.getTeam() != Hex.Team.Neutral) continue;
 
-      for (Orientation.Orientations orientation : Orientation.Orientations.values()) {
-        Tuple tempTuple = Orientation.addCoordinatesByOrientation(tuple, orientation);
-        Hex tempHex = gameBoard.getHex(tempTuple);
-        if(tempHex == null) continue;
-        Terrain.terrainType tempTerrain = tempHex.getTerrain();
-        if (tempTuple == Orientation.getOrigin() || terrain != tempTerrain || tempHex.getTeam() != Hex.Team.Neutral) continue;
-
-        dfsExpansionGrab(copyArr, tempTerrain, tempTuple, team);
+          dfsExpansionGrab(copyArr, terrain, tempTuple, settlementDataFrame.getOwnedBy());
+        }
       }
+
     }
     private void dfsExpansionGrab(boolean[][][] availabilityGrid, Terrain.terrainType terrain, Tuple tuple, Hex.Team team) {
       int xCord = tuple.getX();
