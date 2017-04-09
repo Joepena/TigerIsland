@@ -412,6 +412,13 @@ public class GameAPITest {
         Assert.assertEquals("Settlements successfully conglomerated", 6, settlementSize);
     }
 
+    @Test
+    public void isViableNonNukingLocationTest () throws Exception{
+        createLandMass();
+
+
+    }
+
 
   public void createLandMass() throws Exception {
     Tuple origin = Orientation.getOrigin();

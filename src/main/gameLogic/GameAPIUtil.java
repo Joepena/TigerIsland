@@ -230,23 +230,37 @@ public class GameAPIUtil {
     }
 
     public Orientation.Orientations getViableNonNukingOrientation(Tuple volcanoCoordinates) {
+        boolean volcanoIsAdjacent = HexValidation.existsAdjacentHex(volcanoCoordinates,this.gameBoard);
+
         if (gameBoard.getHex(Orientation.downLeftOf(volcanoCoordinates)) == null
-                && gameBoard.getHex(Orientation.downRightOf(volcanoCoordinates)) == null)
+                && gameBoard.getHex(Orientation.downRightOf(volcanoCoordinates)) == null
+                && (volcanoIsAdjacent || HexValidation.existsAdjacentHex(Orientation.downLeftOf(volcanoCoordinates), this.gameBoard)
+                || HexValidation.existsAdjacentHex(Orientation.downRightOf(volcanoCoordinates), this.gameBoard)))
             return Orientation.Orientations.downLeft;
         if (gameBoard.getHex(Orientation.downRightOf(volcanoCoordinates)) == null
-                && gameBoard.getHex(Orientation.rightOf(volcanoCoordinates)) == null)
+                && gameBoard.getHex(Orientation.rightOf(volcanoCoordinates)) == null
+                && (volcanoIsAdjacent || HexValidation.existsAdjacentHex(Orientation.downRightOf(volcanoCoordinates), this.gameBoard)
+                || HexValidation.existsAdjacentHex(Orientation.rightOf(volcanoCoordinates), this.gameBoard)))
             return  Orientation.Orientations.downRight;
         if (gameBoard.getHex(Orientation.upLeftOf(volcanoCoordinates)) == null
-                && gameBoard.getHex(Orientation.rightOf(volcanoCoordinates)) == null)
+                && gameBoard.getHex(Orientation.rightOf(volcanoCoordinates)) == null
+                && (volcanoIsAdjacent || HexValidation.existsAdjacentHex(Orientation.upLeftOf(volcanoCoordinates), this.gameBoard)
+                || HexValidation.existsAdjacentHex(Orientation.rightOf(volcanoCoordinates), this.gameBoard)))
             return Orientation.Orientations.upLeft;
         if (gameBoard.getHex(Orientation.upRightOf(volcanoCoordinates)) == null
-                && gameBoard.getHex(Orientation.upLeftOf(volcanoCoordinates)) == null)
+                && gameBoard.getHex(Orientation.upLeftOf(volcanoCoordinates)) == null
+                && (volcanoIsAdjacent || HexValidation.existsAdjacentHex(Orientation.upRightOf(volcanoCoordinates), this.gameBoard)
+                || HexValidation.existsAdjacentHex(Orientation.upLeftOf(volcanoCoordinates), this.gameBoard)))
             return Orientation.Orientations.upRight;
         if (gameBoard.getHex(Orientation.leftOf(volcanoCoordinates)) == null
-                && gameBoard.getHex(Orientation.downLeftOf(volcanoCoordinates)) == null)
+                && gameBoard.getHex(Orientation.downLeftOf(volcanoCoordinates)) == null
+                && (volcanoIsAdjacent || HexValidation.existsAdjacentHex(Orientation.leftOf(volcanoCoordinates), this.gameBoard)
+                || HexValidation.existsAdjacentHex(Orientation.downLeftOf(volcanoCoordinates), this.gameBoard)))
             return Orientation.Orientations.left;
         if (gameBoard.getHex(Orientation.rightOf(volcanoCoordinates)) == null
-                && gameBoard.getHex(Orientation.upRightOf(volcanoCoordinates)) == null)
+                && gameBoard.getHex(Orientation.upRightOf(volcanoCoordinates)) == null
+                && (volcanoIsAdjacent || HexValidation.existsAdjacentHex(Orientation.rightOf(volcanoCoordinates), this.gameBoard)
+                || HexValidation.existsAdjacentHex(Orientation.upRightOf(volcanoCoordinates), this.gameBoard)))
             return Orientation.Orientations.right;
         return null;
     }
