@@ -4,7 +4,7 @@ import java.util.Scanner;
  * Created by TomasK on 4/6/2017.
  */
 public class MoveMessage extends Message {
-    private int gid;
+    private String gid;
     private int moveNumber;
     private String pid;
     private MoveType moveType;
@@ -14,7 +14,7 @@ public class MoveMessage extends Message {
     }
 
 
-    public int getGid() {
+    public String getGid() {
         return gid;
     }
 
@@ -37,7 +37,7 @@ public class MoveMessage extends Message {
         if(!scanner.hasNext())
             return;
         scanner.next();
-        this.gid = scanner.nextInt();
+        this.gid = scanner.next();
         scanner.next();
         this.moveNumber = scanner.nextInt();
         scanner.next();
@@ -50,7 +50,7 @@ public class MoveMessage extends Message {
 
 
     public boolean equals(MoveMessage message){
-        return(this.gid == message.getGid() &&
+        return(this.gid.equals(message.getGid()) &&
                 this.moveNumber == message.getMoveNumber() &&
                 this.pid.equals(message.getPid()) &&
                 this.moveType == message.getMoveType());

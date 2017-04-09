@@ -18,22 +18,23 @@ public class MyStepdefs {
     Tile testTile;
     Tuple testPair;
     Tuple secondTestPair;
+    ArrayList<Tuple> validHexes = new ArrayList<>();
 
     @Given("^there are no hexes on the board")
-    public void setupBoardForHexTest () throws Throwable {
-      testBoard = new Board();
-      testHex = new Hex(0, Terrain.terrainType.Jungle);
-      testPair = Orientation.getOrigin();
+    public void setupBoardForHexTest() throws Throwable {
+        testBoard = new Board();
+        testHex = new Hex(0, Terrain.terrainType.Jungle);
+        testPair = Orientation.getOrigin();
     }
 
     @When("^the first player places a hex")
-    public void place_first_hex () throws Throwable {
-      testBoard.setHex(testHex, testPair);
+    public void place_first_hex() throws Throwable {
+        testBoard.setHex(testHex, testPair);
     }
 
     @Then("^the first hex should be placed at the origin")
-    public void hex_should_be_in_origin_of_board () throws Throwable {
-      Assert.assertTrue(!testBoard.isOriginEmpty());
+    public void hex_should_be_in_origin_of_board() throws Throwable {
+        Assert.assertTrue(!testBoard.isOriginEmpty());
     }
 
 
@@ -50,7 +51,7 @@ public class MyStepdefs {
                 TilePositionCoordinates(Orientation.rightOf(Orientation.rightOf(Orientation.getOrigin())), Orientation.Orientations.left);
 
         ArrayList<Tuple> validNukeLocations = testAPI.getValidNukingLocations();
-        if( testAPI.APIUtils.isValidTileNukingPosition(placementLocation) || validNukeLocations.contains(Orientation.rightOf(Orientation.rightOf(Orientation.getOrigin()))))
+        if (testAPI.APIUtils.isValidTileNukingPosition(placementLocation) || validNukeLocations.contains(Orientation.rightOf(Orientation.rightOf(Orientation.getOrigin()))))
             testAPI.placeTile(tile, placementLocation.getVolcanoCoordinates());
     }
 
@@ -74,7 +75,7 @@ public class MyStepdefs {
                 TilePositionCoordinates(Orientation.downRightOf(Orientation.getOrigin()), Orientation.Orientations.upRight);
 
         ArrayList<Tuple> validNukeLocations = testAPI.getValidNukingLocations();
-        if( testAPI.APIUtils.isValidTileNukingPosition(placementLocation) || validNukeLocations.contains(Orientation.downRightOf(Orientation.getOrigin())))
+        if (testAPI.APIUtils.isValidTileNukingPosition(placementLocation) || validNukeLocations.contains(Orientation.downRightOf(Orientation.getOrigin())))
             testAPI.placeTile(tile, placementLocation.getVolcanoCoordinates());
     }
 
@@ -97,7 +98,7 @@ public class MyStepdefs {
                 TilePositionCoordinates(Orientation.upLeftOf(Orientation.upRightOf(Orientation.getOrigin())), Orientation.Orientations.downLeft);
 
         ArrayList<Tuple> validNukeLocations = testAPI.getValidNukingLocations();
-        if( testAPI.APIUtils.isValidTileNukingPosition(placementLocation) || validNukeLocations.contains(Orientation.upLeftOf(Orientation.upRightOf(Orientation.getOrigin()))))
+        if (testAPI.APIUtils.isValidTileNukingPosition(placementLocation) || validNukeLocations.contains(Orientation.upLeftOf(Orientation.upRightOf(Orientation.getOrigin()))))
             testAPI.placeTile(tile, placementLocation.getVolcanoCoordinates());
     }
 
@@ -118,10 +119,10 @@ public class MyStepdefs {
         Tile tile = new Tile(12, Terrain.terrainType.Grassland, Terrain.terrainType.Jungle, Orientation.Orientations.downLeft);
         TilePositionCoordinates placementLocation = new
                 TilePositionCoordinates(Orientation.upRightOf(Orientation.upRightOf(Orientation.upRightOf(Orientation.upLeftOf(Orientation.getOrigin())))),
-                                    Orientation.Orientations.downLeft);
+                Orientation.Orientations.downLeft);
 
         ArrayList<Tuple> validNukeLocations = testAPI.getValidNukingLocations();
-        if( testAPI.APIUtils.isValidTileNukingPosition(placementLocation) || validNukeLocations.contains(Orientation.upRightOf(Orientation.upRightOf(Orientation.upRightOf(Orientation.upLeftOf(Orientation.getOrigin()))))))
+        if (testAPI.APIUtils.isValidTileNukingPosition(placementLocation) || validNukeLocations.contains(Orientation.upRightOf(Orientation.upRightOf(Orientation.upRightOf(Orientation.upLeftOf(Orientation.getOrigin()))))))
             testAPI.placeTile(tile, placementLocation.getVolcanoCoordinates());
     }
 
@@ -145,7 +146,7 @@ public class MyStepdefs {
                 TilePositionCoordinates(Orientation.getOrigin(), Orientation.Orientations.downRight);
 
         ArrayList<Tuple> validNukeLocations = testAPI.getValidNukingLocations();
-        if( testAPI.APIUtils.isValidTileNukingPosition(placementLocation) && validNukeLocations.contains(Orientation.getOrigin()))
+        if (testAPI.APIUtils.isValidTileNukingPosition(placementLocation) && validNukeLocations.contains(Orientation.getOrigin()))
             testAPI.placeTile(tile, placementLocation.getVolcanoCoordinates());
     }
 
@@ -167,7 +168,7 @@ public class MyStepdefs {
         TilePositionCoordinates placementLocation = new TilePositionCoordinates(Orientation.getOrigin(), Orientation.Orientations.downRight);
 
         ArrayList<Tuple> validNukeLocations = testAPI.getValidNukingLocations();
-        if( testAPI.APIUtils.isValidTileNukingPosition(placementLocation) && validNukeLocations.contains(Orientation.getOrigin()))
+        if (testAPI.APIUtils.isValidTileNukingPosition(placementLocation) && validNukeLocations.contains(Orientation.getOrigin()))
             testAPI.placeTile(tile, placementLocation.getVolcanoCoordinates());
     }
 
@@ -178,7 +179,7 @@ public class MyStepdefs {
         Assert.assertTrue("Tile was not changed", hex.getLevel() == 2);
     }
 
-    private void setupNukeScenario(){
+    private void setupNukeScenario() {
         testAPI = new GameAPI();
         testBoard = testAPI.gameBoard;
         Tile tile2 = new Tile(2, Terrain.terrainType.Grassland, Terrain.terrainType.Rocky, Orientation.Orientations.left);
@@ -214,4 +215,5 @@ public class MyStepdefs {
 
         testAPI.updateSettlements();
     }
+
 }

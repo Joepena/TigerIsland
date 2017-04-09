@@ -29,7 +29,7 @@ public class ExpansionOptionsTest {
     setUpScenario1();
     gameAPI.updateSettlements();
     ArrayList<ExpansionOpDataFrame> list = gameAPI.getExpansionOptions(Hex.Team.Black);
-    gameAPI.performLandGrab(list.get(0).getExpansionStart());
+    gameAPI.performLandGrab(list.get(0).getExpansionStart(), Hex.Team.Black);
     Hex hex1 = gameAPI.gameBoard.getHex(Orientation.getRIGHT());
     Hex hex2 = gameAPI.gameBoard.getHex(Orientation.getUPRIGHT());
     Hex hex3 = gameAPI.gameBoard.getHex(Orientation.getUPLEFT());
@@ -55,7 +55,7 @@ public class ExpansionOptionsTest {
     setUpScenario2();
     gameAPI.updateSettlements();
     ArrayList<ExpansionOpDataFrame> list = gameAPI.getExpansionOptions(Hex.Team.Black);
-    gameAPI.performLandGrab(list.get(0).getExpansionStart());
+    gameAPI.performLandGrab(list.get(0).getExpansionStart(), Hex.Team.Black);
     Hex hex1 = gameAPI.gameBoard.getHex(Orientation.getDOWNRIGHT());
     Hex hex2 = gameAPI.gameBoard.getHex(Orientation.getRIGHT());
     Hex hex3 = gameAPI.gameBoard.getHex(Orientation.getUPRIGHT());
@@ -75,7 +75,7 @@ public class ExpansionOptionsTest {
     setUpScenario2();
     gameAPI.updateSettlements();
     ArrayList<ExpansionOpDataFrame> list = gameAPI.getExpansionOptions(Hex.Team.Black);
-    gameAPI.performLandGrab(list.get(1).getExpansionStart());
+    gameAPI.performLandGrab(list.get(1).getExpansionStart(), Hex.Team.Black);
     Hex hex2 = gameAPI.gameBoard.getHex(Orientation.getRIGHT());
     Hex hex3 = gameAPI.gameBoard.getHex(Orientation.getUPRIGHT());
     Hex hex4 = gameAPI.gameBoard.getHex(Orientation.getUPLEFT());
