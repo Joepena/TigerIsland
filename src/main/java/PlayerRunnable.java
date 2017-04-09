@@ -7,6 +7,7 @@ public class PlayerRunnable implements Runnable {
 
     private boolean gameOver;
 
+
     private boolean gotMessage;
 
     private boolean hasMove;
@@ -23,15 +24,15 @@ public class PlayerRunnable implements Runnable {
     private String gameID;
     private clientMoveMessages moveMessage;
     private int moveNumber;
+    private int threadNumber;
 
     public GameAPI getGame() {
         return game;
     }
 
-    public PlayerRunnable (String playerID, String opponentID){
+    public PlayerRunnable (String playerID, String opponentID, int threadNumber){
         this.playerID = playerID;
         this.opponentID = opponentID;
-        this.gameID = "";
         this.newTile = null;
         this.gameOver = false;
         this.hasMove = false;
@@ -41,10 +42,6 @@ public class PlayerRunnable implements Runnable {
         this.game = new GameAPI();
         this.moveMessage = null;
         this.moveNumber = 0;
-    }
-
-    public void setGameID(String gameID) {
-        this.gameID = gameID;
     }
 
     @Override
@@ -241,8 +238,8 @@ public class PlayerRunnable implements Runnable {
         if(message.getPid().equals(this.playerID))
             return;
         game.placeTile(message.getTile(), message.getTileLocation());
-        //game.expandSettlement();
-
+        SettlementDataFrame settlement = game.APIUtils.getWhiteSettlementFromLocation(message.getExpandLocation(), game.getWhiteSettlements());
+        game.APIUtils.performLandGrab(settlement, message.getExpandTerrain());
     }
 
     private void Forfeit(ForfeitMessage message){
