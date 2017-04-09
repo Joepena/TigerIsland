@@ -96,9 +96,9 @@ public class Board {
             }
         }
 
-        for (int i = 183; i < 196; i++) {
+        for (int i = 173; i < 203; i++) {
             System.out.println();
-            for (int j = 183; j < 196; j++) {
+            for (int j = 173; j < 203; j++) {
                 if (i == 188 && j == 188) {
                     if (gameBoard2D[i][j] == null) {
                         System.out.print("***\t");

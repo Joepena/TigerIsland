@@ -94,13 +94,16 @@ public class PlayerRunnable implements Runnable {
 
             moveMessage.setTileLocation(tilePlacementOptions.get(0));
             Orientation.Orientations orientation = game.APIUtils.getViableNonNukingOrientation(tilePlacementOptions.get(0));
+            //int orientation = game.APIUtils.findValidOrientationsAtPoint(tilePlacementOptions.get(0)).get(0);
             moveMessage.setOrientation(moveMessage.orientationToNumber(orientation));
+            //moveMessage.setOrientation(orientation);
             moveMessage.setTile(newTile);
             moveMessage.setGid(this.gameID);
             moveMessage.setMoveNumber(this.moveNumber);
 
 
-            //Place tile
+            //Place tile to handle on our own board
+            newTile.setLeftHexOrientation(orientation);
             game.placeTile(newTile, tilePlacementOptions.get(0));
 
             //Update board state
@@ -132,7 +135,6 @@ public class PlayerRunnable implements Runnable {
                 buildDecision = new BuildDecision(foundSettlementOptions.get(0), BuildDecision.buildDecisions.Found);
             }
 
-            buildDecisionCoords = foundSettlementOptions.get(1);
 
             //FOR SERVER TESTING
             moveMessage.setBuildLocation(foundSettlementOptions.get(0));
