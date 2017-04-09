@@ -203,6 +203,24 @@ public class GameAPI {
         return tuplesInSettlements;
     }
 
+    public ArrayList<Tuple> findSizeNSettlementsForNukingWithNoTotoro(ArrayList<SettlementDataFrame> ourSettlements, int n) {
+        ArrayList<Tuple> tuplesInSettlementsAcceptableForNuking = new ArrayList<>();
+        boolean existingPiece;
+
+        for(int i = 0; i < ourSettlements.size(); i++) {
+            if(ourSettlements.get(i).getSettlementSize() >= n) {
+                existingPiece = false;
+                for (int j = 0; j < ourSettlements.get(i).getSettlementSize(); j++)
+                    if (gameBoard.getHex(ourSettlements.get(i).getListOfHexLocations().get(j)).getOccupiedBy() == Hex.gamePieces.Totoro)
+                        existingPiece = true;
+                for (int j = 0; j < ourSettlements.get(i).getSettlementSize() && !existingPiece; j++)
+                    tuplesInSettlementsAcceptableForNuking.add(ourSettlements.get(i).getListOfHexLocations().get(j));
+            }
+        }
+
+        return tuplesInSettlementsAcceptableForNuking;
+    }
+
     public ArrayList<Tuple> findValidTotoroLocations(ArrayList<Tuple> testableLocations) {
         ArrayList<Tuple> validLocations = new ArrayList<>();
 

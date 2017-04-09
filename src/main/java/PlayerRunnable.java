@@ -82,10 +82,9 @@ public class PlayerRunnable implements Runnable {
             //Decide normal place or nuke
             //Tiger Rush Strategy
             if (canNukeSafely(game)) {
-                if (canSabotageEnemySettlement()) {
-                    //sabotage enemy settlement
-                } else if (canRecycleOwnTotoroSettlement()) {
-                    //recycle own Totoro settlement
+                decisionCoords = canSabotageEnemySettlement(game, eruptionOptions);
+                if (decisionCoords != null) {
+                    moveMessage.setTileLocation(decisionCoords);
                 } else {
                     //nuke tile nearest origin.
                 }
@@ -94,7 +93,7 @@ public class PlayerRunnable implements Runnable {
             }
 
             //Totoro Turtle Strategy
-            if (totoroPiecesRemaining(game)) {
+/*            if (totoroPiecesRemaining(game)) {
                 if (canNukeSafely(game)) {
                     if (canSabotageEnemySettlement()) {
                         //Sabotage enemy settlement
@@ -108,7 +107,7 @@ public class PlayerRunnable implements Runnable {
                 } else {
                     //Place tile
                 }
-            }
+            }*/
 
                 moveMessage.setTileLocation(tilePlacementOptions.get(0));
                 Orientation.Orientations orientation = game.APIUtils.getViableNonNukingOrientation(tilePlacementOptions.get(0));
@@ -158,7 +157,7 @@ public class PlayerRunnable implements Runnable {
                 }
 
                 //Totoro Turtle Strategy
-                if (totoroPiecesRemaining(game)) {
+/*                if (totoroPiecesRemaining(game)) {
                     if (canPlaceTotoro(totoroPlacementOptions)) {
                         //place Totoro
                     } else if (canPlaceTiger(tigerPlacementOptions)) {
@@ -174,7 +173,7 @@ public class PlayerRunnable implements Runnable {
                     } else {
                         //Found settlement
                     }
-                }
+                }*/
 
 
                 //FOR SERVER TESTING
@@ -201,8 +200,17 @@ public class PlayerRunnable implements Runnable {
         return game.findListOfValidSettlementLocations().size() > 2;
     }
 
-    private boolean canSabotageEnemySettlement() {
-        return false;
+    private Tuple canSabotageEnemySettlement(GameAPI game, ArrayList<Tuple> eruptionOptions) {
+        ArrayList<SettlementDataFrame> enemySettlements = game.getWhiteSettlements().getListOfSettlements();
+        ArrayList<Tuple> sabotageOptions = game.findSizeNSettlementsForNukingWithNoTotoro(enemySettlements,3);
+        if(!sabotageOptions.isEmpty()) {
+            for(Tuple eruptionTuple: eruptionOptions) {
+                boolean contains = sabotageOptions.contains(eruptionTuple);
+                if(contains)
+                    return eruptionTuple;
+            }
+        }
+        return null;
     }
 
     private boolean canRecycleOwnTotoroSettlement() {
