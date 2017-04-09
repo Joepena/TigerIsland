@@ -81,8 +81,8 @@ public class PlayerRunnable implements Runnable {
         while(!gameOver) {
             try {
 
-                System.out.println(GameClient.getP1Move().toString());
-                while(GameClient.getP1Move() == null) {
+               // System.out.println(GameClient.getP1Move().toString());
+                while(true) {
                     Thread.sleep(100);
                     System.out.println("Goodnight player 1");
                 }
@@ -95,11 +95,8 @@ public class PlayerRunnable implements Runnable {
             this.gameID = GameClient.getGame1ID();
             executeMessage(GameClient.getP1Move());
 
-            if (GameClient.getP1Move() != null) {
-                //executeMessage(GameClient.getP1Move());
-                playTurn(1);
-                GameClient.setP1Move(null);
-            }
+            GameClient.setP1Move(null);
+            playTurn(1);
 //            try {
 //
 //                while(GameClient.getP2Move() == null) {
@@ -205,7 +202,6 @@ public class PlayerRunnable implements Runnable {
             System.out.println(moveMessage.toString(moveMessage.getMoveType()));
 
             GameClient.sendMessageFromPlayerToServer(moveMessage, 1);
-            GameClient.setP1Move(null);
 
         }
 
