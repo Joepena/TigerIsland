@@ -17,7 +17,7 @@ public class GameClient {
     private static int numRounds = 0;
     private static String challengeID;
     private static String roundID;
-    private static String opponentPID;
+    private static String opponentPID = "";
     private static String game1ID;
     private static String game2ID;
     private static Socket socket;
@@ -71,15 +71,13 @@ public class GameClient {
                // while(i < 10) {
                     //Get round ID get opponent pid
                     parsedServerMessage = parseServerInput(in, Message.MessageType.BeginRound);
-                    System.out.println("we have parsedServerMessage");
                     if (parsedServerMessage instanceof BeginRoundMessage) {
-                        System.out.println("inside if");
                         roundID = ((BeginRoundMessage) parsedServerMessage).getRid();
-                        System.out.println("if this happens i have literally no clue what is wrong " + roundID);
                     }
                     parsedServerMessage = parseServerInput(in, Message.MessageType.MatchBeginning);
-                    if (parsedServerMessage instanceof BeginRoundMessage) {
+                    if (parsedServerMessage instanceof MatchBeginningMessage) {
                         opponentPID = ((MatchBeginningMessage) parsedServerMessage).getPid();
+                        System.out.println("opponent's pid: " + opponentPID);
                     }
             //      i++;
             //    }
