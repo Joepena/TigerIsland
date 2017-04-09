@@ -11,13 +11,15 @@ public class OpponentMoveExecutionTest {
 
     @Before
     public void setUp() throws Exception {
-        player = new PlayerRunnable("A", "B", "GAME0");
+        player = new PlayerRunnable("A", "B");
+        player.setGameID("GAME0");
         mP = new MessageParser();
     }
 
     @Test
     public void ignoreDifferentGidTest () throws Exception {
         createLandMass();
+
         mP.parseString("GAME GAME1 MOVE 12 PLAYER B PLACED LAKE+ROCK AT 1 0 -1 3 FOUNDED SETTLEMENT AT 1 1 -2");
         player.executeMessage(mP.getMessage());
 

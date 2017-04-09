@@ -9,20 +9,20 @@ public class ourMoveTest {
 
     @Before
     public void setup(){
-        this.player = new PlayerRunnable("A", "B", "ABC");
+        this.player = new PlayerRunnable("A", "B");
+        player.setGameID("ABC");
     }
 
     @Test
     public void basicMoveTest() throws Exception{
         createLandMass();
         MessageParser mP = new MessageParser();
-        MakeYourMoveMessage message = (MakeYourMoveMessage)mP.parseString("MAKE YOUR MOVE IN GAME ABC WITHIN 1.5 SECONDS: MOVE 12 PLACE LAKE+ROCK");
+        MakeYourMoveMessage message = (MakeYourMoveMessage)mP.parseString("MAKE YOUR MOVE IN GAME ABC WITHIN 1.5 SECONDS: MOVE 8 PLACE LAKE+ROCK");
+
 
         player.executeMessage(message);
 
         player.run();
-
-
 
     }
 

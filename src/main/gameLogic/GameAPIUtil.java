@@ -215,7 +215,7 @@ public class GameAPIUtil {
         return false;
     }
 
-    public Orientation.Orientations getViableOrientation(Tuple volcanoCoordinates) {
+    public Orientation.Orientations getViableNukingOrientation(Tuple volcanoCoordinates) {
         if (isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.downLeft)))
             return Orientation.Orientations.downLeft;
         if (isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.downRight)))
@@ -227,6 +227,28 @@ public class GameAPIUtil {
         if (isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.left)))
             return Orientation.Orientations.left;
         if (isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.right)))
+            return Orientation.Orientations.right;
+        return null;
+    }
+
+    public Orientation.Orientations getViableNonNukingOrientation(Tuple volcanoCoordinates) {
+        if (gameBoard.getHex(Orientation.downLeftOf(volcanoCoordinates)) == null
+                && gameBoard.getHex(Orientation.downRightOf(volcanoCoordinates)) == null)
+            return Orientation.Orientations.downLeft;
+        if (gameBoard.getHex(Orientation.downRightOf(volcanoCoordinates)) == null
+                && gameBoard.getHex(Orientation.rightOf(volcanoCoordinates)) == null)
+            return  Orientation.Orientations.downRight;
+        if (gameBoard.getHex(Orientation.upLeftOf(volcanoCoordinates)) == null
+                && gameBoard.getHex(Orientation.rightOf(volcanoCoordinates)) == null)
+            return Orientation.Orientations.upLeft;
+        if (gameBoard.getHex(Orientation.upRightOf(volcanoCoordinates)) == null
+                && gameBoard.getHex(Orientation.upLeftOf(volcanoCoordinates)) == null)
+            return Orientation.Orientations.upRight;
+        if (gameBoard.getHex(Orientation.leftOf(volcanoCoordinates)) == null
+                && gameBoard.getHex(Orientation.downLeftOf(volcanoCoordinates)) == null)
+            return Orientation.Orientations.left;
+        if (gameBoard.getHex(Orientation.rightOf(volcanoCoordinates)) == null
+                && gameBoard.getHex(Orientation.upRightOf(volcanoCoordinates)) == null)
             return Orientation.Orientations.right;
         return null;
     }

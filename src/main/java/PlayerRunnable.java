@@ -22,15 +22,16 @@ public class PlayerRunnable implements Runnable {
     private String opponentID;
     private String gameID;
     private clientMoveMessages moveMessage;
+    private int moveNumber;
 
     public GameAPI getGame() {
         return game;
     }
 
-    public PlayerRunnable (String playerID, String opponentID, String gameID){
+    public PlayerRunnable (String playerID, String opponentID){
         this.playerID = playerID;
         this.opponentID = opponentID;
-        this.gameID = gameID;
+        this.gameID = "";
         this.newTile = null;
         this.gameOver = false;
         this.hasMove = false;
@@ -39,6 +40,11 @@ public class PlayerRunnable implements Runnable {
         this.buildDecisionCoords = null;
         this.game = new GameAPI();
         this.moveMessage = null;
+        this.moveNumber = 0;
+    }
+
+    public void setGameID(String gameID) {
+        this.gameID = gameID;
     }
 
     @Override
@@ -58,7 +64,7 @@ public class PlayerRunnable implements Runnable {
 
         //Player Logic
 
-        game.placeFirstTile();
+        //game.placeFirstTile();
 
         while(!gameOver) {
             while(!hasMove);
@@ -87,12 +93,15 @@ public class PlayerRunnable implements Runnable {
             }
 
             moveMessage.setTileLocation(tilePlacementOptions.get(0));
-            Orientation.Orientations orientation = game.APIUtils.getViableOrientation(tilePlacementOptions.get(0));
+            Orientation.Orientations orientation = game.APIUtils.getViableNonNukingOrientation(tilePlacementOptions.get(0));
             moveMessage.setOrientation(moveMessage.orientationToNumber(orientation));
+            moveMessage.setTile(newTile);
+            moveMessage.setGid(this.gameID);
+            moveMessage.setMoveNumber(this.moveNumber);
 
 
             //Place tile
-            game.placeTile(newTile, decisionCoords);
+            game.placeTile(newTile, tilePlacementOptions.get(0));
 
             //Update board state
             game.updateSettlements();
@@ -195,6 +204,7 @@ public class PlayerRunnable implements Runnable {
     private void MakeYourMove(MakeYourMoveMessage message){
         this.newTile = message.getTile();
         this.hasMove = true;
+        this.moveNumber = message.getMoveNumber();
     }
 
 
