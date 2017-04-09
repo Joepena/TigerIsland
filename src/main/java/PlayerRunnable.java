@@ -143,7 +143,6 @@ public class PlayerRunnable implements Runnable {
             System.out.println(moveMessage.toString(moveMessage.getMoveType()));
 
             hasMove = false;
-            gameOver = true;
         }
     }
 
