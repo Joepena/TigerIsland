@@ -90,8 +90,9 @@ public class GameAPI {
     public ArrayList<ExpansionOpDataFrame> getExpansionOptions(Hex.Team targetTeam) {
       return APIUtils.findExpansionOptionsFor(targetTeam);
     }
-    public void performLandGrab(Tuple tuple, Hex.Team team) {
-      APIUtils.performLandGrab(tuple, team);
+
+    public void performLandGrab(ExpansionOpDataFrame df) {
+      APIUtils.performLandGrab(df.getSettlementDataframe(), df.getTerrain());
     }
     public ArrayList<Tuple> getValidNukingLocations() {
         if(gameBoard.isOriginEmpty()){

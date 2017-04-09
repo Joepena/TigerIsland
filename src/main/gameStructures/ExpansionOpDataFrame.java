@@ -3,14 +3,17 @@
  */
 public class ExpansionOpDataFrame implements Comparable<ExpansionOpDataFrame>{
   private Integer expansionCost;
-  private Tuple expansionStart;
+  private SettlementDataFrame settlementDataFrame;
   private Terrain.terrainType terrain;
+  private Tuple expansionStart;
 
 
-  public ExpansionOpDataFrame(Tuple expansionStart, Terrain.terrainType terrain) {
-    this.expansionStart = expansionStart;
+  public ExpansionOpDataFrame(SettlementDataFrame settlementDataFrame, Terrain.terrainType terrain, Tuple expansionStart) {
+    this.settlementDataFrame = settlementDataFrame;
     this.terrain = terrain;
     this.expansionCost = 0;
+    this.expansionStart = expansionStart;
+
   }
 
   public Integer getExpansionCost() {
@@ -19,6 +22,11 @@ public class ExpansionOpDataFrame implements Comparable<ExpansionOpDataFrame>{
 
   public void incrementExpansionCost(Integer hexLevel) {
     this.expansionCost += hexLevel;
+  }
+
+
+  public SettlementDataFrame getSettlementDataframe() {
+    return settlementDataFrame;
   }
 
   public Tuple getExpansionStart() {
