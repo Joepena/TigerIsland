@@ -39,6 +39,53 @@ public class OpponentMoveExecutionTest {
                         player.getGame().gameBoard.getHex(new Tuple(1, 1, -2)).getTeam() == Hex.Team.White);
     }
 
+    /*@Test
+    public void expandSettlementFromMessageTest () throws Exception {
+        createLandMass();
+        player.getGame().gameBoard.getHex(new Tuple(-1, 0 , 1)).setOccupiedBy(Hex.gamePieces.Meeple);
+        player.getGame().gameBoard.getHex(new Tuple(-1, 0 , 1)).setTeam(Hex.Team.Black);
+
+        ExpandSettlementMessage message = (ExpandSettlementMessage)mP.parseString("GAME GAME0 MOVE 12 PLAYER B PLACED LAKE+ROCK AT 1 0 -1 3 EXPANDED SETTLEMENT AT -1 0 1 JUNGLE");
+        player.executeMessage(mP.getMessage());
+
+
+        Assert.assertTrue("Tile placed at 1 0 -1",
+                player.getGame().gameBoard.getHex(new Tuple(1, 0, -1)).getLevel() == 2);
+        Assert.assertTrue("Settlement founded at -1 0 1",
+                player.getGame().gameBoard.getHex(new Tuple(0, -1, 1)).getOccupiedBy() == Hex.gamePieces.Meeple &&
+                        player.getGame().gameBoard.getHex(new Tuple(0, -1, 1)).getTeam() == Hex.Team.Black &&
+                        player.getGame().gameBoard.getHex(new Tuple(1, -1, 0)).getOccupiedBy() == Hex.gamePieces.Meeple &&
+                        player.getGame().gameBoard.getHex(new Tuple(1, -1, 0)).getTeam() == Hex.Team.Black);
+    }*/
+
+    @Test
+    public void totoroParsingTest () throws Exception {
+        createLandMass();
+        mP.parseString("GAME GAME0 MOVE 13 PLAYER B PLACED LAKE+ROCK AT 1 0 -1 3 BUILT TOTORO SANCTUARY AT 1 1 -2");
+        player.executeMessage(mP.getMessage());
+        Tuple testTuple = new Tuple(1, 1, -2);
+        Tuple testTuple2 = new Tuple(1, 0, -1);
+
+        Assert.assertEquals(Terrain.terrainType.Volcano, player.getGame().gameBoard.getHex(testTuple2).getTerrain());
+        Assert.assertEquals(Terrain.terrainType.Lake, player.getGame().gameBoard.getHex(Orientation.rightOf(testTuple2)).getTerrain());
+        Assert.assertEquals(Terrain.terrainType.Rocky, player.getGame().gameBoard.getHex(Orientation.downRightOf(testTuple2)).getTerrain());
+        Assert.assertEquals(Hex.gamePieces.Totoro, player.getGame().gameBoard.getHex(testTuple).getOccupiedBy());
+    }
+
+    @Test
+    public void tigerParsingTest () throws Exception {
+        createLandMass();
+        mP.parseString("GAME GAME0 MOVE 13 PLAYER B PLACED LAKE+ROCK AT 1 0 -1 3 BUILT TIGER PLAYGROUND AT 1 1 -2");
+        player.executeMessage(mP.getMessage());
+        Tuple testTuple = new Tuple(1, 1, -2);
+        Tuple testTuple2 = new Tuple(1, 0, -1);
+
+        Assert.assertEquals(Terrain.terrainType.Volcano, player.getGame().gameBoard.getHex(testTuple2).getTerrain());
+        Assert.assertEquals(Terrain.terrainType.Lake, player.getGame().gameBoard.getHex(Orientation.rightOf(testTuple2)).getTerrain());
+        Assert.assertEquals(Terrain.terrainType.Rocky, player.getGame().gameBoard.getHex(Orientation.downRightOf(testTuple2)).getTerrain());
+        Assert.assertEquals(Hex.gamePieces.Tiger, player.getGame().gameBoard.getHex(testTuple).getOccupiedBy());
+    }
+
     public void createLandMass() throws Exception {
         Tuple origin = Orientation.getOrigin();
         Tuple tile1Loc = Orientation.rightOf(Orientation.upRightOf(origin));
