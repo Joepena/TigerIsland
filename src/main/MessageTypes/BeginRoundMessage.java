@@ -5,10 +5,10 @@ import java.util.Scanner;
  * Created by TomasK on 4/6/2017.
  */
 public class BeginRoundMessage extends Message{
-    private String rid;
+    private int rid;
     private int rounds;
 
-    public String getRid() {
+    public int getRid() {
         return rid;
     }
 
@@ -23,7 +23,7 @@ public class BeginRoundMessage extends Message{
             return;
         scanner.next();
         scanner.next();
-        this.rid = scanner.next();
+        this.rid = scanner.nextInt();
         scanner.next();
         this.rounds = scanner.nextInt();
         scanner.close();
@@ -31,6 +31,6 @@ public class BeginRoundMessage extends Message{
 
     public boolean equals(BeginRoundMessage message){
         return(this.rounds == message.getRounds() &&
-                this.rid.equals(message.getRid()));
+                this.rid == message.getRid());
     }
 }

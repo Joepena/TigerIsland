@@ -13,6 +13,7 @@ public class OpponentMoveExecutionTest {
     public void setUp() throws Exception {
         player = new PlayerRunnable("A", "B", 1);
         player.setGameID("GAME0");
+
         mP = new MessageParser();
     }
 

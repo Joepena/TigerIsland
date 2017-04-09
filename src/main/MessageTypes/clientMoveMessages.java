@@ -31,6 +31,10 @@ public class clientMoveMessages
         this.terrain = terrain;
     }
 
+    public clientMoveMessageType getMessageType() {
+        return moveType;
+    }
+
     private String gid;
     private int moveNumber;
     private Tuple tileLocation;
@@ -47,6 +51,7 @@ public class clientMoveMessages
     public void setMoveType(clientMoveMessageType moveType) {
         this.moveType = moveType;
     }
+
 
     public static enum clientMoveMessageType{
         Found, Totoro, Expand, Unable, Tiger;

@@ -11,7 +11,7 @@ public class WaitToBeginMessage extends Message{
         return pid;
     }
 
-    WaitToBeginMessage(String message){
+    public WaitToBeginMessage(String message){
         super(Message.MessageType.WaitToBegin);
 
         Scanner scanner = new Scanner(message).useDelimiter(" ");

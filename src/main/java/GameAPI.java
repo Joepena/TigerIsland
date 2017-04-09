@@ -136,6 +136,10 @@ public class GameAPI {
     return APIUtils.findListOfValidSettlementLocation(Orientation.getOrigin(), new boolean[194][194][194], new ArrayList<Tuple>());
   }
 
+  public ArrayList<Integer> findValidTileOrientations(Tuple loc) {
+        return APIUtils.findValidOrientationsAtPoint(loc);
+  }
+
   public ArrayList<Tuple> getAvailableTilePlacement() {
     ArrayList<Tuple> list = new ArrayList<>();
     boolean[][][] hexCheckedforPlacement = new boolean[194][194][194];
@@ -193,6 +197,7 @@ public class GameAPI {
         gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Meeple);
         gameBoard.getHex(tuple).setTeam(team);
         if(team == Hex.Team.Black) decrementVillagersBy(gameBoard.getHex(tuple).getLevel());
+
     }
 
     public void createTotoroSanctuary(Tuple tuple, Hex.Team team) {

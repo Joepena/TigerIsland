@@ -6,12 +6,8 @@ import java.util.ArrayList;
 public class PlayerRunnable implements Runnable {
 
     private boolean gameOver;
-
-
     private boolean gotMessage;
-
     private boolean hasMove;
-
     private Tile newTile;
     private Tuple decisionCoords;
     private Tuple buildDecisionCoords;
@@ -22,19 +18,26 @@ public class PlayerRunnable implements Runnable {
     private String playerID;
     private String opponentID;
     private String gameID;
-    private clientMoveMessages moveMessage;
     private int moveNumber;
-    private int threadNumber;
+    private clientMoveMessages moveMessage;
+    private int playerNum;
+
+    //lisztomania
+    //Instantiate all ArrayLists once
+    ArrayList<Tuple> tilePlacementOptions;
+    ArrayList<Tuple> eruptionOptions;
+    ArrayList<Tuple> foundSettlementOptions;
+    ArrayList<ExpansionOpDataFrame> expandSettlementOptions;
+    ArrayList<Tuple> totoroPlacementOptions;
+    ArrayList<Tuple> tigerPlacementOptions;
+    ArrayList<Integer> orientationOptions;
 
     public GameAPI getGame() {
         return game;
     }
 
-    public void setGameID(String gameID) {
-        this.gameID = gameID;
-    }
 
-    public PlayerRunnable (String playerID, String opponentID, int threadNumber){
+    public PlayerRunnable (String playerID, String opponentID, int playerNum) {
         this.playerID = playerID;
         this.opponentID = opponentID;
         this.newTile = null;
@@ -48,22 +51,27 @@ public class PlayerRunnable implements Runnable {
         this.moveNumber = 0;
         this.playerTeam = Hex.Team.Black;
         this.opponentTeam = Hex.Team.White;
+        this.playerNum = playerNum;
     }
 
     @Override
     public void run() {
 
-       // System.out.println("Villager count of " + this.toString() + " is: " + game.getVillagerCount());
-        //System.out.println("Totoro count of " + this.toString() + " is: " + game.getTotoroCount());
-        //System.out.println("Tiger count of " + this.toString() + " is: " + game.getTigerCount());
+
+        gameOver = false;
+        hasMove = false;
+
+        game = new GameAPI();
+
 
         //Instantiate all ArrayLists once
-        ArrayList<Tuple> tilePlacementOptions = new ArrayList<>();
-        ArrayList<Tuple> eruptionOptions = new ArrayList<>();
-        ArrayList<Tuple> foundSettlementOptions = new ArrayList<>();
-        ArrayList<ExpansionOpDataFrame> expandSettlementOptions = new ArrayList<>();
-        ArrayList<Tuple> totoroPlacementOptions = new ArrayList<>();
-        ArrayList<Tuple> tigerPlacementOptions = new ArrayList<>();
+        tilePlacementOptions = new ArrayList<>();
+        eruptionOptions = new ArrayList<>();
+        foundSettlementOptions = new ArrayList<>();
+        expandSettlementOptions = new ArrayList<>();
+        totoroPlacementOptions = new ArrayList<>();
+        tigerPlacementOptions = new ArrayList<>();
+        orientationOptions = new ArrayList<>();
 
 
         //Player Logic
@@ -71,17 +79,49 @@ public class PlayerRunnable implements Runnable {
         game.placeFirstTile();
 
         while(!gameOver) {
-            while(!hasMove);
-            this.moveMessage = new clientMoveMessages();
+            try {
 
-            //Update board state
-            game.updateSettlements();
+                while(GameClient.getP1Move() == null) {
+                    Thread.sleep(50);
+                    System.out.println("Goodnight player 1");
+                }
 
-            //Check for tile placement options
-            tilePlacementOptions = game.getAvailableTilePlacement();
+            } catch (InterruptedException e) {
+                System.out.println("Player 1 about to do stuff!");
+            }
 
-            //Check for nuking options
-            eruptionOptions = game.getValidNukingLocations();
+            System.out.println("Troy knows how this works");
+
+            if (GameClient.getP1Move() != null) {
+                //executeMessage(GameClient.getP1Move());
+                playTurn(1);
+                GameClient.setP1Move(null);
+            }
+//            try {
+//
+//                while(GameClient.getP2Move() == null) {
+//                    Thread.sleep(100);
+//                    System.out.println("Goodnight player 2");
+//                }
+//
+//            } catch (InterruptedException e) {
+//                System.out.println("Player 2 about to do stuff!");
+//            }
+        }
+    }
+
+
+    private void playTurn(int playerNum) {
+        //Update board state
+        game.updateSettlements();
+
+        //Check for tile placement options
+        tilePlacementOptions = game.getAvailableTilePlacement();
+        System.out.println("Number of placement options: " + tilePlacementOptions.size());
+
+        //Check for valid orientations for first spot
+        orientationOptions = game.findValidTileOrientations(tilePlacementOptions.get(0));
+        System.out.println("Number of orientation options: " + orientationOptions.size());
 
             //Decide normal place or nuke
             if (canNukeSafely()) {
@@ -106,15 +146,26 @@ public class PlayerRunnable implements Runnable {
 
             //Place tile
             game.placeTile(newTile, tilePlacementOptions.get(0));
+        //Check for nuking options
+        eruptionOptions = game.getValidNukingLocations();
+        System.out.println("Number of Nuking options: " + eruptionOptions.size());
 
-            //Update board state
-            game.updateSettlements();
+        //Decide normal place or nuke
 
-            //Check for Found Settlement options
-            foundSettlementOptions = game.findListOfValidSettlementLocations();
 
-            //Check for Expand Settlement options
-            expandSettlementOptions = game.getExpansionOptions(Hex.Team.Black);
+
+        //Place tile
+        game.gameBoard.printSectionedBoard(game.gameBoard);
+        System.out.println("Where we were thinking of placing: " + tilePlacementOptions.get(0));
+        Tile troyTestTile = new Tile(1, Terrain.terrainType.Jungle, Terrain.terrainType.Lake, Orientation.Orientations.downLeft);
+        game.placeTile(troyTestTile, tilePlacementOptions.get(0));
+        game.gameBoard.printSectionedBoard(game.gameBoard);
+
+        //Update board state
+        game.updateSettlements();
+
+        //Check for Found Settlement options
+        foundSettlementOptions = game.findListOfValidSettlementLocations();
 
             //Check for Totoro placement options
             totoroPlacementOptions = game.validTotoroPlacements(this.playerTeam);
@@ -149,9 +200,12 @@ public class PlayerRunnable implements Runnable {
 
             System.out.println(moveMessage.toString(moveMessage.getMoveType()));
 
-            hasMove = false;
+            GameClient.sendMessageFromPlayerToServer(moveMessage, 1);
+            GameClient.setP1Move(null);
+
         }
-    }
+
+
 
 
     private boolean canNukeSafely() {
@@ -277,6 +331,14 @@ public class PlayerRunnable implements Runnable {
 
     public void receiveMessage(Message m) {
         gotMessage = true;
+    }
+
+    public void setGameID(String gameID) {
+        this.gameID = gameID;
+    }
+
+    public String getGameID() {
+        return this.gameID;
     }
 }
 

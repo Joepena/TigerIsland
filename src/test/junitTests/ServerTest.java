@@ -18,18 +18,43 @@ public class ServerTest {
             System.out.println(serverSocket.getLocalSocketAddress());
             System.out.println(clientSocket.getRemoteSocketAddress().toString());
             String inputLine, outputLine;
-             
+
             // Initiate conversation with client
-            outputLine = "PlaceTile at 0,2,-2 Build Settlement at -3,2,1";
-            out.println(outputLine);
-            int i = 0;
-            while ((inputLine = in.readLine()) != null) {
-                outputLine = "hello number: " + i;
-                out.println(outputLine);
-                if (outputLine.equals("Bye."))
-                    break;
-                i++;
-            }
+
+            String pid = "player5";
+            String cid = "testTestGame";
+            int rounds = 5;
+            int roundID = 1;
+            String gid1 = "1";
+            int time = 2;
+            int moveNum = 1;
+            String tile = "LAKE+JUNGLE\r\n";
+            String opponentPID = "player2\r\n";
+            String message1 = "WELCOME TO ANOTHER EDITION OF THUNDERDOME!\r\n";
+            String message2 = "TWO SHALL ENTER, ONE SHALL LEAVE\r\n";
+            String message3 = "WAIT FOR THE TOURNAMENT TO BEGIN " + pid + "\r\n";
+            String message4 = "NEW CHALLENGE " + cid + " YOU WILL PLAY " + rounds + " MATCHES\r\n";
+            String message5 = "BEGIN ROUND "+ roundID +" OF " + rounds + "\r\n";
+            String message6 = "NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER " + opponentPID + "\r\n";
+            String message7 = "MAKE YOUR MOVE IN GAME " + gid1 + " WITHIN " + time + " SECONDS: MOVE " + moveNum + " PLACE " + tile + "\r\n";
+//            String message8 = "NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER " + opponentPID;
+//            String message9 = "NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER " + opponentPID;
+
+
+
+            out.println(message1);
+            out.println(message2);
+            out.println(message3);
+            out.println(message4);
+            out.println(message5);
+            out.println(message6);
+            out.println(message7);
+
+            System.out.println("From our AI with love: " + in.readLine());
+
+            while(true);
+
+
         } catch (IOException e) {
             System.out.println("Exception caught when trying to listen on port "
                 + portNumber + " or listening for a connection");

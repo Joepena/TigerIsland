@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -707,11 +708,11 @@ public class GameAPIUtil {
     return exists;
   }
 
-  public Vector<Integer> findValidOrientationsAtPoint(Tuple testingLocation)
+  public ArrayList<Integer> findValidOrientationsAtPoint(Tuple testingLocation)
   {
 
     Hex hexTestingLocation = gameBoard.getHex(testingLocation);
-    Vector<Integer> validOrientations = new Vector<Integer>();
+    ArrayList<Integer> validOrientations = new ArrayList<Integer>();
 
     if(hexTestingLocation != null)
     {
