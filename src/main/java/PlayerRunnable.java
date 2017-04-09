@@ -21,7 +21,7 @@ public class PlayerRunnable implements Runnable {
     private String playerID;
     private String opponentID;
     private String gameID;
-    private clientMessages moveMessage;
+    private clientMoveMessages moveMessage;
 
     public GameAPI getGame() {
         return game;
@@ -43,10 +43,6 @@ public class PlayerRunnable implements Runnable {
 
     @Override
     public void run() {
-        gameOver = false;
-        hasMove = false;
-
-        game = new GameAPI();
         System.out.println("Villager count of " + this.toString() + " is: " + game.getVillagerCount());
         System.out.println("Totoro count of " + this.toString() + " is: " + game.getTotoroCount());
         System.out.println("Tiger count of " + this.toString() + " is: " + game.getTigerCount());
@@ -65,7 +61,8 @@ public class PlayerRunnable implements Runnable {
         game.placeFirstTile();
 
         while(!gameOver) {
-
+            while(!hasMove);
+            this.moveMessage = new clientMoveMessages();
 
             //Update board state
             game.updateSettlements();
@@ -89,8 +86,9 @@ public class PlayerRunnable implements Runnable {
                 //Pick a random tile placement location.
             }
 
-            decisionCoords = tilePlacementOptions.get(0);
-
+            moveMessage.setTileLocation(tilePlacementOptions.get(0));
+            Orientation.Orientations orientation = game.APIUtils.getViableOrientation(tilePlacementOptions.get(0))
+            moveMessage.setOrientation(moveMessage.orientationToNumber(orientation));
 
 
             //Place tile
@@ -130,6 +128,7 @@ public class PlayerRunnable implements Runnable {
             //Perform Build action
             game.foundSettlement(buildDecisionCoords, Hex.Team.Black);
 
+            hasMove = false;
         }
     }
     private boolean canNukeSafely() {

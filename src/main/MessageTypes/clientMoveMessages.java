@@ -88,5 +88,24 @@ public class clientMoveMessages
         return "";
     }
 
+    protected int orientationToNumber(Orientation.Orientations orientation){
+        switch(orientation){
+            case upRight:
+                return 1;
+            case right:
+                return 2;
+            case downRight:
+                return 3;
+            case downLeft:
+                return 4;
+            case left:
+                return 5;
+            case upLeft:
+                return 6;
+            default:
+                return 0;
+        }
+    }
+
 
 }

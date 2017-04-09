@@ -215,6 +215,22 @@ public class GameAPIUtil {
         return false;
     }
 
+    public Orientation.Orientations getViableOrientation(Tuple volcanoCoordinates) {
+        if (isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.downLeft)))
+            return Orientation.Orientations.downLeft;
+        if (isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.downRight)))
+            return  Orientation.Orientations.downRight;
+        if (isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.upLeft)))
+            return Orientation.Orientations.upLeft;
+        if (isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.upRight)))
+            return Orientation.Orientations.upRight;
+        if (isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.left)))
+            return Orientation.Orientations.left;
+        if (isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.right)))
+            return Orientation.Orientations.right;
+        return null;
+    }
+
     public boolean isValidTileNukingPosition(TilePositionCoordinates tilePositionCoordinates) {
 
         Hex hexUnderVolcano = gameBoard.getHex(tilePositionCoordinates.getVolcanoCoordinates());
