@@ -511,7 +511,7 @@ public class GameAPIUtil {
     if(currentHex == null) return settlementList;
     Hex[] neighborHex = getNeighborHexes(coordPoint,gameBoard);
     Tuple[] neighborCoord = getNeighborCoords(coordPoint);
-    if(currentHex.getLevel() == 1 && currentHex.getTeam() == Hex.Team.Neutral)
+    if(currentHex.getLevel() == 1 && currentHex.getTeam() == Hex.Team.Neutral && currentHex.getTerrain() != Terrain.terrainType.Volcano)
     {
       settlementList.add(coordPoint);
     }

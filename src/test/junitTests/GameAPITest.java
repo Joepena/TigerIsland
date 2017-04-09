@@ -401,9 +401,7 @@ public class GameAPITest {
 
         meeple = game.gameBoard.getHex(Orientation.rightOf(Orientation.rightOf(Orientation.getOrigin())));
         meeple.placeMeeple(Hex.Team.Black);
-
-        game.gameBoard.printSectionedBoard(game.gameBoard);
-
+        
         game.updateSettlements();
 
         Settlements resultingBlackSettlements = game.getBlackSettlements();

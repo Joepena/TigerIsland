@@ -64,7 +64,7 @@ public class PlayerRunnable implements Runnable {
 
         //Player Logic
 
-        //game.placeFirstTile();
+        game.placeFirstTile();
 
         while(!gameOver) {
             while(!hasMove);
@@ -132,7 +132,9 @@ public class PlayerRunnable implements Runnable {
                 buildDecision = new BuildDecision(foundSettlementOptions.get(0), BuildDecision.buildDecisions.Found);
             }
 
-            buildDecisionCoords = foundSettlementOptions.get(0);
+            buildDecisionCoords = foundSettlementOptions.get(1);
+
+            //FOR SERVER TESTING
             moveMessage.setBuildLocation(foundSettlementOptions.get(0));
             moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Found);
 

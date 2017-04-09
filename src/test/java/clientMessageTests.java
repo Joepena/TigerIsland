@@ -17,7 +17,7 @@ public class clientMessageTests {
         message.setOrientation(1);
         message.setBuildLocation(Orientation.getOrigin());
         String testMessage = message.toString(clientMoveMessages.clientMoveMessageType.Found);
-        String actualMessage = ("GAME 1 MOVE 1 PLACE GRASSLAND+JUNGLE AT 0 0 0 1 FOUND SETTLEMENT AT 0 0 0");
+        String actualMessage = ("GAME 1 MOVE 1 PLACE GRASS+JUNGLE AT 0 0 0 1 FOUND SETTLEMENT AT 0 0 0");
         Assert.assertEquals(actualMessage, testMessage);
 
     }
@@ -34,7 +34,7 @@ public class clientMessageTests {
         message.setBuildLocation(Orientation.getOrigin());
         message.setTerrain(Terrain.terrainType.Rocky);
         String testMessage = message.toString(clientMoveMessages.clientMoveMessageType.Expand);
-        String actualMessage = ("GAME 1 MOVE 1 PLACE GRASSLAND+JUNGLE AT 0 0 0 1 EXPAND SETTLEMENT AT 0 0 0 ROCKY");
+        String actualMessage = ("GAME 1 MOVE 1 PLACE GRASS+JUNGLE AT 0 0 0 1 EXPAND SETTLEMENT AT 0 0 0 ROCK");
         Assert.assertEquals(actualMessage, testMessage);
 
     }
@@ -50,7 +50,7 @@ public class clientMessageTests {
         message.setOrientation(1);
         message.setBuildLocation(Orientation.getOrigin());
         String testMessage = message.toString(clientMoveMessages.clientMoveMessageType.Totoro);
-        String actualMessage = ("GAME 1 MOVE 1 PLACE GRASSLAND+JUNGLE AT 0 0 0 1 BUILD TOTORO SANCTUARY AT 0 0 0");
+        String actualMessage = ("GAME 1 MOVE 1 PLACE GRASS+JUNGLE AT 0 0 0 1 BUILD TOTORO SANCTUARY AT 0 0 0");
         Assert.assertEquals(actualMessage, testMessage);
 
     }
@@ -66,7 +66,7 @@ public class clientMessageTests {
         message.setOrientation(1);
         message.setBuildLocation(Orientation.getOrigin());
         String testMessage = message.toString(clientMoveMessages.clientMoveMessageType.Tiger);
-        String actualMessage = ("GAME 1 MOVE 1 PLACE GRASSLAND+JUNGLE AT 0 0 0 1 BUILD TIGER PLAYGROUND AT 0 0 0");
+        String actualMessage = ("GAME 1 MOVE 1 PLACE GRASS+JUNGLE AT 0 0 0 1 BUILD TIGER PLAYGROUND AT 0 0 0");
         Assert.assertEquals(actualMessage, testMessage);
 
     }
@@ -82,7 +82,7 @@ public class clientMessageTests {
         message.setOrientation(1);
         message.setBuildLocation(Orientation.getOrigin());
         String testMessage = message.toString(clientMoveMessages.clientMoveMessageType.Unable);
-        String actualMessage = ("GAME 1 MOVE 1 PLACE GRASSLAND+JUNGLE AT 0 0 0 1 UNABLE TO BUILD");
+        String actualMessage = ("GAME 1 MOVE 1 PLACE GRASS+JUNGLE AT 0 0 0 1 UNABLE TO BUILD");
         Assert.assertEquals(actualMessage, testMessage);
 
     }

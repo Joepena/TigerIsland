@@ -15,7 +15,8 @@ public class ourMoveTest {
 
     @Test
     public void basicMoveTest() throws Exception{
-        createLandMass();
+       // createLandMass();
+        player.getGame().gameBoard.printSectionedBoard(player.getGame().gameBoard);
         MessageParser mP = new MessageParser();
         MakeYourMoveMessage message = (MakeYourMoveMessage)mP.parseString("MAKE YOUR MOVE IN GAME ABC WITHIN 1.5 SECONDS: MOVE 8 PLACE LAKE+ROCK");
 
@@ -23,6 +24,7 @@ public class ourMoveTest {
         player.executeMessage(message);
 
         player.run();
+        player.getGame().gameBoard.printSectionedBoard(player.getGame().gameBoard);
 
     }
 

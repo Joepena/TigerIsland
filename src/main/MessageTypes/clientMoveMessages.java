@@ -55,13 +55,13 @@ public class clientMoveMessages
     private String terrainToString(Terrain.terrainType terrain)
     {
         if(terrain == Terrain.terrainType.Grassland)
-            return "GRASSLAND";
+            return "GRASS";
         if(terrain == Terrain.terrainType.Jungle)
             return "JUNGLE";
         if(terrain == Terrain.terrainType.Lake)
             return "LAKE";
         if(terrain == Terrain.terrainType.Rocky)
-            return "ROCKY";
+            return "ROCK";
         return "";
     }
 
