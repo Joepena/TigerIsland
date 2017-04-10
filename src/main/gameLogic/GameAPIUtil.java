@@ -28,7 +28,7 @@ public class GameAPIUtil {
         Settlements.retriveWhiteSettlements(settlement, game.getWhiteSettlements());
         Settlements.retriveBlackSettlements(settlement, game.getBlackSettlements());
 
-        //conglomerateAdjacentSettlements(Hex.Team.White);
+        conglomerateAdjacentSettlements(Hex.Team.White);
         conglomerateAdjacentSettlements(Hex.Team.Black);
     }
 
@@ -173,6 +173,7 @@ public class GameAPIUtil {
                                 for (Tuple combinedCoords : combinedDataFrameHexLocs) {
                                     combinedDataFrame.addLocationListOfHexes(combinedCoords);
                                 }
+                                combinedDataFrame.setOwnedBy(currentDataFrame.getOwnedBy());
 
                                 listSettlements.addNewSettlement(combinedDataFrame);
                                 listSettlements.removeSettlement(currentDataFrame);

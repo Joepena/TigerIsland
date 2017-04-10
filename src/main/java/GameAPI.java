@@ -294,7 +294,6 @@ public class GameAPI {
 
         gameBoard.getHex(tuple).setTeam(team);
         if (team == Hex.Team.Black) {
-            System.out.println("hex level: " + gameBoard.getHex(tuple).getLevel());
             decrementVillagersBy(gameBoard.getHex(tuple).getLevel());
         }
     }

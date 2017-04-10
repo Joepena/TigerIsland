@@ -38,7 +38,7 @@ public class ourMoveTest {
         System.out.println("Villager Count: "+player.getGame().getVillagerCount());
 
 
-        for (int i = 2; i <=12; i++){
+        for (int i = 2; i <=13; i++){
             player.setGameOver(false);
             message = (MakeYourMoveMessage)mP.parseString("MAKE YOUR MOVE IN GAME ABC WITHIN 1.5 SECONDS: MOVE "+i+" PLACE GRASS+JUNGLE");
             player.executeMessage(message);

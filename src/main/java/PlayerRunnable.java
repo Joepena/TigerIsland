@@ -168,11 +168,14 @@ public class PlayerRunnable implements Runnable {
                         moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Tiger);
                         moveMessage.setBuildLocation(tigerPlacementOptions.get(0));
                         game.createTigerPlayground(tigerPlacementOptions.get(0), Hex.Team.Black);
+                        System.out.println("We placed a tiger ");
                     } else if (canPlaceTotoro(totoroPlacementOptions)) {
                         //place Totoro
                         moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Totoro);
                         moveMessage.setBuildLocation(totoroPlacementOptions.get(0));
                         game.createTotoroSanctuary(totoroPlacementOptions.get(0), Hex.Team.Black);
+                        System.out.println("We placed a totoro ");
+
                     } else {
                         //found settlement
                         buildDecisionCoords = findClosestTupleToOrigin(foundSettlementOptions);
