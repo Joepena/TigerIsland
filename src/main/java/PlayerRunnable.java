@@ -157,14 +157,17 @@ public class PlayerRunnable implements Runnable {
                         //place Tiger
                         moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Tiger);
                         moveMessage.setBuildLocation(tigerPlacementOptions.get(0));
+                        game.createTigerPlayground(tigerPlacementOptions.get(0), Hex.Team.Black);
                     } else if (canPlaceTotoro(totoroPlacementOptions)) {
                         //place Totoro
                         moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Totoro);
                         moveMessage.setBuildLocation(totoroPlacementOptions.get(0));
+                        game.createTotoroSanctuary(totoroPlacementOptions.get(0), Hex.Team.Black);
                     } else {
                         //found settlement
                         moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Found);
                         moveMessage.setBuildLocation(foundSettlementOptions.get(0));
+                        game.foundSettlement(foundSettlementOptions.get(0), Hex.Team.Black);
                     }
                 } else {
                     ExpansionOpDataFrame expansionDF = chooseHighestCostValidExpansion(expandSettlementOptions);
@@ -173,10 +176,12 @@ public class PlayerRunnable implements Runnable {
                         moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Expand);
                         moveMessage.setBuildLocation(expansionDF.getExpansionStart());
                         moveMessage.setTerrain(expansionDF.getTerrain());
+                        game.performLandGrab(expansionDF);
                     } else {
                         //found settlement
                         moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Found);
                         moveMessage.setBuildLocation(foundSettlementOptions.get(0));
+                        game.foundSettlement(foundSettlementOptions.get(0), Hex.Team.Black);
                     }
                 }
 
@@ -206,19 +211,6 @@ public class PlayerRunnable implements Runnable {
 
                 //Perform Build action
                 //foundSettlement(buildDecisionCoords, Hex.Team.Black);
-                switch  (moveMessage.getMoveType()){
-                    case Expand:
-                        game.performLandGrab(moveMessage.getBuildLocation());
-                        break;
-                    case Found:
-                        break;
-                    case Totoro:
-                        break;
-                    case Tiger:
-                        break;
-                    case Unable:
-                        break;
-                }
 
 
                 //Print out moveMessage and send to Client
