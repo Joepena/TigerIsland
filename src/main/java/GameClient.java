@@ -59,6 +59,10 @@ public class GameClient {
             Message parsedServerMessage;
             MessageParser parser = new MessageParser();
 
+            //Send in username and password
+            ClientMessages authentication = new ClientMessages("K", "K");
+            out.print(authentication.enterThunderdome("TIGERSRULE"));
+            out.print(authentication.usernamePassword());
 
             //get the player id
             parsedServerMessage = parseServerInput(in, Message.MessageType.WaitToBegin);
