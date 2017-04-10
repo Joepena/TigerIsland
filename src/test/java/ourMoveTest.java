@@ -13,17 +13,6 @@ public class ourMoveTest {
         player.setGameID("ABC");
     }
 
-    @Test
-    public void basicMoveTest() throws Exception{
-        MessageParser mP = new MessageParser();
-        MakeYourMoveMessage message = (MakeYourMoveMessage)mP.parseString("MAKE YOUR MOVE IN GAME ABC WITHIN 1.5 SECONDS: MOVE 8 PLACE LAKE+ROCK");
-
-
-        player.executeMessage(message);
-
-        player.run();
-
-    }
 
     @Test
     public void secondbasicMoveTest() throws Exception{
@@ -34,16 +23,17 @@ public class ourMoveTest {
 
         player.executeMessage(message);
         player.run();
-        //player.getGame().gameBoard.printSectionedBoard(player.getGame().gameBoard);
+        player.getGame().gameBoard.printSectionedBoard(player.getGame().gameBoard);
         System.out.println("Villager Count: "+player.getGame().getVillagerCount());
 
 
-        for (int i = 2; i <=17; i++){
+        for (int i = 3; i <=17; i++){
             player.setGameOver(false);
             message = (MakeYourMoveMessage)mP.parseString("MAKE YOUR MOVE IN GAME ABC WITHIN 1.5 SECONDS: MOVE "+i+" PLACE GRASS+JUNGLE");
             player.executeMessage(message);
             player.run();
             System.out.println("Villager Count: "+player.getGame().getVillagerCount());
+            player.getGame().gameBoard.printSectionedBoard(player.getGame().gameBoard);
         }
         System.out.println(player.getGame().getTigerCount());
         System.out.println(player.getGame().getTotoroCount());

@@ -53,10 +53,6 @@ public class PlayerRunnable implements Runnable {
 
     @Override
     public void run() {
-        // System.out.println("Villager count of " + this.toString() + " is: " + game.getVillagerCount());
-        //System.out.println("Totoro count of " + this.toString() + " is: " + game.getTotoroCount());
-        //System.out.println("Tiger count of " + this.toString() + " is: " + game.getTigerCount());
-
         //Instantiate all ArrayLists once
         ArrayList<Tuple> tilePlacementOptions = new ArrayList<>();
         ArrayList<Tuple> eruptionOptions = new ArrayList<>();
@@ -81,8 +77,6 @@ public class PlayerRunnable implements Runnable {
 
             //Check for tile placement options
             tilePlacementOptions = game.getAvailableTilePlacement();
-
-            //Check for nuking options
             eruptionOptions = game.getValidNukingLocations();
 
             //Decide normal place or nuke
@@ -104,7 +98,6 @@ public class PlayerRunnable implements Runnable {
                 //Place tile nearest origin.
                 decisionCoords = findClosestTupleToOrigin(tilePlacementOptions);
                 moveMessage.setTileLocation(decisionCoords);
-                //orientation = game.APIUtils.getViableNonNukingOrientation(decisionCoords);
                 orientationList = game.APIUtils.findValidOrientationsAtPoint(decisionCoords);
                 for (Integer i : orientationList){
                     newTile.setLeftHexOrientation(game.APIUtils.numToOrientation(i));
@@ -116,15 +109,9 @@ public class PlayerRunnable implements Runnable {
                 moveMessage.setOrientation(moveMessage.orientationToNumber(orientation));
             }
 
-                //FOR SERVER TESTING
-                //moveMessage.setTileLocation(tilePlacementOptions.get(0));
-                //Orientation.Orientations orientation = game.APIUtils.getViableNonNukingOrientation(tilePlacementOptions.get(0));
-                //moveMessage.setOrientation(moveMessage.orientationToNumber(orientation));
-
                 moveMessage.setTile(newTile);
                 moveMessage.setGid(this.gameID);
                 moveMessage.setMoveNumber(this.moveNumber);
-
 
                 //Place tile to handle on our own board
                 newTile.setLeftHexOrientation(orientation);
@@ -133,16 +120,11 @@ public class PlayerRunnable implements Runnable {
                 //Update board state
                 game.updateSettlements();
 
-                //Check for Found Settlement options
+                //BUILD ACTION ****************************************************************
+                //Find Placement options
                 foundSettlementOptions = game.findListOfValidSettlementLocations();
-
-                //Check for Expand Settlement options
                 expandSettlementOptions = game.getExpansionOptions(Hex.Team.Black);
-
-                //Check for Totoro placement options
                 totoroPlacementOptions = game.validTotoroPlacements();
-
-                //Check for Tiger placement options
                 tigerPlacementOptions = game.validTigerPlacements();
 
                 //Decide Build Action
@@ -193,27 +175,11 @@ public class PlayerRunnable implements Runnable {
                     }
                 }
 
-
-                //FOR SERVER TESTING
-                //moveMessage.setBuildLocation(foundSettlementOptions.get(0));
-                //moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Found);
-
-                //Perform Build action
-                //foundSettlement(buildDecisionCoords, Hex.Team.Black);
-
-
-                //Print out moveMessage and send to Client
-
-                //System.out.println(moveMessage.toString(moveMessage.getMoveType()));
-
                 hasMove = false;
                 gameOver = true;
             }
         }
 
-    private boolean existsSub3ExpandOption() {
-        return false;
-    }
 
     private boolean canNukeSafely(GameAPI game) {
         return game.findListOfValidSettlementLocations().size() > 2;
