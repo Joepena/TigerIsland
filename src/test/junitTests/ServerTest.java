@@ -37,8 +37,9 @@ public class ServerTest {
             String message5 = "BEGIN ROUND "+ roundID +" OF " + rounds + "\r\n";
             String message6 = "NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER " + opponentPID + "\r\n";
             String message7 = "MAKE YOUR MOVE IN GAME " + gid1 + " WITHIN " + time + " SECONDS: MOVE " + moveNum + " PLACE " + tile + "\r\n";
-            String message8 = "GAME 1 MOVE 1 PLACE JUNGLE+LAKE AT -1 3 -2 4 FOUND SETTLEMENT AT 0 1 -1\r\n";
-//            String message9 = "NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER " + opponentPID;
+            String message8 = "GAME 2 MOVE 1 PLAYER ASASDFASD PLACED JUNGLE+LAKE AT -1 3 -2 3 FOUNDED SETTLEMENT AT 0 1 -1\r\n";
+            String message9 = "GAME 1 OVER PLAYER player5 123 PLAYER player2 2345";
+            String message10 = "GAME 2 OVER PLAYER player2 123 PLAYER player5 2345";
 
 
 
@@ -49,6 +50,12 @@ public class ServerTest {
             out.println(message5);
             out.println(message6);
             out.println(message7);
+            out.println(message8);
+            out.println(message7);
+            out.println(message8);
+            out.println(message9);
+            out.println(message10);
+
 
             System.out.println("From our AI with love: " + in.readLine());
 

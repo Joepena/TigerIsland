@@ -90,7 +90,7 @@ public class clientMessageTests {
     @Test
     public void thunderDomeMessageTest()
     {
-        clientMessages message = new clientMessages();
+        ClientMessages message = new ClientMessages("A", "V");
         String testMessage = message.enterThunderdome("HI");
         String actualMessage = ("ENTER THUNDERDOME HI");
         Assert.assertEquals(actualMessage, testMessage);
@@ -100,8 +100,8 @@ public class clientMessageTests {
     @Test
     public void usernamePasswordMessageTest()
     {
-        clientMessages message = new clientMessages();
-        String testMessage = message.usernamePassword("MEGAN", "HELLO");
+        ClientMessages message = new ClientMessages("MEGAN", "HELLO");
+        String testMessage = message.usernamePassword();
         String actualMessage = ("I AM MEGAN HELLO");
         Assert.assertEquals(actualMessage, testMessage);
 

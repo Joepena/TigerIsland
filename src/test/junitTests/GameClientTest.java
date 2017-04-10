@@ -35,7 +35,7 @@ public class GameClientTest {
         //System.setIn(fips);
     }
 
-    @Test
+    /*@Test
     public void testIntroMessageParsing() {
 
         try {
@@ -53,7 +53,7 @@ public class GameClientTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
 //    @Test
 //    public void testRoundMessageParsing() {

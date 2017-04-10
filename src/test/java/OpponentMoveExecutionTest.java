@@ -18,16 +18,6 @@ public class OpponentMoveExecutionTest {
     }
 
     @Test
-    public void ignoreDifferentGidTest () throws Exception {
-        createLandMass();
-
-        mP.parseString("GAME GAME1 MOVE 12 PLAYER B PLACED LAKE+ROCK AT 1 0 -1 3 FOUNDED SETTLEMENT AT 1 1 -2");
-        player.executeMessage(mP.getMessage());
-
-        Assert.assertTrue("GID is different so move is ignored", player.getGame().gameBoard.getHex(new Tuple(1, 0, -1)).getLevel() == 1);
-    }
-
-    @Test
     public void foundSettlementFromMessageTest () throws Exception {
         createLandMass();
 

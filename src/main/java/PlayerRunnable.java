@@ -84,19 +84,40 @@ public class PlayerRunnable implements Runnable {
                // System.out.println(GameClient.getP1Move().toString());
                 while(true) {
                     Thread.sleep(100);
-                    System.out.println("Goodnight player 1");
+                    System.out.println("Goodnight player " + this.playerNum);
                 }
 
             } catch (InterruptedException e) {
-                System.out.println("Player 1 about to do stuff!");
+                System.out.println("Player " + this.playerNum + " about to do stuff!");
             }
 
             System.out.println("Troy knows how this works");
             this.gameID = GameClient.getGame1ID();
-            executeMessage(GameClient.getP1Move());
 
-            GameClient.setP1Move(null);
-            playTurn(1);
+            if (this.playerNum == 1) {
+                System.out.println(GameClient.getP1Move());
+                if(!gameOver)
+                    executeMessage(GameClient.getP1Move());
+                System.out.println("THis is player " + playerNum + "'s board\n");
+                game.gameBoard.printSectionedBoard(game.gameBoard);
+
+                if(GameClient.getP1Move().getMessageType() == Message.MessageType.MakeYourMove)
+                    playTurn(1);
+                GameClient.setP1Move(null);
+            }
+            else {
+                System.out.println(GameClient.getP2Move());
+                if(!gameOver)
+                    executeMessage(GameClient.getP2Move());
+                System.out.println("THis is player " + playerNum + "'s board\n");
+                game.gameBoard.printSectionedBoard(game.gameBoard);
+
+                if(GameClient.getP2Move().getMessageType() == Message.MessageType.MakeYourMove)
+                    playTurn(2);
+                GameClient.setP2Move(null);
+            }
+
+
 //            try {
 //
 //                while(GameClient.getP2Move() == null) {
@@ -112,6 +133,7 @@ public class PlayerRunnable implements Runnable {
 
 
     private void playTurn(int playerNum) {
+        System.out.println("NOT HERE");
         moveMessage = new clientMoveMessages();
         //Update board state
         game.updateSettlements();
@@ -137,7 +159,6 @@ public class PlayerRunnable implements Runnable {
             moveMessage.setTileLocation(tilePlacementOptions.get(0));
             Orientation.Orientations orientation = game.APIUtils.getViableNonNukingOrientation(tilePlacementOptions.get(0));
             System.out.println(tilePlacementOptions.get(0));
-            game.gameBoard.printSectionedBoard(game.gameBoard);
             newTile.setLeftHexOrientation(orientation);
             moveMessage.setOrientation(moveMessage.orientationToNumber(orientation));
             moveMessage.setTile(newTile);
@@ -156,11 +177,10 @@ public class PlayerRunnable implements Runnable {
 
 
         //Place tile
-        game.gameBoard.printSectionedBoard(game.gameBoard);
         System.out.println("Where we were thinking of placing: " + tilePlacementOptions.get(0));
         Tile troyTestTile = new Tile(1, Terrain.terrainType.Jungle, Terrain.terrainType.Lake, Orientation.Orientations.downLeft);
         game.placeTile(troyTestTile, tilePlacementOptions.get(0));
-        game.gameBoard.printSectionedBoard(game.gameBoard);
+
 
         //Update board state
         game.updateSettlements();
@@ -200,8 +220,10 @@ public class PlayerRunnable implements Runnable {
             //Print out moveMessage and send to Client
 
             System.out.println(moveMessage.toString(moveMessage.getMoveType()));
-
-            GameClient.sendMessageFromPlayerToServer(moveMessage, 1);
+            if(this.playerNum == 1)
+                GameClient.sendMessageFromPlayerToServer(moveMessage, 1);
+            else
+                GameClient.sendMessageFromPlayerToServer(moveMessage, 2);
 
         }
 
@@ -251,6 +273,7 @@ public class PlayerRunnable implements Runnable {
     }
 
     private void GameOver(GameOverMessage message){
+        System.out.println("GAMEOVER!!!!!!!!!");
         this.gameOver = true;
     }
 

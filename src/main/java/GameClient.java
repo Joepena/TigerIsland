@@ -19,6 +19,7 @@ public class GameClient {
     private static int numRounds = 0;
     private static String challengeID;
     private static int roundID = 0;
+    private static int numberOfRounds = 0;
     private static String opponentPID = "";
     private static String game1ID = "";
     private static String game2ID = "";
@@ -87,7 +88,7 @@ public class GameClient {
             //while(!challengeIsDone) {
 
                //
-             //   while(roundID < numRounds) {
+               // while(numberOfRounds++ < numRounds) {
                     //Get round ID get opponent pid
                     parsedServerMessage = parseServerInput(in, Message.MessageType.BeginRound);
                     if (parsedServerMessage instanceof BeginRoundMessage) {
@@ -104,7 +105,7 @@ public class GameClient {
 //                    player2.start();
 
                     //SINGLE TURN
-                    //while(!p1RoundIsDone && !p2RoundIsDone) {
+                    while(!p1RoundIsDone && !p2RoundIsDone) {
 
                         Message turnMessage;
                         String serverMessage = "";
@@ -121,24 +122,38 @@ public class GameClient {
                         tempGameID = getGameIDFromMessage(turnMessage);
 
                         //Will check if gameIDs are empty and set if one is
+
                         setGameIDs(tempGameID);
 
+                            if(turnMessage instanceof GameOverMessage){
+                                if(((GameOverMessage)turnMessage).getGid().equals(game1ID)){
+                                    p1RoundIsDone = true;
+                                    player1.join();
+                                }
+                                else {
+                                    p2RoundIsDone = true;
+//                                    player2.join();
+                                }
+                            }
+
+
                         //Send Message object to proper player
-                        if (tempGameID == game1ID) {
+                        if (tempGameID.equals(game1ID)) {
                             p1Move = turnMessage;
                             System.out.println("We got a move");
                             player1.interrupt();
-                        } else if (tempGameID == game2ID) {
-
-//                            p2Move = turnMessage;
-//                            System.out.println("We got a move");
-//                            player2.interrupt();
+                        } else if (tempGameID.equals(game2ID)) {
+                           // p2Move = turnMessage;
+                           // System.out.println("We got a move");
+                           // player2.interrupt();
                         }
 
-                   // }
+                    }
 
 
-               // }
+
+
+                //}
 
                 challengeIsDone = true;
 
