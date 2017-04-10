@@ -35,13 +35,6 @@ public class GameOverMessage extends Message{
         Scanner scanner = new Scanner(message).useDelimiter(" ");
         scanner.next();
         this.gid = scanner.next();
-        scanner.next();
-        scanner.next();
-        this.pid1 = scanner.next();
-        this.score1 = scanner.nextInt();
-        scanner.next();
-        this.pid2 = scanner.next();
-        this.score2 = scanner.nextInt();
         scanner.close();
     }
 

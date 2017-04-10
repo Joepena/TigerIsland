@@ -105,6 +105,8 @@ public class PlayerRunnable implements Runnable {
 
                 } catch(InterruptedException e){
                     System.out.println("Player " + this.playerNum + " about to do stuff!");
+                    Thread.currentThread().interrupt();
+                    return;
                 }
 
 
@@ -227,13 +229,11 @@ public class PlayerRunnable implements Runnable {
 
             //Print out moveMessage and send to Client
 
-            System.out.println(moveMessage.toString(moveMessage.getMoveType()));
-            System.out.println("Queue size player 1:  " + GameClient.getP1Moves().size());
-             System.out.println("Queue size player 2:  " + GameClient.getP2Moves().size());
-            if(this.playerNum == 1)
-                GameClient.sendMessageFromPlayerToServer(moveMessage, 1);
-            else
-                GameClient.sendMessageFromPlayerToServer(moveMessage, 2);
+
+            //System.out.println(moveMessage.toString(moveMessage.getMoveType()));
+            //System.out.println("Sending this to the server:  " + moveMessage.toString(moveMessage.getMoveType()));
+            GameClient.sendMessageFromPlayerToServer(moveMessage);
+
 
         }
 
@@ -283,12 +283,12 @@ public class PlayerRunnable implements Runnable {
     }
 
     private void GameOver(GameOverMessage message){
-        System.out.println("GAMEOVER!!!!!!!!!");
+        System.out.println("GAMEOVER!!!!!!!!!   " + playerNum);
         this.gameOver = true;
     }
 
     private void MakeYourMove(MakeYourMoveMessage message){
-        System.out.println("MAKE YOUR MOVE!!");
+        //System.out.println("MAKE YOUR MOVE!!");
         this.newTile = message.getTile();
         this.hasMove = true;
         this.moveNumber = message.getMoveNumber();
