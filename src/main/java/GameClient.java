@@ -25,12 +25,15 @@ public class GameClient {
     private static String game1ID = "";
     private static String game2ID = "";
     private static Socket socket;
+    private static Socket socket1;
+    private static Socket socket2;
     private static PrintWriter output;
     private static Queue<Message> p1Moves;
     private static Queue<Message> p2Moves;
     private static boolean p1RoundIsDone;
     private static boolean p2RoundIsDone;
     private static boolean challengeIsDone;
+    private static Queue<String> outqueue;
 
 
 
@@ -38,9 +41,14 @@ public class GameClient {
 //    This will be for when we actually run the project I guess?
     public static void main(String[] args) throws Exception {
 
-        String host = "localhost";
+        //String host = "10.228.1.171";
 
-        int port = 8000;
+        //int port = 1708;
+
+        String host1 = "localhost";
+
+        int port1 = 8000;
+        int port2 = 1708;
 
         //Game Flags
         challengeIsDone = false;
@@ -52,15 +60,19 @@ public class GameClient {
 
 
             //Create socket and buffers
-            socket = new Socket(host, port);
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            output = new PrintWriter(socket.getOutputStream(), true);
+            //socket = new Socket(host, port);
+            socket1 = new Socket(host1, port1);
+            socket2 = new Socket(host1, port2);
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket1.getInputStream()));
+            output = new PrintWriter(socket2.getOutputStream(), true);
             String rawServerMessage;
             Message parsedServerMessage;
             MessageParser parser = new MessageParser();
+            outqueue = new LinkedList<String>();
+
 
             //Send in username and password
-            ClientMessages authentication = new ClientMessages("K", "K");
+            ClientMessages authentication = new ClientMessages(args[1], args[2]);
             output.println(authentication.enterThunderdome(args[0]));
             output.println(authentication.usernamePassword());
             //output.close();
@@ -69,6 +81,7 @@ public class GameClient {
             while(beginMessage.getMessageType() != Message.MessageType.WaitToBegin) {
                 beginMessage = parseServerInput(in, Message.MessageType.WaitToBegin);
             }
+
 
             //Get player ID
             if (beginMessage instanceof WaitToBeginMessage) {
@@ -190,18 +203,30 @@ public class GameClient {
 
                     }
 
-                   player1.join();
-                   player2.join();
+                    while(!p1Moves.isEmpty() || !p2Moves.isEmpty()) {
+                        if (!p1Moves.isEmpty()) {
+                            player1.interrupt();
+                        }
+                        if (!p2Moves.isEmpty()) {
+                            player2.interrupt();
+                        }
+                    }
+
+                    player1.join();
+                    player2.join();
 
                    //player2.interrupt();
                     System.out.println("Threads should be dead");
 
                     game1ID = "";
                     game2ID = "";
-//                    synchronized (p1Moves) {
-//                        System.out.println("p1Moves.size():  " + p1Moves.size());
-//                        p1Moves.notifyAll();
-//                    }
+
+                    while (parsedServerMessage.getMessageType() != Message.MessageType.EndRound) {
+                        parsedServerMessage = parseServerInput(in, Message.MessageType.EndRound);
+                    }
+
+
+
                 }
 
                 parsedServerMessage = parseServerInput(in, Message.MessageType.WaitForNext);
@@ -216,7 +241,8 @@ public class GameClient {
             System.exit(1);
         }
          try {
-            socket.close();
+            socket1.close();
+            socket2.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -249,10 +275,13 @@ public class GameClient {
 
     public static void sendMessageFromPlayerToServer(clientMoveMessages playerMessage) {
         String finalMessage = playerMessage.toString(playerMessage.getMessageType());
-        //System.out.println("To server with love: " + finalMessage);
+        outqueue.add(finalMessage + "\r\n");
+        System.out.println("To server with love: " + finalMessage);
         try {
-            PrintWriter playerWriter = new PrintWriter(socket.getOutputStream());
-            playerWriter.print(finalMessage);
+            PrintWriter playerWriter = new PrintWriter(socket2.getOutputStream(), true);
+            while(!outqueue.isEmpty()) {
+                playerWriter.println(outqueue.remove());
+            }
             //playerWriter.close();
         } catch (Exception e) {
             e.printStackTrace();

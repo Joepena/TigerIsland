@@ -21,53 +21,58 @@ public class ServerTest {
 
             // Initiate conversation with client
 
-            String pid = "player5";
+            String pid = "us";
             String cid = "1";
-            int rounds = 4;
+            int rounds = 2;
             int roundID = 1;
             String gid1 = "1";
-            int time = 2;
+            double time = 1.5;
             int moveNum = 1;
-            String tile = "LAKE+JUNGLE\r\n";
-            String opponentPID = "player2\r\n";
+            String tile1 = "LAKE+JUNGLE\r\n";
+            String tile2 = "ROCK+GRASS\r\n";
+            String opponentPID = "them";
             String message1 = "WELCOME TO ANOTHER EDITION OF THUNDERDOME!\r\n";
             String message2 = "TWO SHALL ENTER, ONE SHALL LEAVE\r\n";
             String message3 = "WAIT FOR THE TOURNAMENT TO BEGIN " + pid + "\r\n";
             String message4 = "NEW CHALLENGE " + cid + " YOU WILL PLAY " + rounds + " MATCHES\r\n";
-            String message5 = "BEGIN ROUND "+ roundID +" OF " + rounds + "\r\n";
+            String message5 = "BEGIN ROUND 1 OF 2 \r\n";
             String message6 = "NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER " + opponentPID + "\r\n";
-            String message7 = "MAKE YOUR MOVE IN GAME " + gid1 + " WITHIN " + time + " SECONDS: MOVE " + moveNum + " PLACE " + tile + "\r\n";
-            String message8 = "GAME 2 MOVE 1 PLAYER ASASDFASD PLACED JUNGLE+LAKE AT -1 3 -2 3 FOUNDED SETTLEMENT AT 0 1 -1\r\n";
+            String message7 = "MAKE YOUR MOVE IN GAME " + gid1 + " WITHIN " + time + " SECONDS: MOVE 1 PLACE " + tile1 + "\r\n";
+            String message8 = "GAME 2 MOVE 1 PLAYER ASASDFASD LOST: UNABLE TO BUILD\r\n";
             String message9 = "GAME 1 OVER PLAYER player5 123 PLAYER player2 2345\r\n";
             String message10 = "GAME 2 OVER PLAYER player2 123 PLAYER player5 2345\r\n";
+            String message101 = "END OF ROUND 1 OF 4 WAIT FOR NEXT MATCH\r\n";
             //round 2
-            String message11 = "BEGIN ROUND "+ 2 +" OF " + rounds + "\r\n";
+            String message11 = "BEGIN ROUND "+ 2 +" OF 2\r\n";
             String message12 = "NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER " + "D" + "\r\n";
-            String message13 = "MAKE YOUR MOVE IN GAME " + gid1 + " WITHIN " + time + " SECONDS: MOVE " + moveNum + " PLACE " + tile + "\r\n";
+            String message13 = "MAKE YOUR MOVE IN GAME " + gid1 + " WITHIN " + time + " SECONDS: MOVE " + moveNum + " PLACE " + tile1 + "\r\n";
             String message14 = "GAME 2 MOVE 1 PLAYER ASASDFASD PLACED JUNGLE+LAKE AT -1 3 -2 3 FOUNDED SETTLEMENT AT 0 1 -1\r\n";
             String message15 = "GAME 1 OVER PLAYER player5 123 PLAYER player2 2345\r\n";
             String message16 = "GAME 2 OVER PLAYER D 123 PLAYER player5 2345\r\n";
+            String message102 = "END OF ROUND 2 OF 4 WAIT FOR NEXT MATCH\r\n";
             String message17 = "WAIT FOR THE NEXT CHALLENGE TO BEGIN\r\n";
 
             //challenge 2
             String message40 = "NEW CHALLENGE " + 2 + " YOU WILL PLAY " + rounds + " MATCHES\r\n";
-            String message50 = "BEGIN ROUND "+ 3 +" OF " + rounds + "\r\n";
+            String message50 = "BEGIN ROUND "+ 1 +" OF " + rounds + "\r\n";
             String message60 = "NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER " + opponentPID + "\r\n";
-            String message70 = "MAKE YOUR MOVE IN GAME " + gid1 + " WITHIN " + time + " SECONDS: MOVE " + moveNum + " PLACE " + tile + "\r\n";
+            String message70 = "MAKE YOUR MOVE IN GAME " + gid1 + " WITHIN " + time + " SECONDS: MOVE " + moveNum + " PLACE " + tile2 + "\r\n";
             String message80 = "GAME 2 MOVE 1 PLAYER ASASDFASD PLACED JUNGLE+LAKE AT -1 3 -2 3 FOUNDED SETTLEMENT AT 0 1 -1\r\n";
             String message90 = "GAME 1 OVER PLAYER player5 123 PLAYER player2 2345\r\n";
             String message100 = "GAME 2 OVER PLAYER player2 123 PLAYER player5 2345\r\n";
+            String message103 = "END OF ROUND 3 OF 4 WAIT FOR NEXT MATCH\r\n";
             //round 2
-            String message110 = "BEGIN ROUND "+ 4 +" OF " + rounds + "\r\n";
+            String message110 = "BEGIN ROUND "+ 2 +" OF " + rounds + "\r\n";
             String message120 = "NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER " + "FFFFFFF" + "\r\n";
-            String message130 = "MAKE YOUR MOVE IN GAME " + gid1 + " WITHIN " + time + " SECONDS: MOVE " + moveNum + " PLACE " + tile + "\r\n";
+            String message130 = "MAKE YOUR MOVE IN GAME " + gid1 + " WITHIN " + time + " SECONDS: MOVE " + moveNum + " PLACE " + tile1 + "\r\n";
             String message140 = "GAME 2 MOVE 1 PLAYER FUCKER PLACED JUNGLE+LAKE AT -1 3 -2 3 FOUNDED SETTLEMENT AT 0 1 -1\r\n";
             String message150 = "GAME 1 OVER PLAYER player5 123 PLAYER player2 2345\r\n";
             String message160 = "GAME 2 OVER PLAYER FFFFFFF 123 PLAYER player5 2345\r\n";
+            String message104 = "END OF ROUND 4 OF 4 WAIT FOR NEXT MATCH\r\n";
             String message170 = "END OF CHALLENGES\r\n";
 
-            System.out.println("From our AI with love: " + in.readLine());
-            System.out.println("From our AI with love: " + in.readLine());
+//            System.out.println("From our AI with love: " + in.readLine());
+//            System.out.println("From our AI with love: " + in.readLine());
             //System.out.println("From our AI with love: " + in.readLine());
             //System.out.println("From our AI with love: " + in.readLine());
 
@@ -131,6 +136,12 @@ public class ServerTest {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            out.println(message101);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             out.println(message11);
             try {
                 Thread.sleep(500);
@@ -162,6 +173,12 @@ public class ServerTest {
                 e.printStackTrace();
             }
             out.println(message16);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            out.println(message102);
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
@@ -215,6 +232,12 @@ public class ServerTest {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            out.println(message103);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             out.println(message110);
             try {
                 Thread.sleep(500);
@@ -235,27 +258,30 @@ public class ServerTest {
             }
             out.println(message140);
             try {
-                Thread.sleep(1500);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             out.println(message150);
             try {
-                Thread.sleep(1500);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             out.println(message160);
             try {
-                Thread.sleep(1500);
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            out.println(message104);
+            try {
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             out.println(message170);
 
-            String fromPlayer = "From our AI with love: " + in.readLine();
-           // serverSocket.close();
-            System.out.println(fromPlayer);
 
         } catch (IOException e) {
             System.out.println("Exception caught when trying to listen on port "
