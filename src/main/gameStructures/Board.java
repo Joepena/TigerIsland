@@ -101,21 +101,25 @@ public class Board {
             for (int j = 173; j < 203; j++) {
                 if (i == 188 && j == 188) {
                     if (gameBoard2D[i][j] == null) {
-                        System.out.print("***\t");
+                        System.out.print("****\t");
                     } else {
                         System.out.print("*");
                         System.out.print(gameBoard2D[i][j].getTileId());
                         System.out.print(gameBoard2D[i][j].getTerrainForVisualization());
                         System.out.print(gameBoard2D[i][j].getLevel());
+                        System.out.print(gameBoard2D[i][j].getPieceForVisualization());
+                        System.out.print("\t");
                     }
                 } else {
                     if (gameBoard2D[i][j] == null) {
-                        System.out.print("---\t");
+                        System.out.print("----\t");
                     } else {
 
                         System.out.print(gameBoard2D[i][j].getTileId());
                         System.out.print(gameBoard2D[i][j].getTerrainForVisualization());
-                        System.out.print(gameBoard2D[i][j].getLevel() + "\t");
+                        System.out.print(gameBoard2D[i][j].getLevel());
+                        System.out.print(gameBoard2D[i][j].getPieceForVisualization());
+                        System.out.print("\t");
                     }
                 }
             }

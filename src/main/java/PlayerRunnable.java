@@ -23,6 +23,7 @@ public class PlayerRunnable implements Runnable {
     private String gameID;
     private clientMoveMessages moveMessage;
     private int moveNumber;
+    Orientation.Orientations orientation;
 
     public GameAPI getGame() {
         return game;
@@ -41,6 +42,7 @@ public class PlayerRunnable implements Runnable {
         this.game = new GameAPI();
         this.moveMessage = null;
         this.moveNumber = 0;
+        this.orientation = null;
     }
 
     public void setGameID(String gameID) {
@@ -81,19 +83,25 @@ public class PlayerRunnable implements Runnable {
 
             //Decide normal place or nuke
             //Tiger Rush Strategy
-            if (canNukeSafely(game)) {
+            if (canNukeSafely(game) && eruptionOptions.size() != 0) {
                 decisionCoords = canSabotageEnemySettlement(game, eruptionOptions);
                 if (decisionCoords != null) {
                     moveMessage.setTileLocation(decisionCoords);
+                    orientation = game.APIUtils.getViableNukingOrientation(decisionCoords);
+                    moveMessage.setOrientation(moveMessage.orientationToNumber(orientation));
                 } else {
                     //nuke tile nearest origin.
                     decisionCoords = findClosestTupleToOrigin(eruptionOptions);
                     moveMessage.setTileLocation(decisionCoords);
+                    orientation = game.APIUtils.getViableNukingOrientation(decisionCoords);
+                    moveMessage.setOrientation(moveMessage.orientationToNumber(orientation));
                 }
             } else {
                 //Place tile nearest origin.
                 decisionCoords = findClosestTupleToOrigin(tilePlacementOptions);
                 moveMessage.setTileLocation(decisionCoords);
+                orientation = game.APIUtils.getViableNonNukingOrientation(decisionCoords);
+                moveMessage.setOrientation(moveMessage.orientationToNumber(orientation));
             }
 
             //Totoro Turtle Strategy
@@ -113,11 +121,11 @@ public class PlayerRunnable implements Runnable {
                 }
             }*/
 
-                moveMessage.setTileLocation(tilePlacementOptions.get(0));
-                Orientation.Orientations orientation = game.APIUtils.getViableNonNukingOrientation(tilePlacementOptions.get(0));
-                //int orientation = game.APIUtils.findValidOrientationsAtPoint(tilePlacementOptions.get(0)).get(0);
-                moveMessage.setOrientation(moveMessage.orientationToNumber(orientation));
-                //moveMessage.setOrientation(orientation);
+                //FOR SERVER TESTING
+                //moveMessage.setTileLocation(tilePlacementOptions.get(0));
+                //Orientation.Orientations orientation = game.APIUtils.getViableNonNukingOrientation(tilePlacementOptions.get(0));
+                //moveMessage.setOrientation(moveMessage.orientationToNumber(orientation));
+
                 moveMessage.setTile(newTile);
                 moveMessage.setGid(this.gameID);
                 moveMessage.setMoveNumber(this.moveNumber);
@@ -125,7 +133,7 @@ public class PlayerRunnable implements Runnable {
 
                 //Place tile to handle on our own board
                 newTile.setLeftHexOrientation(orientation);
-                game.placeTile(newTile, tilePlacementOptions.get(0));
+                game.placeTile(newTile, decisionCoords);
 
                 //Update board state
                 game.updateSettlements();
@@ -193,11 +201,25 @@ public class PlayerRunnable implements Runnable {
 
 
                 //FOR SERVER TESTING
-                moveMessage.setBuildLocation(foundSettlementOptions.get(0));
-                moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Found);
+                //moveMessage.setBuildLocation(foundSettlementOptions.get(0));
+                //moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Found);
 
                 //Perform Build action
-                //game.foundSettlement(buildDecisionCoords, Hex.Team.Black);
+                //foundSettlement(buildDecisionCoords, Hex.Team.Black);
+                switch  (moveMessage.getMoveType()){
+                    case Expand:
+                        game.performLandGrab(moveMessage.getBuildLocation());
+                        break;
+                    case Found:
+                        break;
+                    case Totoro:
+                        break;
+                    case Tiger:
+                        break;
+                    case Unable:
+                        break;
+                }
+
 
                 //Print out moveMessage and send to Client
 

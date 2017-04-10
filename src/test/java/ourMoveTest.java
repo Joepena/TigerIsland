@@ -36,14 +36,14 @@ public class ourMoveTest {
 
         player.executeMessage(message);
         player.run();
-        //player.getGame().gameBoard.printSectionedBoard(player.getGame().gameBoard);
+        player.getGame().gameBoard.printSectionedBoard(player.getGame().gameBoard);
 
 
         player.setGameOver(false);
         message = (MakeYourMoveMessage)mP.parseString("MAKE YOUR MOVE IN GAME ABC WITHIN 1.5 SECONDS: MOVE 8 PLACE GRASS+JUNGLE");
         player.executeMessage(message);
         player.run();
-        //player.getGame().gameBoard.printSectionedBoard(player.getGame().gameBoard);
+        player.getGame().gameBoard.printSectionedBoard(player.getGame().gameBoard);
 
         player.setGameOver(false);
         message = (MakeYourMoveMessage)mP.parseString("MAKE YOUR MOVE IN GAME ABC WITHIN 1.5 SECONDS: MOVE 9 PLACE ROCK+JUNGLE");

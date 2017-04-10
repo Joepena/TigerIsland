@@ -23,6 +23,8 @@ public class clientMoveMessages
         this.buildLocation = buildLocation;
     }
 
+    public Tuple getBuildLocation() {return buildLocation;}
+
     public void setTile(Tile tile) {
         this.tile = tile;
     }
@@ -35,6 +37,9 @@ public class clientMoveMessages
     private int moveNumber;
     private Tuple tileLocation;
     private int orientation;
+
+
+
     private Tuple buildLocation;
     private Tile tile;
     private Terrain.terrainType terrain;
