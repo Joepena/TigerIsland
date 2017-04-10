@@ -3,7 +3,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.LinkedList;
 import java.util.Objects;
+import java.util.Queue;
 
 /**
  * Created by troy on 4/6/2017.
@@ -25,10 +27,11 @@ public class GameClient {
     private static String game2ID = "";
     private static Socket socket;
     private static PrintWriter out;
-    private static Message p1Move;
-    private static Message p2Move;
+    private static Queue<Message> p1Moves;
+    private static Queue<Message> p2Moves;
     private static boolean p1RoundIsDone;
     private static boolean p2RoundIsDone;
+
 
 
 
@@ -104,8 +107,11 @@ public class GameClient {
 //                    Thread player2 = new Thread(new PlayerRunnable(playerID, opponentPID, 2));
 //                    player2.start();
 
+                    p1Moves = new LinkedList<Message>();
+                    p2Moves = new LinkedList<Message>();
+
                     //SINGLE TURN
-                    while(!p1RoundIsDone && !p2RoundIsDone) {
+                    while(!p1RoundIsDone) {
 
                         Message turnMessage;
                         String serverMessage = "";
@@ -114,10 +120,10 @@ public class GameClient {
                         while (serverMessage.equals("")) {
                             serverMessage = in.readLine();
                         }
-                            System.out.println(serverMessage);
+                            System.out.println("ServerString:   " + serverMessage);
                             turnMessage = parser.parseString(serverMessage);
 
-                        System.out.println("Server says: " + turnMessage + "MessageType: " + turnMessage.getMessageType());
+                        System.out.println("Server says: " + turnMessage + "  MessageType: " + turnMessage.getMessageType());
 
                         tempGameID = getGameIDFromMessage(turnMessage);
 
@@ -128,7 +134,7 @@ public class GameClient {
                             if(turnMessage instanceof GameOverMessage){
                                 if(((GameOverMessage)turnMessage).getGid().equals(game1ID)){
                                     p1RoundIsDone = true;
-                                    player1.join();
+
                                 }
                                 else {
                                     p2RoundIsDone = true;
@@ -136,12 +142,16 @@ public class GameClient {
                                 }
                             }
 
-
+//&&player1.isReady()
                         //Send Message object to proper player
+                        System.out.println("GameID1:  " + game1ID + "   tempGameID:  " + tempGameID);
                         if (tempGameID.equals(game1ID)) {
-                            p1Move = turnMessage;
-                            System.out.println("We got a move");
-                            player1.interrupt();
+                            System.out.println("Client entering Sycnhronized block");
+                                synchronized (p1Moves) {
+                                    p1Moves.add(turnMessage);
+                                    System.out.println("Added to Queue");
+                                    p1Moves.notifyAll();
+                                }
                         } else if (tempGameID.equals(game2ID)) {
                            // p2Move = turnMessage;
                            // System.out.println("We got a move");
@@ -149,6 +159,7 @@ public class GameClient {
                         }
 
                     }
+            player1.join();
 
 
 
@@ -178,6 +189,8 @@ public class GameClient {
         } else if (serverMessage instanceof MoveMessage) {
             returnID = ((MoveMessage) serverMessage).getGid();
         }
+        else if (serverMessage instanceof  GameOverMessage)
+            returnID = ((GameOverMessage)serverMessage).getGid();
 
         return returnID;
     }
@@ -189,7 +202,7 @@ public class GameClient {
             System.out.println("Game1ID: " + game1ID);
         } else if (game2ID.equals("")) {
             game2ID = ID;
-            System.out.println("Game2ID: " + game1ID);
+            System.out.println("Game2ID: " + game2ID);
         }
     }
 
@@ -263,21 +276,21 @@ public class GameClient {
         }
     }
 
-    public static Message getP1Move() {
-        return p1Move;
+    public static Queue<Message> getP1Moves() {
+        return p1Moves;
     }
 
-    public static void setP1Move(Message p1Move) {
-        GameClient.p1Move = p1Move;
-    }
+//    public static void setP1Move(Message p1Move) {
+//        GameClient.p1Move = p1Move;
+//    }
 
     public static Message getP2Move() {
-        return p2Move;
+        return p2Moves.peek();
     }
 
-    public static void setP2Move(Message p2Move) {
-        GameClient.p2Move = p2Move;
-    }
+//    public static void setP2Move(Message p2Move) {
+//        GameClient.p2Move = p2Move;
+//    }
 
     public static void setP1RoundIsDone(boolean p1RoundIsDone) {
         GameClient.p1RoundIsDone = p1RoundIsDone;

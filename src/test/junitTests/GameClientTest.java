@@ -35,7 +35,7 @@ public class GameClientTest {
         //System.setIn(fips);
     }
 
-    /*@Test
+    @Test
     public void testIntroMessageParsing() {
 
         try {
@@ -46,14 +46,15 @@ public class GameClientTest {
             Assert.assertEquals("roundID should be 1", GameClient.getRoundID(), 1);
             Assert.assertEquals("opponent pid should be player2",  GameClient.getOpponentPID(), "player2");
             //GameClient.closeSocket();
-            while(true);
+            int count = 0;
+            while(count++ < 1000000);
             //GameClient.setP1RoundIsDone(true);
             //GameClient.setP2RoundIsDone(true);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }*/
+    }
 
 //    @Test
 //    public void testRoundMessageParsing() {

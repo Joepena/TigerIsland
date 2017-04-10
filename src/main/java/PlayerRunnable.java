@@ -79,13 +79,22 @@ public class PlayerRunnable implements Runnable {
         game.placeFirstTile();
 
         while(!gameOver) {
+            Message messageFromClient = new NoActionMessage(Message.MessageType.Welcome);
             try {
 
                // System.out.println(GameClient.getP1Move().toString());
-                while(true) {
-                    Thread.sleep(100);
+               /* while(!GameClient.getP1Moves().isEmpty()) {
+                    Thread.sleep(20);
+                    System.out.println("Queue Size in try catch:  " + GameClient.getP1Moves().size());
                     System.out.println("Goodnight player " + this.playerNum);
-                }
+                }*/
+                System.out.println("Player entering Synchronized block");
+               synchronized (GameClient.getP1Moves()){
+                   while(GameClient.getP1Moves().isEmpty())
+                       GameClient.getP1Moves().wait();
+                   messageFromClient = GameClient.getP1Moves().remove();
+                   GameClient.getP1Moves().notifyAll();
+               }
 
             } catch (InterruptedException e) {
                 System.out.println("Player " + this.playerNum + " about to do stuff!");
@@ -95,27 +104,28 @@ public class PlayerRunnable implements Runnable {
             this.gameID = GameClient.getGame1ID();
 
             if (this.playerNum == 1) {
-                System.out.println(GameClient.getP1Move());
+                System.out.println(messageFromClient);
                 if(!gameOver)
-                    executeMessage(GameClient.getP1Move());
-                System.out.println("THis is player " + playerNum + "'s board\n");
-                game.gameBoard.printSectionedBoard(game.gameBoard);
+                    executeMessage(messageFromClient);
+                //System.out.println("THis is player " + playerNum + "'s board\n");
+               // game.gameBoard.printSectionedBoard(game.gameBoard);
 
-                if(GameClient.getP1Move().getMessageType() == Message.MessageType.MakeYourMove)
+                if(messageFromClient.getMessageType() == Message.MessageType.MakeYourMove)
                     playTurn(1);
-                GameClient.setP1Move(null);
+                //GameClient.setP1Move(null);
             }
             else {
                 System.out.println(GameClient.getP2Move());
                 if(!gameOver)
                     executeMessage(GameClient.getP2Move());
-                System.out.println("THis is player " + playerNum + "'s board\n");
-                game.gameBoard.printSectionedBoard(game.gameBoard);
+                //System.out.println("THis is player " + playerNum + "'s board\n");
+               // game.gameBoard.printSectionedBoard(game.gameBoard);
 
                 if(GameClient.getP2Move().getMessageType() == Message.MessageType.MakeYourMove)
                     playTurn(2);
-                GameClient.setP2Move(null);
+               // GameClient.setP2Move(null);
             }
+
 
 
 //            try {
@@ -133,14 +143,13 @@ public class PlayerRunnable implements Runnable {
 
 
     private void playTurn(int playerNum) {
-        System.out.println("NOT HERE");
         moveMessage = new clientMoveMessages();
         //Update board state
         game.updateSettlements();
 
         //Check for tile placement options
         tilePlacementOptions = game.getAvailableTilePlacement();
-        System.out.println("Number of placement options: " + tilePlacementOptions.size());
+        //System.out.println("Number of placement options: " + tilePlacementOptions.size());
 
 
             //Decide normal place or nuke
@@ -158,7 +167,7 @@ public class PlayerRunnable implements Runnable {
 
             moveMessage.setTileLocation(tilePlacementOptions.get(0));
             Orientation.Orientations orientation = game.APIUtils.getViableNonNukingOrientation(tilePlacementOptions.get(0));
-            System.out.println(tilePlacementOptions.get(0));
+            //System.out.println(tilePlacementOptions.get(0));
             newTile.setLeftHexOrientation(orientation);
             moveMessage.setOrientation(moveMessage.orientationToNumber(orientation));
             moveMessage.setTile(newTile);
@@ -170,14 +179,14 @@ public class PlayerRunnable implements Runnable {
             game.placeTile(newTile, tilePlacementOptions.get(0));
         //Check for nuking options
         eruptionOptions = game.getValidNukingLocations();
-        System.out.println("Number of Nuking options: " + eruptionOptions.size());
+        //System.out.println("Number of Nuking options: " + eruptionOptions.size());
 
         //Decide normal place or nuke
 
 
 
         //Place tile
-        System.out.println("Where we were thinking of placing: " + tilePlacementOptions.get(0));
+        //System.out.println("Where we were thinking of placing: " + tilePlacementOptions.get(0));
         Tile troyTestTile = new Tile(1, Terrain.terrainType.Jungle, Terrain.terrainType.Lake, Orientation.Orientations.downLeft);
         game.placeTile(troyTestTile, tilePlacementOptions.get(0));
 
@@ -220,6 +229,7 @@ public class PlayerRunnable implements Runnable {
             //Print out moveMessage and send to Client
 
             System.out.println(moveMessage.toString(moveMessage.getMoveType()));
+            System.out.println("Queue size player 1:  " + GameClient.getP1Moves().size());
             if(this.playerNum == 1)
                 GameClient.sendMessageFromPlayerToServer(moveMessage, 1);
             else
