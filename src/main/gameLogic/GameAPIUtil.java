@@ -253,6 +253,46 @@ public class GameAPIUtil {
         return null;
     }
 
+    public Vector<Integer> findValidOrientationsAtPoint(Tuple testingLocation)
+    {
+
+        Hex hexTestingLocation = gameBoard.getHex(testingLocation);
+        Vector<Integer> validOrientations = new Vector<Integer>();
+
+        if(hexTestingLocation != null)
+        {
+            validOrientations.add(-1);
+        }
+        else {
+            Hex hexLeftOf = gameBoard.getHex(Orientation.leftOf(testingLocation));
+            Hex hexRightOf = gameBoard.getHex(Orientation.rightOf(testingLocation));
+            Hex hexUpLeftOf = gameBoard.getHex(Orientation.upLeftOf(testingLocation));
+            Hex hexUpRightOf = gameBoard.getHex(Orientation.upRightOf(testingLocation));
+            Hex hexDownLeftOf = gameBoard.getHex(Orientation.downLeftOf(testingLocation));
+            Hex hexDownRightOf = gameBoard.getHex(Orientation.downRightOf(testingLocation));
+
+            if (hexUpLeftOf == null && hexUpRightOf == null) {
+                validOrientations.add(1);
+            }
+            if (hexUpRightOf == null && hexRightOf == null) {
+                validOrientations.add(2);
+            }
+            if (hexRightOf == null && hexDownRightOf == null) {
+                validOrientations.add(3);
+            }
+            if (hexDownRightOf == null && hexDownLeftOf == null) {
+                validOrientations.add(4);
+            }
+            if (hexLeftOf == null && hexDownLeftOf == null) {
+                validOrientations.add(5);
+            }
+            if (hexLeftOf == null && hexUpLeftOf == null) {
+                validOrientations.add(6);
+            }
+        }
+        return validOrientations;
+    }
+
     public boolean isValidTileNukingPosition(TilePositionCoordinates tilePositionCoordinates) {
 
         Hex hexUnderVolcano = gameBoard.getHex(tilePositionCoordinates.getVolcanoCoordinates());
@@ -728,45 +768,7 @@ public class GameAPIUtil {
     return exists;
   }
 
-  public Vector<Integer> findValidOrientationsAtPoint(Tuple testingLocation)
-  {
 
-    Hex hexTestingLocation = gameBoard.getHex(testingLocation);
-    Vector<Integer> validOrientations = new Vector<Integer>();
-
-    if(hexTestingLocation != null)
-    {
-      validOrientations.add(-1);
-    }
-    else {
-      Hex hexLeftOf = gameBoard.getHex(Orientation.leftOf(testingLocation));
-      Hex hexRightOf = gameBoard.getHex(Orientation.rightOf(testingLocation));
-      Hex hexUpLeftOf = gameBoard.getHex(Orientation.upLeftOf(testingLocation));
-      Hex hexUpRightOf = gameBoard.getHex(Orientation.upRightOf(testingLocation));
-      Hex hexDownLeftOf = gameBoard.getHex(Orientation.downLeftOf(testingLocation));
-      Hex hexDownRightOf = gameBoard.getHex(Orientation.downRightOf(testingLocation));
-
-      if (hexUpLeftOf == null && hexUpRightOf == null) {
-        validOrientations.add(1);
-      }
-      if (hexUpRightOf == null && hexRightOf == null) {
-        validOrientations.add(2);
-      }
-      if (hexRightOf == null && hexDownRightOf == null) {
-        validOrientations.add(3);
-      }
-      if (hexDownRightOf == null && hexDownLeftOf == null) {
-        validOrientations.add(4);
-      }
-      if (hexLeftOf == null && hexDownLeftOf == null) {
-        validOrientations.add(5);
-      }
-      if (hexLeftOf == null && hexUpLeftOf == null) {
-        validOrientations.add(6);
-      }
-    }
-    return validOrientations;
-  }
 
     public static boolean isSameTeam(Hex hex1, Hex hex2) {
 
@@ -789,6 +791,26 @@ public class GameAPIUtil {
     public static boolean isEmpty(Hex hex) {
         return hex.getOccupiedBy() == Hex.gamePieces.empty;
     }
+
+    public Orientation.Orientations numToOrientation(int number){
+        switch(number){
+            case 1:
+                return Orientation.Orientations.upRight;
+            case 2:
+                return Orientation.Orientations.right;
+            case 3:
+                return Orientation.Orientations.downRight;
+            case 4:
+                return Orientation.Orientations.downLeft;
+            case 5:
+                return Orientation.Orientations.left;
+            case 6:
+                return Orientation.Orientations.upLeft;
+            default:
+                return Orientation.Orientations.upRight;
+        }
+    }
+
 
 
 

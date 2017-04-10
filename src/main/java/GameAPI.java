@@ -90,6 +90,7 @@ public class GameAPI {
 
     public ArrayList<ExpansionOpDataFrame> getExpansionOptions(Hex.Team targetTeam) {
       ArrayList<ExpansionOpDataFrame> list = APIUtils.findExpansionOptionsFor(targetTeam);
+      removeSizeZeroOptions(list);
       Collections.sort(list);
       return list;
     }
@@ -299,11 +300,20 @@ public class GameAPI {
     public void createTotoroSanctuary(Tuple tuple, Hex.Team team) {
         gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Totoro);
         gameBoard.getHex(tuple).setTeam(team);
+        totoroCount--;
     }
 
     public void createTigerPlayground(Tuple tuple, Hex.Team team) {
         gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Tiger);
         gameBoard.getHex(tuple).setTeam(team);
+        tigerCount--;
+    }
+
+    public void removeSizeZeroOptions(ArrayList<ExpansionOpDataFrame> list) {
+        for(int i=0; i < list.size(); ) {
+            if(list.get(i).getExpansionCost() == 0) list.remove(i);
+            else i++;
+        }
     }
 
 }

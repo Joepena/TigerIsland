@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * Created by Troy on 3/27/17.
@@ -24,6 +25,7 @@ public class PlayerRunnable implements Runnable {
     private clientMoveMessages moveMessage;
     private int moveNumber;
     Orientation.Orientations orientation;
+    Vector<Integer> orientationList;
 
     public GameAPI getGame() {
         return game;
@@ -66,7 +68,7 @@ public class PlayerRunnable implements Runnable {
 
         //Player Logic
 
-        game.placeFirstTile();
+        //game.placeFirstTile();
 
         while (!gameOver) {
             while (!hasMove) ;
@@ -100,7 +102,15 @@ public class PlayerRunnable implements Runnable {
                 //Place tile nearest origin.
                 decisionCoords = findClosestTupleToOrigin(tilePlacementOptions);
                 moveMessage.setTileLocation(decisionCoords);
-                orientation = game.APIUtils.getViableNonNukingOrientation(decisionCoords);
+                //orientation = game.APIUtils.getViableNonNukingOrientation(decisionCoords);
+                orientationList = game.APIUtils.findValidOrientationsAtPoint(decisionCoords);
+                for (Integer i : orientationList){
+                    newTile.setLeftHexOrientation(game.APIUtils.numToOrientation(i));
+                    if (game.APIUtils.isTileConnected(newTile, decisionCoords)){
+                        orientation = game.APIUtils.numToOrientation(i);
+                        break;
+                    }
+                }
                 moveMessage.setOrientation(moveMessage.orientationToNumber(orientation));
             }
 
@@ -165,9 +175,11 @@ public class PlayerRunnable implements Runnable {
                         game.createTotoroSanctuary(totoroPlacementOptions.get(0), Hex.Team.Black);
                     } else {
                         //found settlement
+                        buildDecisionCoords = findClosestTupleToOrigin(foundSettlementOptions);
                         moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Found);
-                        moveMessage.setBuildLocation(foundSettlementOptions.get(0));
-                        game.foundSettlement(foundSettlementOptions.get(0), Hex.Team.Black);
+                        moveMessage.setBuildLocation(buildDecisionCoords);
+                        game.foundSettlement(buildDecisionCoords, Hex.Team.Black);
+                        System.out.println("We founded a settlement at this level: "+ game.gameBoard.getHex(buildDecisionCoords).getLevel());
                     }
                 } else {
                     ExpansionOpDataFrame expansionDF = chooseHighestCostValidExpansion(expandSettlementOptions);
@@ -177,11 +189,14 @@ public class PlayerRunnable implements Runnable {
                         moveMessage.setBuildLocation(expansionDF.getExpansionStart());
                         moveMessage.setTerrain(expansionDF.getTerrain());
                         game.performLandGrab(expansionDF);
+                        System.out.println("We expanded for turn: "+ newTile.getTileId());
+                        System.out.println("Expanded cost: "+ expansionDF.getExpansionCost());
                     } else {
                         //found settlement
+                        buildDecisionCoords = findClosestTupleToOrigin(foundSettlementOptions);
                         moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Found);
-                        moveMessage.setBuildLocation(foundSettlementOptions.get(0));
-                        game.foundSettlement(foundSettlementOptions.get(0), Hex.Team.Black);
+                        moveMessage.setBuildLocation(buildDecisionCoords);
+                        game.foundSettlement(buildDecisionCoords, Hex.Team.Black);
                     }
                 }
 

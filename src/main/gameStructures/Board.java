@@ -26,6 +26,8 @@ public class Board {
             presentHex.incrementLevel();
             presentHex.setTerrain(hex.getTerrain());
             presentHex.setTileId(hex.getTileId());
+            presentHex.setOccupiedBy(Hex.gamePieces.empty);
+            presentHex.setTeam(Hex.Team.Neutral);
         } else {
             Tuple actualCoordinates = calculateOffset(coordinates);
             gameBoardAvailability[actualCoordinates.getX()][actualCoordinates.getY()][actualCoordinates.getZ()] = true;
