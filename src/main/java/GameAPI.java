@@ -293,9 +293,13 @@ public class GameAPI {
         gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Meeple);
 
         gameBoard.getHex(tuple).setTeam(team);
-        if(team == Hex.Team.Black) decrementVillagersBy(gameBoard.getHex(tuple).getLevel());
-
+        if (team == Hex.Team.Black) {
+            System.out.println("hex level: " + gameBoard.getHex(tuple).getLevel());
+            decrementVillagersBy(gameBoard.getHex(tuple).getLevel());
+        }
     }
+
+
 
     public void createTotoroSanctuary(Tuple tuple, Hex.Team team) {
         gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Totoro);

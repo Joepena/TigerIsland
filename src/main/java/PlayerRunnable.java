@@ -230,7 +230,7 @@ public class PlayerRunnable implements Runnable {
 
                 //Print out moveMessage and send to Client
 
-                System.out.println(moveMessage.toString(moveMessage.getMoveType()));
+                //System.out.println(moveMessage.toString(moveMessage.getMoveType()));
 
                 hasMove = false;
                 gameOver = true;

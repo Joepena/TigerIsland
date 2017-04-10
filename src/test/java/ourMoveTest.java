@@ -34,14 +34,16 @@ public class ourMoveTest {
 
         player.executeMessage(message);
         player.run();
-        player.getGame().gameBoard.printSectionedBoard(player.getGame().gameBoard);
+        //player.getGame().gameBoard.printSectionedBoard(player.getGame().gameBoard);
+        System.out.println("Villager Count: "+player.getGame().getVillagerCount());
 
 
-        for (int i = 2; i <=15; i++){
+        for (int i = 2; i <=12; i++){
             player.setGameOver(false);
             message = (MakeYourMoveMessage)mP.parseString("MAKE YOUR MOVE IN GAME ABC WITHIN 1.5 SECONDS: MOVE "+i+" PLACE GRASS+JUNGLE");
             player.executeMessage(message);
             player.run();
+            System.out.println("Villager Count: "+player.getGame().getVillagerCount());
         }
         System.out.println(player.getGame().getTigerCount());
         System.out.println(player.getGame().getTotoroCount());
