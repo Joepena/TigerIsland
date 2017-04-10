@@ -26,7 +26,7 @@ public class GameClient {
     private static String game1ID = "";
     private static String game2ID = "";
     private static Socket socket;
-    private static PrintWriter out;
+    private static PrintWriter output;
     private static Queue<Message> p1Moves;
     private static Queue<Message> p2Moves;
     private static boolean p1RoundIsDone;
@@ -58,15 +58,16 @@ public class GameClient {
             //Create socket and buffers
             socket = new Socket(host, port);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(socket.getOutputStream(), true);
+            output = new PrintWriter(socket.getOutputStream(), true);
             String rawServerMessage;
             Message parsedServerMessage;
             MessageParser parser = new MessageParser();
 
             //Send in username and password
             ClientMessages authentication = new ClientMessages("K", "K");
-            out.print(authentication.enterThunderdome("TIGERSRULE"));
-            out.print(authentication.usernamePassword());
+            output.println(authentication.enterThunderdome("TIGERSRULE"));
+            output.println(authentication.usernamePassword());
+            //output.close();
 
             //get the player id
             parsedServerMessage = parseServerInput(in, Message.MessageType.WaitToBegin);
@@ -162,19 +163,15 @@ public class GameClient {
             player1.join();
 
 
-
-
-                //}
-
-                challengeIsDone = true;
-
-
-           //}
-
-
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
+        }
+
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -207,9 +204,16 @@ public class GameClient {
     }
 
 
-    public static void sendMessageFromPlayerToServer(clientMoveMessages playerMessage, int playerNum) {
+    public static void sendMessageFromPlayerToServer(clientMoveMessages playerMessage) {
         String finalMessage = playerMessage.toString(playerMessage.getMessageType());
-        out.print(finalMessage);
+        System.out.println("To server with love: " + finalMessage);
+        try {
+            PrintWriter playerWriter = new PrintWriter(socket.getOutputStream());
+            playerWriter.print(finalMessage);
+            playerWriter.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

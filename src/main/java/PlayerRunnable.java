@@ -228,12 +228,9 @@ public class PlayerRunnable implements Runnable {
 
             //Print out moveMessage and send to Client
 
-            System.out.println(moveMessage.toString(moveMessage.getMoveType()));
-            System.out.println("Queue size player 1:  " + GameClient.getP1Moves().size());
-            if(this.playerNum == 1)
-                GameClient.sendMessageFromPlayerToServer(moveMessage, 1);
-            else
-                GameClient.sendMessageFromPlayerToServer(moveMessage, 2);
+            //System.out.println(moveMessage.toString(moveMessage.getMoveType()));
+            System.out.println("Sending this to the server:  " + moveMessage.toString(moveMessage.getMoveType()));
+            GameClient.sendMessageFromPlayerToServer(moveMessage);
 
         }
 

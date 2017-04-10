@@ -41,7 +41,10 @@ public class ServerTest {
             String message9 = "GAME 1 OVER PLAYER player5 123 PLAYER player2 2345";
             String message10 = "GAME 2 OVER PLAYER player2 123 PLAYER player5 2345";
 
-
+            System.out.println("From our AI with love: " + in.readLine());
+            System.out.println("From our AI with love: " + in.readLine());
+            //System.out.println("From our AI with love: " + in.readLine());
+            //System.out.println("From our AI with love: " + in.readLine());
 
             out.println(message1);
             out.println(message2);
@@ -53,17 +56,16 @@ public class ServerTest {
         //    out.println(message8);
             out.println(message9);
          //   out.println(message10);
-
-
-            System.out.println("From our AI with love: " + in.readLine());
-
-            while(true);
-
+            String fromPlayer = "From our AI with love: " + in.readLine();
+            serverSocket.close();
+            System.out.println(fromPlayer);
 
         } catch (IOException e) {
             System.out.println("Exception caught when trying to listen on port "
                 + portNumber + " or listening for a connection");
             System.out.println(e.getMessage());
         }
+
+
     }
 }
