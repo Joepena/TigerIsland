@@ -27,7 +27,7 @@ public class ExpansionStepDef {
     Assert.assertEquals("Scenario 2 assert terrain-2 is rocky", Terrain.terrainType.Rocky, list.get(1).getTerrain());
     Assert.assertEquals("Scenario 2 assert cost-2 is 3", 2, (int)list.get(1).getExpansionCost());
     Assert.assertEquals("Scenario 2 assert terrain-1 is jungle", Terrain.terrainType.Jungle, list.get(0).getTerrain());
-    Assert.assertEquals("Scenario 2 assert cost-1 is 4", 3, (int)list.get(0).getExpansionCost());
+    Assert.assertEquals("Scenario 2 assert cost-1 is 5", 5, (int)list.get(0).getExpansionCost());
 
   }
 
