@@ -217,7 +217,6 @@ public class PlayerRunnable implements Runnable {
     }
 
     hasMove = false;
-    gameOver = true;
     GameClient.sendMessageFromPlayerToServer(moveMessage);
 
   }
@@ -304,6 +303,7 @@ public class PlayerRunnable implements Runnable {
   }
 
   private void GameOver(GameOverMessage message) {
+    System.out.println("GAMEOVER!!!!!!!!!");
     this.gameOver = true;
   }
 
