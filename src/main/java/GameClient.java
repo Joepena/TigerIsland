@@ -61,7 +61,7 @@ public class GameClient {
 
             //Send in username and password
             ClientMessages authentication = new ClientMessages("K", "K");
-            output.println(authentication.enterThunderdome("TIGERSRULE"));
+            output.println(authentication.enterThunderdome(args[0]));
             output.println(authentication.usernamePassword());
             //output.close();
 
@@ -77,7 +77,8 @@ public class GameClient {
 
             System.out.println("This is our playerID: " + playerID);
 
-         //   while(!challengeIsDone) {
+            while(!challengeIsDone) {
+                System.out.println("challenge is done: " + challengeIsDone);
 
                 //get number of rounds
                 roundCount = 1;
@@ -96,6 +97,7 @@ public class GameClient {
 
                //
                 while(roundCount++ <= numRounds) {
+                    System.out.println((roundCount-1) + " < " + numRounds);
                     //Get round ID get opponent pid
 //                    String waitForRound = "";
 //                    while(waitForRound.equals("")) {
@@ -200,13 +202,14 @@ public class GameClient {
 //                        System.out.println("p1Moves.size():  " + p1Moves.size());
 //                        p1Moves.notifyAll();
 //                    }
-              //  }
-                System.out.println("currentRound: " + roundCount);
-                System.out.println("numRounds: " + numRounds);
-               // parsedServerMessage = parseServerInput(in, Message.MessageType.WaitForNext);
-              //  System.out.println("parsedServerMessage:  " + parsedServerMessage);
+                }
 
-           }
+                parsedServerMessage = parseServerInput(in, Message.MessageType.WaitForNext);
+                if (parsedServerMessage.getMessageType() == Message.MessageType.EndOfChallenges) {
+                    challengeIsDone = true;
+                }
+
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -269,21 +272,7 @@ public class GameClient {
             rawServerMessage = in.readLine();
             if (!rawServerMessage.equals("")) {
                 parsedServerMessage = parser.parseString(rawServerMessage);
-                //System.out.println("Server says: " + rawServerMessage);
-                if (parsedServerMessage.getMessageType() == type) {
-                    System.out.println(type);
-                    return parsedServerMessage;
-                }
-                else if(type == Message.MessageType.EndOfChallenges){
-                    //System.out.println("Queue1 size: " + p1Moves.size());
-                   // System.out.println("Queue2 size: " + p2Moves.size());
-                    challengeIsDone = true;
-                }
-                else {
-                    System.out.println("Expected type " + type);
-                    System.out.println("Actual type: "+ parsedServerMessage.getMessageType());
-                    return parsedServerMessage;
-                }
+                return parsedServerMessage;
             }
             i++;
         }

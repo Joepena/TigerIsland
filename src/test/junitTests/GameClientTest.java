@@ -30,7 +30,8 @@ public class GameClientTest {
         message2 = "TWO SHALL ENTER, ONE SHALL LEAVE";
         message3 = "WAIT FOR THE TOURNAMENT TO BEGIN " + pid;
         message4 = "NEW CHALLENGE " + cid + " YOU WILL PLAY " + rounds + " MATCHES";
-        args = null;
+        args = new String[1];
+        args[0] = "heygang";
         //fips = new FileInputStream(new File("src/test/resources/GameClientTestIntroMessageParsing.txt"));
         //System.setIn(fips);
     }
