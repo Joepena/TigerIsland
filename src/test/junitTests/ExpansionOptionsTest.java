@@ -48,9 +48,9 @@ public class ExpansionOptionsTest {
     ArrayList<ExpansionOpDataFrame> list = gameAPI.getExpansionOptions(Hex.Team.Black);
 
     Assert.assertEquals("Scenario 2 assert terrain-2 is rocky", Terrain.terrainType.Rocky, list.get(1).getTerrain());
-    Assert.assertEquals("Scenario 2 assert cost-2 is 3", 2, (int)list.get(1).getExpansionCost());
+    Assert.assertEquals("Scenario 2 assert cost-2 is 2", 2, (int)list.get(1).getExpansionCost());
     Assert.assertEquals("Scenario 2 assert terrain-1 is jungle", Terrain.terrainType.Jungle, list.get(0).getTerrain());
-    Assert.assertEquals("Scenario 2 assert cost-1 is 3", 3, (int)list.get(0).getExpansionCost());
+    Assert.assertEquals("Scenario 2 assert cost-1 is 5", 5, (int)list.get(0).getExpansionCost());
 
   }
 
@@ -90,7 +90,7 @@ public class ExpansionOptionsTest {
     Hex hex4 = gameAPI.gameBoard.getHex(Orientation.getUPLEFT());
     Hex hex5 = gameAPI.gameBoard.getHex(Orientation.upRightOf(hex4.getLocation()));
     Hex hex6 = gameAPI.gameBoard.getHex(Orientation.getLEFT());
-    Assert.assertEquals("Scenario 2-JungleGrab assert Villagers are 17", 17, gameAPI.getVillagerCount());
+    Assert.assertEquals("Scenario 2-JungleGrab assert Villagers are 15", 15, gameAPI.getVillagerCount());
     Assert.assertEquals("Scenario 2-JungleGrab hex 2 is occupied by Meeple", Hex.gamePieces.Meeple, hex2.getOccupiedBy());
     Assert.assertEquals("Scenario 2-JungleGrab hex 3 is occupied by Meeple", Hex.gamePieces.Meeple, hex3.getOccupiedBy());
     Assert.assertEquals("Scenario 2-JungleGrab hex 5 is occupied by Meeple", Hex.gamePieces.Meeple, hex5.getOccupiedBy());
