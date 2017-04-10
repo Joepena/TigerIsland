@@ -26,6 +26,7 @@ public class GameAPI {
     }
 
 
+
     //Getters and Setters
 
     public int getVillagerCount() {
@@ -204,6 +205,24 @@ public class GameAPI {
         return tuplesInSettlements;
     }
 
+    public ArrayList<Tuple> findSizeNSettlementsForNukingWithNoTotoro(ArrayList<SettlementDataFrame> ourSettlements, int n) {
+        ArrayList<Tuple> tuplesInSettlementsAcceptableForNuking = new ArrayList<>();
+        boolean existingPiece;
+
+        for(int i = 0; i < ourSettlements.size(); i++) {
+            if(ourSettlements.get(i).getSettlementSize() >= n) {
+                existingPiece = false;
+                for (int j = 0; j < ourSettlements.get(i).getSettlementSize(); j++)
+                    if (gameBoard.getHex(ourSettlements.get(i).getListOfHexLocations().get(j)).getOccupiedBy() == Hex.gamePieces.Totoro)
+                        existingPiece = true;
+                for (int j = 0; j < ourSettlements.get(i).getSettlementSize() && !existingPiece; j++)
+                    tuplesInSettlementsAcceptableForNuking.add(ourSettlements.get(i).getListOfHexLocations().get(j));
+            }
+        }
+
+        return tuplesInSettlementsAcceptableForNuking;
+    }
+
     public ArrayList<Tuple> findValidTotoroLocations(ArrayList<Tuple> testableLocations) {
         ArrayList<Tuple> validLocations = new ArrayList<>();
 
@@ -271,16 +290,20 @@ public class GameAPI {
 
     public void foundSettlement(Tuple tuple, Hex.Team team) {
         gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Meeple);
+
         gameBoard.getHex(tuple).setTeam(team);
         if(team == Hex.Team.Black) decrementVillagersBy(gameBoard.getHex(tuple).getLevel());
+
     }
 
-    public void createTotoroSanctuary(Tuple tuple) {
+    public void createTotoroSanctuary(Tuple tuple, Hex.Team team) {
         gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Totoro);
+        gameBoard.getHex(tuple).setTeam(team);
     }
 
-    public void createTigerPlayground(Tuple tuple) {
+    public void createTigerPlayground(Tuple tuple, Hex.Team team) {
         gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Tiger);
+        gameBoard.getHex(tuple).setTeam(team);
     }
 
 }

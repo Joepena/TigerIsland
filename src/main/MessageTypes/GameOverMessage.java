@@ -4,13 +4,13 @@ import java.util.Scanner;
  * Created by T K Vicious on 4/6/2017.
  */
 public class GameOverMessage extends Message{
-    private int gid;
+    private String gid;
     private String pid1;
     private String pid2;
     private int score1;
     private int score2;
 
-    public int getGid() {
+    public String getGid() {
         return gid;
     }
 
@@ -34,7 +34,7 @@ public class GameOverMessage extends Message{
         super(MessageType.GameOver);
         Scanner scanner = new Scanner(message).useDelimiter(" ");
         scanner.next();
-        this.gid = scanner.nextInt();
+        this.gid = scanner.next();
         scanner.next();
         scanner.next();
         this.pid1 = scanner.next();
@@ -46,7 +46,7 @@ public class GameOverMessage extends Message{
     }
 
     public boolean equals(GameOverMessage message){
-        return(this.gid == message.getGid() &&
+        return(this.gid.equals(message.getGid()) &&
                 this.pid1.equals(message.getPid1()) &&
                 this.pid2.equals(message.getPid2()) &&
                 this.score1 == message.getScore1() &&

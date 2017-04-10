@@ -314,7 +314,7 @@ public class GameAPITest {
     public void testCreateTotoroSanctuary() throws Exception {
         createLandMass();
         Hex hex = game.gameBoard.getHex(Orientation.upRightOf(Orientation.getOrigin()));
-        game.createTotoroSanctuary(hex.getLocation());
+        game.createTotoroSanctuary(hex.getLocation(), Hex.Team.Black);
 
         Assert.assertEquals(Hex.gamePieces.Totoro, game.gameBoard.getHex(hex.getLocation()).getOccupiedBy());
     }
@@ -323,11 +323,12 @@ public class GameAPITest {
     public void testCreateTigerPlayground() throws Exception {
         createLandMass();
         Hex hex = game.gameBoard.getHex(Orientation.upRightOf(Orientation.getOrigin()));
-        game.createTigerPlayground(hex.getLocation());
+        game.createTigerPlayground(hex.getLocation(), Hex.Team.Black);
 
         Assert.assertEquals(Hex.gamePieces.Tiger, game.gameBoard.getHex(hex.getLocation()).getOccupiedBy());
     }
 
+    @Test
     public void isTilePlacementNukingWholeSettlementOfHexOneTest() throws Exception {
         createLandMass();
 
@@ -400,9 +401,7 @@ public class GameAPITest {
 
         meeple = game.gameBoard.getHex(Orientation.rightOf(Orientation.rightOf(Orientation.getOrigin())));
         meeple.placeMeeple(Hex.Team.Black);
-
-        game.gameBoard.printSectionedBoard(game.gameBoard);
-
+        
         game.updateSettlements();
 
         Settlements resultingBlackSettlements = game.getBlackSettlements();

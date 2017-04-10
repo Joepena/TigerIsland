@@ -215,6 +215,44 @@ public class GameAPIUtil {
         return false;
     }
 
+    public Orientation.Orientations getViableNukingOrientation(Tuple volcanoCoordinates) {
+        if (isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.downLeft)))
+            return Orientation.Orientations.downLeft;
+        if (isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.downRight)))
+            return  Orientation.Orientations.downRight;
+        if (isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.upLeft)))
+            return Orientation.Orientations.upLeft;
+        if (isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.upRight)))
+            return Orientation.Orientations.upRight;
+        if (isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.left)))
+            return Orientation.Orientations.left;
+        if (isValidTileNukingPosition(new TilePositionCoordinates(volcanoCoordinates, Orientation.Orientations.right)))
+            return Orientation.Orientations.right;
+        return null;
+    }
+
+    public Orientation.Orientations getViableNonNukingOrientation(Tuple volcanoCoordinates) {
+        if (gameBoard.getHex(Orientation.downLeftOf(volcanoCoordinates)) == null
+                && gameBoard.getHex(Orientation.downRightOf(volcanoCoordinates)) == null)
+            return Orientation.Orientations.downLeft;
+        if (gameBoard.getHex(Orientation.downRightOf(volcanoCoordinates)) == null
+                && gameBoard.getHex(Orientation.rightOf(volcanoCoordinates)) == null)
+            return  Orientation.Orientations.downRight;
+        if (gameBoard.getHex(Orientation.upLeftOf(volcanoCoordinates)) == null
+                && gameBoard.getHex(Orientation.rightOf(volcanoCoordinates)) == null)
+            return Orientation.Orientations.upLeft;
+        if (gameBoard.getHex(Orientation.upRightOf(volcanoCoordinates)) == null
+                && gameBoard.getHex(Orientation.upLeftOf(volcanoCoordinates)) == null)
+            return Orientation.Orientations.upRight;
+        if (gameBoard.getHex(Orientation.leftOf(volcanoCoordinates)) == null
+                && gameBoard.getHex(Orientation.downLeftOf(volcanoCoordinates)) == null)
+            return Orientation.Orientations.left;
+        if (gameBoard.getHex(Orientation.rightOf(volcanoCoordinates)) == null
+                && gameBoard.getHex(Orientation.upRightOf(volcanoCoordinates)) == null)
+            return Orientation.Orientations.right;
+        return null;
+    }
+
     public boolean isValidTileNukingPosition(TilePositionCoordinates tilePositionCoordinates) {
 
         Hex hexUnderVolcano = gameBoard.getHex(tilePositionCoordinates.getVolcanoCoordinates());
@@ -504,7 +542,9 @@ public class GameAPIUtil {
         return;
       }
       availabilityGrid[offSet.getX()][offSet.getY()][offSet.getZ()] = false;
+
       game.foundSettlement(tuple, team);
+
       for (Orientation.Orientations orientation : Orientation.Orientations.values()) {
         Tuple tempTuple = Orientation.addCoordinatesByOrientation(tuple, orientation);
         Tuple tempTupleOff = gameBoard.calculateOffset(tempTuple);
@@ -529,7 +569,7 @@ public class GameAPIUtil {
     if(currentHex == null) return settlementList;
     Hex[] neighborHex = getNeighborHexes(coordPoint,gameBoard);
     Tuple[] neighborCoord = getNeighborCoords(coordPoint);
-    if(currentHex.getLevel() == 1 && currentHex.getTeam() == Hex.Team.Neutral)
+    if(currentHex.getLevel() == 1 && currentHex.getTeam() == Hex.Team.Neutral && currentHex.getTerrain() != Terrain.terrainType.Volcano)
     {
       settlementList.add(coordPoint);
     }
