@@ -41,11 +41,11 @@ public class GameClient {
 //    This will be for when we actually run the project I guess?
     public static void main(String[] args) throws Exception {
 
-        //String host = "10.228.1.171";
+       // String host = "10.228.1.171";
 
         //int port = 1708;
 
-        String host1 = "localhost";
+        String host1 = "10.136.79.0";
 
         int port1 = 8000;
         int port2 = 1708;

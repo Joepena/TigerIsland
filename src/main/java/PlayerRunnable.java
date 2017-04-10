@@ -92,8 +92,10 @@ public class PlayerRunnable implements Runnable {
         System.out.println("Player " + this.playerNum + " about to do stuff!");
         if (playerNum == 1) {
           messageFromClient = GameClient.getP1Moves().remove();
+          this.gameID = GameClient.getGame1ID();
         } else {
           messageFromClient = GameClient.getP2Moves().remove();
+          this.gameID = GameClient.getGame2ID();
         }
 
       }
@@ -288,23 +290,14 @@ public class PlayerRunnable implements Runnable {
     switch (type) {
       case GameOver:
         GameOverMessage gameOverMessage = (GameOverMessage) message;
-        if (!gameOverMessage.getGid().equals(this.gameID)) {
-          return;
-        }
         GameOver(gameOverMessage);
         break;
       case MakeYourMove:
         MakeYourMoveMessage makeYourMove = (MakeYourMoveMessage) message;
-        if (!makeYourMove.getGid().equals(this.gameID)) {
-          return;
-        }
         MakeYourMove(makeYourMove);
         break;
       case Move:
         MoveMessage move = (MoveMessage) message;
-        if (!move.getGid().equals(this.gameID)) {
-          return;
-        }
         Move(move);
         break;
     }
