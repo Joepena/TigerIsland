@@ -58,7 +58,7 @@ public class GameClient {
 
         try {
 
-
+ 
             //Create socket and buffers
             socket = new Socket(host, port);
 //            socket1 = new Socket(host1, port1);
