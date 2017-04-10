@@ -41,11 +41,11 @@ public class GameClient {
 //    This will be for when we actually run the project I guess?
     public static void main(String[] args) throws Exception {
 
-       // String host = "10.228.1.171";
+        String host = "10.228.1.171";
 
-        //int port = 1708;
+        int port = 1708;
 
-        String host1 = "10.136.79.0";
+//        String host1 = "localhost";
 
         int port1 = 8000;
         int port2 = 1708;
@@ -60,10 +60,10 @@ public class GameClient {
 
 
             //Create socket and buffers
-            //socket = new Socket(host, port);
-            socket1 = new Socket(host1, port1);
-            socket2 = new Socket(host1, port2);
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket1.getInputStream()));
+            socket = new Socket(host, port);
+//            socket1 = new Socket(host1, port1);
+//            socket2 = new Socket(host1, port2);
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             output = new PrintWriter(socket2.getOutputStream(), true);
             String rawServerMessage;
             Message parsedServerMessage;
@@ -73,11 +73,25 @@ public class GameClient {
 
             //Send in username and password
             ClientMessages authentication = new ClientMessages(args[1], args[2]);
-            output.println(authentication.enterThunderdome(args[0]));
-            output.println(authentication.usernamePassword());
+
+
             //output.close();
 
-            Message beginMessage = new NoActionMessage(Message.MessageType.Welcome);
+            Message beginMessage;
+
+            //Get Welcome, send game password
+            beginMessage = parseServerInput(in, Message.MessageType.Welcome);
+            if (beginMessage.getMessageType() == Message.MessageType.Welcome) {
+                output.println(authentication.enterThunderdome(args[0]));
+            }
+
+            //Get enter, send in username and password
+            beginMessage = parseServerInput(in, Message.MessageType.Enter);
+            if (beginMessage.getMessageType() == Message.MessageType.Enter) {
+                output.println(authentication.usernamePassword());
+            }
+
+
             while(beginMessage.getMessageType() != Message.MessageType.WaitToBegin) {
                 beginMessage = parseServerInput(in, Message.MessageType.WaitToBegin);
             }
@@ -177,22 +191,6 @@ public class GameClient {
                         System.out.println("GameID1:  " + game1ID + "   tempGameID:  " + tempGameID);
                         System.out.println("GameID2:  " + game2ID);
 
-//                        if (tempGameID.equals(game1ID)) {
-//                            System.out.println("Client entering Sycnhronized block1");
-//                            synchronized (p1Moves) {
-//                                p1Moves.add(turnMessage);
-//                                System.out.println("Added to Queue1");
-//                                p1Moves.notifyAll();
-//                            }
-//                        } else if (tempGameID.equals(game2ID)) {
-//                            System.out.println("Client entering Sycnhronized block2");
-//                            synchronized (p2Moves) {
-//                                p2Moves.add(turnMessage);
-//                                System.out.println("Added to Queue2");
-//                                p2Moves.notifyAll();
-//                            }
-//
-//                        }
                         if (tempGameID.equals(game1ID)) {
                             p1Moves.add(turnMessage);
                             player1.interrupt();
@@ -215,7 +213,6 @@ public class GameClient {
                     player1.join();
                     player2.join();
 
-                   //player2.interrupt();
                     System.out.println("Threads should be dead");
 
                     game1ID = "";
@@ -241,6 +238,7 @@ public class GameClient {
             System.exit(1);
         }
          try {
+            socket.close();
             socket1.close();
             socket2.close();
         } catch (IOException e) {
@@ -278,7 +276,7 @@ public class GameClient {
         outqueue.add(finalMessage + "\r\n");
         System.out.println("To server with love: " + finalMessage);
         try {
-            PrintWriter playerWriter = new PrintWriter(socket2.getOutputStream(), true);
+            PrintWriter playerWriter = new PrintWriter(socket.getOutputStream(), true);
             while(!outqueue.isEmpty()) {
                 playerWriter.println(outqueue.remove());
             }
