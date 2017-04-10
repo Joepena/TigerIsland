@@ -79,6 +79,26 @@ public class Hex {
         }
   }
 
+    public char getPieceForVisualization() {
+        gamePieces gamePiece = getOccupiedBy();
+        if(gamePiece == gamePieces.Totoro) {
+            return 'T';
+        }
+
+        else if(gamePiece == gamePieces.Meeple) {
+            return 'M';
+        }
+        else if(gamePiece == gamePieces.Tiger) {
+            return 'Z';
+        }
+        else if(gamePiece == gamePieces.empty) {
+            return 'E';
+        }
+        else {
+            return '-';
+        }
+    }
+
     public void setLocation(Tuple location) {
         this.location = location;
     }

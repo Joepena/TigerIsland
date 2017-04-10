@@ -90,6 +90,7 @@ public class GameAPI {
 
     public ArrayList<ExpansionOpDataFrame> getExpansionOptions(Hex.Team targetTeam) {
       ArrayList<ExpansionOpDataFrame> list = APIUtils.findExpansionOptionsFor(targetTeam);
+      removeSizeZeroOptions(list);
       Collections.sort(list);
       return list;
     }
@@ -136,7 +137,7 @@ public class GameAPI {
     return APIUtils.findListOfValidSettlementLocation(Orientation.getOrigin(), new boolean[194][194][194], new ArrayList<Tuple>());
   }
 
-  public ArrayList<Integer> findValidTileOrientations(Tuple loc) {
+  public Vector<Integer> findValidTileOrientations(Tuple loc) {
         return APIUtils.findValidOrientationsAtPoint(loc);
   }
 
@@ -190,24 +191,138 @@ public class GameAPI {
         validLocations = APIUtils.findValidTigerLocations(validLocations);
 
         return APIUtils.removeDuplicateTuples(validLocations);
+
+    }
+
+    public ArrayList<Tuple> findSizeNSettlements(ArrayList<SettlementDataFrame> ourSettlements, int n, Hex.gamePieces gamePiece) {
+        ArrayList<Tuple> tuplesInSettlements = new ArrayList<>();
+        boolean existingPiece = false;
+
+        for(int i = 0; i < ourSettlements.size(); i++) {
+            if(ourSettlements.get(i).getSettlementSize() >= n) {
+                existingPiece = false;
+                for (int j = 0; j < ourSettlements.get(i).getSettlementSize(); j++)
+                    if (gameBoard.getHex(ourSettlements.get(i).getListOfHexLocations().get(j)).getOccupiedBy() == gamePiece)
+                        existingPiece = true;
+                for (int j = 0; j < ourSettlements.get(i).getSettlementSize() && !existingPiece; j++)
+                    tuplesInSettlements.add(ourSettlements.get(i).getListOfHexLocations().get(j));
+            }
+        }
+
+        return tuplesInSettlements;
+    }
+
+    public ArrayList<Tuple> findSizeNSettlementsForNukingWithNoTotoro(ArrayList<SettlementDataFrame> ourSettlements, int n) {
+        ArrayList<Tuple> tuplesInSettlementsAcceptableForNuking = new ArrayList<>();
+        boolean existingPiece;
+
+        for(int i = 0; i < ourSettlements.size(); i++) {
+            if(ourSettlements.get(i).getSettlementSize() >= n) {
+                existingPiece = false;
+                for (int j = 0; j < ourSettlements.get(i).getSettlementSize(); j++)
+                    if (gameBoard.getHex(ourSettlements.get(i).getListOfHexLocations().get(j)).getOccupiedBy() == Hex.gamePieces.Totoro)
+                        existingPiece = true;
+                for (int j = 0; j < ourSettlements.get(i).getSettlementSize() && !existingPiece; j++)
+                    tuplesInSettlementsAcceptableForNuking.add(ourSettlements.get(i).getListOfHexLocations().get(j));
+            }
+        }
+
+        return tuplesInSettlementsAcceptableForNuking;
+    }
+
+    public ArrayList<Tuple> findValidTotoroLocations(ArrayList<Tuple> testableLocations) {
+        ArrayList<Tuple> validLocations = new ArrayList<>();
+
+        for(int i = 0; i < testableLocations.size(); i++) {
+            Tuple currentTuple =  testableLocations.get(i);
+
+            if(HexValidation.isLocationFree(Orientation.leftOf(currentTuple), gameBoard)
+                    && gameBoard.getHex(Orientation.leftOf(currentTuple)).getTerrain() != Terrain.terrainType.Volcano)
+                validLocations.add(Orientation.leftOf(currentTuple));
+            if(HexValidation.isLocationFree(Orientation.rightOf(currentTuple), gameBoard)
+                    && gameBoard.getHex(Orientation.rightOf(currentTuple)).getTerrain() != Terrain.terrainType.Volcano)
+                validLocations.add(Orientation.rightOf(currentTuple));
+            if (HexValidation.isLocationFree(Orientation.upLeftOf(currentTuple), gameBoard)
+                    && gameBoard.getHex(Orientation.upLeftOf(currentTuple)).getTerrain() != Terrain.terrainType.Volcano)
+                validLocations.add(Orientation.upLeftOf(currentTuple));
+            if (HexValidation.isLocationFree(Orientation.upRightOf(currentTuple), gameBoard)
+                    && gameBoard.getHex(Orientation.upRightOf(currentTuple)).getTerrain() != Terrain.terrainType.Volcano)
+                validLocations.add(Orientation.upRightOf(currentTuple));
+            if (HexValidation.isLocationFree(Orientation.downLeftOf(currentTuple), gameBoard)
+                    && gameBoard.getHex(Orientation.downLeftOf(currentTuple)).getTerrain() != Terrain.terrainType.Volcano)
+                validLocations.add(Orientation.downLeftOf(currentTuple));
+            if (HexValidation.isLocationFree(Orientation.downRightOf(currentTuple), gameBoard)
+                    && gameBoard.getHex(Orientation.downRightOf(currentTuple)).getTerrain() != Terrain.terrainType.Volcano)
+                validLocations.add(Orientation.downRightOf(currentTuple));
+        } // the above loop looks around every hex in the settlements for an empty placed hex
+
+        return validLocations;
+    }
+
+    public ArrayList<Tuple> findValidTigerLocations(ArrayList<Tuple> testableLocations) {
+        ArrayList<Tuple> validLocations = new ArrayList<>();
+
+        for(int i = 0; i < testableLocations.size(); i++) {
+            Tuple currentTuple =  testableLocations.get(i);
+
+            if(HexValidation.isLocationFree(Orientation.leftOf(currentTuple), gameBoard)
+                    && gameBoard.getHex(Orientation.leftOf(currentTuple)).getTerrain() != Terrain.terrainType.Volcano
+                    && gameBoard.getHex(Orientation.leftOf(currentTuple)).getLevel() >= 3)
+                validLocations.add(Orientation.leftOf(currentTuple));
+            if(HexValidation.isLocationFree(Orientation.rightOf(currentTuple), gameBoard)
+                    && gameBoard.getHex(Orientation.rightOf(currentTuple)).getTerrain() != Terrain.terrainType.Volcano
+                    && gameBoard.getHex(Orientation.rightOf(currentTuple)).getLevel() >= 3)
+                validLocations.add(Orientation.rightOf(currentTuple));
+            if (HexValidation.isLocationFree(Orientation.upLeftOf(currentTuple), gameBoard)
+                    && gameBoard.getHex(Orientation.upLeftOf(currentTuple)).getTerrain() != Terrain.terrainType.Volcano
+                    && gameBoard.getHex(Orientation.upLeftOf(currentTuple)).getLevel() >= 3)
+                validLocations.add(Orientation.upLeftOf(currentTuple));
+            if (HexValidation.isLocationFree(Orientation.upRightOf(currentTuple), gameBoard)
+                    && gameBoard.getHex(Orientation.upRightOf(currentTuple)).getTerrain() != Terrain.terrainType.Volcano
+                    && gameBoard.getHex(Orientation.upRightOf(currentTuple)).getLevel() >= 3)
+                validLocations.add(Orientation.upRightOf(currentTuple));
+            if (HexValidation.isLocationFree(Orientation.downLeftOf(currentTuple), gameBoard)
+                    && gameBoard.getHex(Orientation.downLeftOf(currentTuple)).getTerrain() != Terrain.terrainType.Volcano
+                    && gameBoard.getHex(Orientation.downLeftOf(currentTuple)).getLevel() >= 3)
+                validLocations.add(Orientation.downLeftOf(currentTuple));
+            if (HexValidation.isLocationFree(Orientation.downRightOf(currentTuple), gameBoard)
+                    && gameBoard.getHex(Orientation.downRightOf(currentTuple)).getTerrain() != Terrain.terrainType.Volcano
+                    && gameBoard.getHex(Orientation.downRightOf(currentTuple)).getLevel() >= 3)
+                validLocations.add(Orientation.downRightOf(currentTuple));
+        } // the above loop looks around every hex in the settlements for an empty placed hex above level 3
+
+        return validLocations;
+
     }
 
 
     public void foundSettlement(Tuple tuple, Hex.Team team) {
         gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Meeple);
         gameBoard.getHex(tuple).setTeam(team);
-        if(team == Hex.Team.Black) decrementVillagersBy(gameBoard.getHex(tuple).getLevel());
-
+        if (team == Hex.Team.Black) {
+            decrementVillagersBy(gameBoard.getHex(tuple).getLevel());
+        }
     }
+
+
 
     public void createTotoroSanctuary(Tuple tuple, Hex.Team team) {
         gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Totoro);
         gameBoard.getHex(tuple).setTeam(team);
+        totoroCount--;
     }
 
     public void createTigerPlayground(Tuple tuple, Hex.Team team) {
         gameBoard.getHex(tuple).setOccupiedBy(Hex.gamePieces.Tiger);
         gameBoard.getHex(tuple).setTeam(team);
+        tigerCount--;
+    }
+
+    public void removeSizeZeroOptions(ArrayList<ExpansionOpDataFrame> list) {
+        for(int i=0; i < list.size(); ) {
+            if(list.get(i).getExpansionCost() == 0) list.remove(i);
+            else i++;
+        }
     }
 
 }

@@ -39,10 +39,6 @@ public class GameOverMessage extends Message{
     }
 
     public boolean equals(GameOverMessage message){
-        return(this.gid.equals(message.getGid()) &&
-                this.pid1.equals(message.getPid1()) &&
-                this.pid2.equals(message.getPid2()) &&
-                this.score1 == message.getScore1() &&
-                this.score2 == message.getScore2());
+        return(this.gid.equals(message.getGid()));
     }
 }

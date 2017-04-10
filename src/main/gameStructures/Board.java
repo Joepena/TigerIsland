@@ -26,6 +26,8 @@ public class Board {
             presentHex.incrementLevel();
             presentHex.setTerrain(hex.getTerrain());
             presentHex.setTileId(hex.getTileId());
+            presentHex.setOccupiedBy(Hex.gamePieces.empty);
+            presentHex.setTeam(Hex.Team.Neutral);
         } else {
             Tuple actualCoordinates = calculateOffset(coordinates);
             gameBoardAvailability[actualCoordinates.getX()][actualCoordinates.getY()][actualCoordinates.getZ()] = true;
@@ -96,30 +98,38 @@ public class Board {
             }
         }
 
-        for (int i = 183; i < 196; i++) {
+        for (int i = 173; i < 203; i++) {
             System.out.println();
-            for (int j = 183; j < 196; j++) {
+            for (int j = 173; j < 203; j++) {
                 if (i == 188 && j == 188) {
                     if (gameBoard2D[i][j] == null) {
-                        System.out.print("***\t");
+                        System.out.print("****\t");
                     } else {
                         System.out.print("*");
                         System.out.print(gameBoard2D[i][j].getTileId());
                         System.out.print(gameBoard2D[i][j].getTerrainForVisualization());
                         System.out.print(gameBoard2D[i][j].getLevel());
+                        System.out.print(gameBoard2D[i][j].getPieceForVisualization());
+                        System.out.print("\t");
                     }
                 } else {
                     if (gameBoard2D[i][j] == null) {
-                        System.out.print("---\t");
+                        System.out.print("----\t");
                     } else {
 
                         System.out.print(gameBoard2D[i][j].getTileId());
                         System.out.print(gameBoard2D[i][j].getTerrainForVisualization());
-                        System.out.print(gameBoard2D[i][j].getLevel() + "\t");
+                        System.out.print(gameBoard2D[i][j].getLevel());
+                        System.out.print(gameBoard2D[i][j].getPieceForVisualization());
+                        System.out.print("\t");
                     }
                 }
             }
         }
+    }
+
+    public static int distanceFromTheOrigin(Tuple tuple) {
+        return (int)(Math.pow(tuple.getX(),2)+Math.pow(tuple.getY(),2)+Math.pow(tuple.getZ(),2));
     }
 
 

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * Created by Troy on 3/27/17.
@@ -31,6 +32,8 @@ public class PlayerRunnable implements Runnable {
     ArrayList<Tuple> totoroPlacementOptions;
     ArrayList<Tuple> tigerPlacementOptions;
     ArrayList<Integer> orientationOptions;
+    Orientation.Orientations orientation;
+    Vector<Integer> orientationList;
 
     public GameAPI getGame() {
         return game;
@@ -52,17 +55,21 @@ public class PlayerRunnable implements Runnable {
         this.playerTeam = Hex.Team.Black;
         this.opponentTeam = Hex.Team.White;
         this.playerNum = playerNum;
+        this.orientation = null;
+    }
+
+    public void setGameID(String gameID) {
+        this.gameID = gameID;
+
     }
 
     @Override
     public void run() {
 
-
         gameOver = false;
         hasMove = false;
 
         game = new GameAPI();
-
 
         //Instantiate all ArrayLists once
         tilePlacementOptions = new ArrayList<>();
@@ -76,7 +83,8 @@ public class PlayerRunnable implements Runnable {
 
         //Player Logic
 
-        game.placeFirstTile();
+        //game.placeFirstTile();
+
 
         while(!gameOver) {
             Message messageFromClient = new NoActionMessage(Message.MessageType.Welcome);
@@ -137,8 +145,6 @@ public class PlayerRunnable implements Runnable {
                 //GameClient.setP1Move(null);
 
 
-
-
 //            try {
 //
 //                while(GameClient.getP2Move() == null) {
@@ -158,155 +164,219 @@ public class PlayerRunnable implements Runnable {
         //Update board state
         game.updateSettlements();
 
-        //Check for tile placement options
-        tilePlacementOptions = game.getAvailableTilePlacement();
-        //System.out.println("Number of placement options: " + tilePlacementOptions.size());
-
+            //Check for tile placement options
+            tilePlacementOptions = game.getAvailableTilePlacement();
+            eruptionOptions = game.getValidNukingLocations();
 
             //Decide normal place or nuke
-            if (canNukeSafely()) {
-                if (canSabotageEnemySettlement()){
-
-                } else if (canRecycleOwnTotoroSettlement()){
-
+            //Tiger Rush Strategy
+            if (canNukeSafely(game) && eruptionOptions.size() != 0) {
+                decisionCoords = canSabotageEnemySettlement(game, eruptionOptions);
+                if (decisionCoords != null) {
+                    moveMessage.setTileLocation(decisionCoords);
+                    orientation = game.APIUtils.getViableNukingOrientation(decisionCoords);
+                    moveMessage.setOrientation(moveMessage.orientationToNumber(orientation));
                 } else {
-                    //Pick a random nuking location.
+                    //nuke tile nearest origin.
+                    decisionCoords = findClosestTupleToOrigin(eruptionOptions);
+                    moveMessage.setTileLocation(decisionCoords);
+                    orientation = game.APIUtils.getViableNukingOrientation(decisionCoords);
+                    moveMessage.setOrientation(moveMessage.orientationToNumber(orientation));
                 }
-            } else{
-                //Pick a random tile placement location.
+            } else {
+                //Place tile nearest origin.
+                decisionCoords = findClosestTupleToOrigin(tilePlacementOptions);
+                moveMessage.setTileLocation(decisionCoords);
+                orientationList = game.APIUtils.findValidOrientationsAtPoint(decisionCoords);
+                for (Integer i : orientationList){
+                    newTile.setLeftHexOrientation(game.APIUtils.numToOrientation(i));
+                    if (game.APIUtils.isTileConnected(newTile, decisionCoords)){
+                        orientation = game.APIUtils.numToOrientation(i);
+                        break;
+                    }
+                }
+                moveMessage.setOrientation(moveMessage.orientationToNumber(orientation));
             }
-
-            moveMessage.setTileLocation(tilePlacementOptions.get(0));
-            Orientation.Orientations orientation = game.APIUtils.getViableNonNukingOrientation(tilePlacementOptions.get(0));
-            //System.out.println(tilePlacementOptions.get(0));
-            newTile.setLeftHexOrientation(orientation);
-            moveMessage.setOrientation(moveMessage.orientationToNumber(orientation));
             moveMessage.setTile(newTile);
             moveMessage.setGid(this.gameID);
             moveMessage.setMoveNumber(this.moveNumber);
 
 
-            //Place tile
-            game.placeTile(newTile, tilePlacementOptions.get(0));
-        //Check for nuking options
-        eruptionOptions = game.getValidNukingLocations();
-        //System.out.println("Number of Nuking options: " + eruptionOptions.size());
+              newTile.setLeftHexOrientation(orientation);
+              game.placeTile(newTile, decisionCoords);
 
-        //Decide normal place or nuke
+              //Update board state
+              game.updateSettlements();
 
+              //BUILD ACTION ****************************************************************
+              //Find Placement options
+              foundSettlementOptions = game.findListOfValidSettlementLocations();
+              expandSettlementOptions = game.getExpansionOptions(Hex.Team.Black);
+              totoroPlacementOptions = game.validTotoroPlacements(Hex.Team.Black);
+              tigerPlacementOptions = game.validTigerPlacements(Hex.Team.Black);
 
+              //Decide Build Action
+              //Tiger Rush Strategy
+              if (tigerPiecesRemaining(game)) {
+                if (canPlaceTiger(tigerPlacementOptions)) {
+                  //place Tiger
+                  moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Tiger);
+                  moveMessage.setBuildLocation(tigerPlacementOptions.get(0));
+                  game.createTigerPlayground(tigerPlacementOptions.get(0), Hex.Team.Black);
+                  //System.out.println("We placed a tiger ");
+                } else if (canPlaceTotoro(totoroPlacementOptions)) {
+                  //place Totoro
+                  moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Totoro);
+                  moveMessage.setBuildLocation(totoroPlacementOptions.get(0));
+                  game.createTotoroSanctuary(totoroPlacementOptions.get(0), Hex.Team.Black);
+                 // System.out.println("We placed a totoro ");
 
-        //Place tile
-        //System.out.println("Where we were thinking of placing: " + tilePlacementOptions.get(0));
-        Tile troyTestTile = new Tile(1, Terrain.terrainType.Jungle, Terrain.terrainType.Lake, Orientation.Orientations.downLeft);
-        game.placeTile(troyTestTile, tilePlacementOptions.get(0));
+                } else {
+                  //found settlement
+                  buildDecisionCoords = findClosestTupleToOrigin(foundSettlementOptions);
+                  moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Found);
+                  moveMessage.setBuildLocation(buildDecisionCoords);
+                  game.foundSettlement(buildDecisionCoords, Hex.Team.Black);
+                  ///System.out.println("We founded a settlement at this level: " + game.gameBoard
+                    //.getHex(buildDecisionCoords).getLevel());
+                }
+              } else {
+                ExpansionOpDataFrame expansionDF = chooseHighestCostValidExpansion(
+                  expandSettlementOptions);
+                if (expansionDF != null) {
+                  //choose highest cost expansion option
+                  moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Expand);
+                  moveMessage.setBuildLocation(expansionDF.getExpansionStart());
+                  moveMessage.setTerrain(expansionDF.getTerrain());
+                  game.performLandGrab(expansionDF);
+                  System.out.println("We expanded for turn: " + newTile.getTileId());
+                  System.out.println("Expanded cost: " + expansionDF.getExpansionCost());
+                } else if (game.getVillagerCount() > 0) {
+                  //found settlement
+                  buildDecisionCoords = findClosestTupleToOrigin(foundSettlementOptions);
+                  moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Found);
+                  moveMessage.setBuildLocation(buildDecisionCoords);
+                  game.foundSettlement(buildDecisionCoords, Hex.Team.Black);
+                  System.out.println("We founded a settlement");
+                } else {
+                  //We lost.
+                  moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Unable);
+                  System.out.println("We cannot build.");
+                }
+              }
 
+              hasMove = false;
+              gameOver = true;
 
-        //Update board state
-        game.updateSettlements();
+              //System.out.println(moveMessage.toString(moveMessage.getMoveType()));
+              //System.out.println("Sending this to the server:  " + moveMessage.toString(moveMessage.getMoveType()));
+              GameClient.sendMessageFromPlayerToServer(moveMessage);
 
-        //Check for Found Settlement options
-        foundSettlementOptions = game.findListOfValidSettlementLocations();
-
-            //Check for Totoro placement options
-            totoroPlacementOptions = game.validTotoroPlacements(this.playerTeam);
-
-            //Check for Tiger placement options
-            tigerPlacementOptions = game.validTigerPlacements(this.playerTeam);
-
-            //Decide Build Action
-            if (canPlaceTiger(tigerPlacementOptions)){
-                buildDecision = new BuildDecision(tigerPlacementOptions.get(0), BuildDecision.buildDecisions.Tiger);
-            } else if (tigerPiecesRemaining(game)){
-                buildDecision = new BuildDecision(foundSettlementOptions.get(0), BuildDecision.buildDecisions.Found);
-            } else if (canExpand(expandSettlementOptions)){
-                buildDecision = new BuildDecision(expandSettlementOptions.get(0).getExpansionStart(), BuildDecision.buildDecisions.Expand);
-            }else if (canPlaceTotoro(totoroPlacementOptions)){
-                buildDecision = new BuildDecision(totoroPlacementOptions.get(0), BuildDecision.buildDecisions.Totoro);
-            } else
-            {
-                buildDecision = new BuildDecision(foundSettlementOptions.get(0), BuildDecision.buildDecisions.Found);
             }
 
-            buildDecisionCoords = foundSettlementOptions.get(1);
-
-            //FOR SERVER TESTING
-            moveMessage.setBuildLocation(foundSettlementOptions.get(0));
-            moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Found);
-
-            //Perform Build action
-            //game.foundSettlement(buildDecisionCoords, Hex.Team.Black);
-
-            //Print out moveMessage and send to Client
 
 
-            //System.out.println(moveMessage.toString(moveMessage.getMoveType()));
-            //System.out.println("Sending this to the server:  " + moveMessage.toString(moveMessage.getMoveType()));
-            GameClient.sendMessageFromPlayerToServer(moveMessage);
 
+    private boolean canNukeSafely(GameAPI game) {
+        return game.findListOfValidSettlementLocations().size() > 2;
+    }
 
+    private Tuple canSabotageEnemySettlement(GameAPI game, ArrayList<Tuple> eruptionOptions) {
+        ArrayList<SettlementDataFrame> enemySettlements = game.getWhiteSettlements().getListOfSettlements();
+        ArrayList<Tuple> sabotageOptions = game.findSizeNSettlementsForNukingWithNoTotoro(enemySettlements,3);
+        if(!sabotageOptions.isEmpty()) {
+            for(Tuple eruptionTuple: eruptionOptions) {
+                boolean contains = sabotageOptions.contains(eruptionTuple);
+                if(contains)
+                    return eruptionTuple;
+            }
         }
-
-
-
-
-    private boolean canNukeSafely() {
-      return false;
+        return null;
     }
-    private boolean canSabotageEnemySettlement() {
-        return false;
-    }
+
     private boolean canRecycleOwnTotoroSettlement() {
         return false;
     }
+
     private boolean canPlaceTiger(ArrayList<Tuple> tigerOptions) {
-      return !tigerOptions.isEmpty();
+        return !tigerOptions.isEmpty();
     }
-    private boolean tigerPiecesRemaining(GameAPI game) {
-      return game.getTigerCount() > 0;
-    }
-    private boolean canExpand(ArrayList<ExpansionOpDataFrame> expandSettlementOptions) {
-      return !expandSettlementOptions.isEmpty();
-    }
-    private boolean canPlaceTotoro(ArrayList<Tuple> totoroPlacementOptions) {
-      return !totoroPlacementOptions.isEmpty();
+    private boolean totoroPiecesRemaining(GameAPI game) {
+        return game.getTotoroCount() > 0;
     }
 
-    public void executeMessage(Message message){
+    private boolean tigerPiecesRemaining(GameAPI game) {
+        return game.getTigerCount() > 0;
+    }
+
+    private ExpansionOpDataFrame chooseHighestCostValidExpansion(ArrayList<ExpansionOpDataFrame> expandSettlementOptions) {
+
+        for (ExpansionOpDataFrame currentEDF : expandSettlementOptions){
+            if (currentEDF.getExpansionCost() <= game.getVillagerCount()){
+                return currentEDF;
+            }
+        }
+
+
+        return null;
+    }
+
+    private boolean canPlaceTotoro(ArrayList<Tuple> totoroPlacementOptions) {
+        return !totoroPlacementOptions.isEmpty();
+    }
+    private Tuple findClosestTupleToOrigin(ArrayList<Tuple> eruptionList) {
+        Tuple closestTuple = null;
+        int tupleDistance;
+        int minDistance = Integer.MAX_VALUE;
+        for(Tuple tuple : eruptionList) {
+            tupleDistance = Board.distanceFromTheOrigin(tuple);
+            if(tupleDistance < minDistance) {
+                closestTuple = tuple;
+                minDistance = tupleDistance;
+            }
+        }
+        return closestTuple;
+    }
+
+    public void executeMessage(Message message) {
 
         Message.MessageType type = message.getMessageType();
 
-        switch(type){
+        switch (type) {
             case GameOver:
-                GameOverMessage gameOverMessage = (GameOverMessage)message;
+                GameOverMessage gameOverMessage = (GameOverMessage) message;
+                if (!gameOverMessage.getGid().equals(this.gameID))
+                    return;
                 GameOver(gameOverMessage);
                 break;
             case MakeYourMove:
                 MakeYourMoveMessage makeYourMove = (MakeYourMoveMessage) message;
+                if (!makeYourMove.getGid().equals(this.gameID))
+                    return;
                 MakeYourMove(makeYourMove);
                 break;
             case Move:
                 MoveMessage move = (MoveMessage) message;
+                if (!move.getGid().equals(this.gameID))
+                    return;
                 Move(move);
                 break;
         }
     }
 
-    private void GameOver(GameOverMessage message){
-        System.out.println("GAMEOVER!!!!!!!!!   " + playerNum);
+    private void GameOver(GameOverMessage message) {
         this.gameOver = true;
     }
 
-    private void MakeYourMove(MakeYourMoveMessage message){
-        //System.out.println("MAKE YOUR MOVE!!");
+    private void MakeYourMove(MakeYourMoveMessage message) {
         this.newTile = message.getTile();
         this.hasMove = true;
         this.moveNumber = message.getMoveNumber();
     }
 
 
-    private void Move(MoveMessage message){
-        switch(message.getMoveType()){
+    private void Move(MoveMessage message) {
+        switch (message.getMoveType()) {
             case Found:
                 FoundMove((FoundSettlementMessage) message);
                 break;
@@ -325,34 +395,34 @@ public class PlayerRunnable implements Runnable {
         }
     }
 
-    private void FoundMove(FoundSettlementMessage message){
-        if(message.getPid().equals(this.playerID))
+    private void FoundMove(FoundSettlementMessage message) {
+        if (message.getPid().equals(this.playerID))
             return;
         game.placeTile(message.getTile(), message.getTileLocation());
         game.foundSettlement(message.getBuildLocation(), this.opponentTeam);
     }
 
-    private void Expand(ExpandSettlementMessage message){
-        if(message.getPid().equals(this.playerID))
+    private void Expand(ExpandSettlementMessage message) {
+        if (message.getPid().equals(this.playerID))
             return;
         game.placeTile(message.getTile(), message.getTileLocation());
         SettlementDataFrame settlement = game.APIUtils.getWhiteSettlementFromLocation(message.getExpandLocation(), game.getWhiteSettlements());
         game.APIUtils.performLandGrab(settlement, message.getExpandTerrain());
     }
 
-    private void Forfeit(ForfeitMessage message){
+    private void Forfeit(ForfeitMessage message) {
         return;
     }
 
-    private void Tiger(BuildTigerMessage message){
-        if(message.getPid().equals(this.playerID))
+    private void Tiger(BuildTigerMessage message) {
+        if (message.getPid().equals(this.playerID))
             return;
         game.placeTile(message.getTile(), message.getTileLocation());
         game.createTigerPlayground(message.getBuildLocation(), this.opponentTeam);
     }
 
-    private void Totoro(BuildTotoroMessage message){
-        if(message.getPid().equals(this.playerID))
+    private void Totoro(BuildTotoroMessage message) {
+        if (message.getPid().equals(this.playerID))
             return;
         game.placeTile(message.getTile(), message.getTileLocation());
         game.createTotoroSanctuary(message.getBuildLocation(), this.opponentTeam);
@@ -362,17 +432,13 @@ public class PlayerRunnable implements Runnable {
         this.gameOver = gameOver;
     }
 
-    public String toString(){
+    public String toString() {
         String string = ("playerID:  " + this.playerID + "\nopponentID:  " + this.opponentID + "\ngameID:  " + this.gameID);
         return string;
     }
 
     public void receiveMessage(Message m) {
         gotMessage = true;
-    }
-
-    public void setGameID(String gameID) {
-        this.gameID = gameID;
     }
 
     public String getGameID() {

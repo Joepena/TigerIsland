@@ -174,6 +174,7 @@ public class GameAPIUtil {
                                 for (Tuple combinedCoords : combinedDataFrameHexLocs) {
                                     combinedDataFrame.addLocationListOfHexes(combinedCoords);
                                 }
+                                combinedDataFrame.setOwnedBy(currentDataFrame.getOwnedBy());
 
                                 listSettlements.addNewSettlement(combinedDataFrame);
                                 listSettlements.removeSettlement(currentDataFrame);
@@ -524,6 +525,7 @@ public class GameAPIUtil {
         return;
       }
       availabilityGrid[offSet.getX()][offSet.getY()][offSet.getZ()] = false;
+
       game.foundSettlement(tuple, team);
       for (Orientation.Orientations orientation : Orientation.Orientations.values()) {
         Tuple tempTuple = Orientation.addCoordinatesByOrientation(tuple, orientation);
@@ -708,11 +710,12 @@ public class GameAPIUtil {
     return exists;
   }
 
-  public ArrayList<Integer> findValidOrientationsAtPoint(Tuple testingLocation)
+
+  public Vector<Integer> findValidOrientationsAtPoint(Tuple testingLocation)
   {
 
     Hex hexTestingLocation = gameBoard.getHex(testingLocation);
-    ArrayList<Integer> validOrientations = new ArrayList<Integer>();
+    Vector<Integer> validOrientations = new Vector<Integer>();
 
     if(hexTestingLocation != null)
     {
@@ -748,7 +751,8 @@ public class GameAPIUtil {
     return validOrientations;
   }
 
-    public static boolean isSameTeam(Hex hex1, Hex hex2) {
+
+  public static boolean isSameTeam(Hex hex1, Hex hex2) {
 
 
         if (hex1 == null || hex2 == null)
@@ -770,16 +774,36 @@ public class GameAPIUtil {
         return hex.getOccupiedBy() == Hex.gamePieces.empty;
     }
 
+
     public ArrayList<Tuple> removeDuplicateTuples(ArrayList<Tuple> duplicateList) {
-        ArrayList<Tuple> uniqueList = new ArrayList<>();
+      ArrayList<Tuple> uniqueList = new ArrayList<>();
 
-        for(int i = 0; i < duplicateList.size(); i++) {
-            if(!uniqueList.contains(duplicateList.get(i)))
-                uniqueList.add(duplicateList.get(i));
-        }
-
-        return uniqueList;
+      for (int i = 0; i < duplicateList.size(); i++) {
+        if (!uniqueList.contains(duplicateList.get(i)))
+          uniqueList.add(duplicateList.get(i));
+      }
+      return uniqueList;
     }
+
+    public Orientation.Orientations numToOrientation(int number){
+        switch(number){
+            case 1:
+                return Orientation.Orientations.upRight;
+            case 2:
+                return Orientation.Orientations.right;
+            case 3:
+                return Orientation.Orientations.downRight;
+            case 4:
+                return Orientation.Orientations.downLeft;
+            case 5:
+                return Orientation.Orientations.left;
+            case 6:
+                return Orientation.Orientations.upLeft;
+            default:
+                return Orientation.Orientations.upRight;
+        }
+    }
+
 
     public ArrayList<Tuple> findSizeNSettlements(ArrayList<SettlementDataFrame> ourSettlements, int n, Hex.gamePieces gamePiece) {
         ArrayList<Tuple> tuplesInSettlements = new ArrayList<>();
