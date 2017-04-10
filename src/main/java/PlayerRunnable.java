@@ -87,9 +87,13 @@ public class PlayerRunnable implements Runnable {
                     moveMessage.setTileLocation(decisionCoords);
                 } else {
                     //nuke tile nearest origin.
+                    decisionCoords = findClosestTupleToOrigin(eruptionOptions);
+                    moveMessage.setTileLocation(decisionCoords);
                 }
             } else {
                 //Place tile nearest origin.
+                decisionCoords = findClosestTupleToOrigin(tilePlacementOptions);
+                moveMessage.setTileLocation(decisionCoords);
             }
 
             //Totoro Turtle Strategy
@@ -143,16 +147,28 @@ public class PlayerRunnable implements Runnable {
                 if (tigerPiecesRemaining(game)) {
                     if (canPlaceTiger(tigerPlacementOptions)) {
                         //place Tiger
+                        moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Tiger);
+                        moveMessage.setBuildLocation(tigerPlacementOptions.get(0));
                     } else if (canPlaceTotoro(totoroPlacementOptions)) {
                         //place Totoro
+                        moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Totoro);
+                        moveMessage.setBuildLocation(totoroPlacementOptions.get(0));
                     } else {
                         //found settlement
+                        moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Found);
+                        moveMessage.setBuildLocation(foundSettlementOptions.get(0));
                     }
                 } else {
-                    if (canExpand(expandSettlementOptions)) {
+                    ExpansionOpDataFrame expansionDF = chooseHighestCostValidExpansion(expandSettlementOptions);
+                    if (expansionDF != null) {
                         //choose highest cost expansion option
+                        moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Expand);
+                        moveMessage.setBuildLocation(expansionDF.getExpansionStart());
+                        moveMessage.setTerrain(expansionDF.getTerrain());
                     } else {
                         //found settlement
+                        moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Found);
+                        moveMessage.setBuildLocation(foundSettlementOptions.get(0));
                     }
                 }
 
@@ -228,12 +244,33 @@ public class PlayerRunnable implements Runnable {
         return game.getTigerCount() > 0;
     }
 
-    private boolean canExpand(ArrayList<ExpansionOpDataFrame> expandSettlementOptions) {
-        return !expandSettlementOptions.isEmpty();
+    private ExpansionOpDataFrame chooseHighestCostValidExpansion(ArrayList<ExpansionOpDataFrame> expandSettlementOptions) {
+
+        for (ExpansionOpDataFrame currentEDF : expandSettlementOptions){
+            if (currentEDF.getExpansionCost() <= game.getVillagerCount()){
+                return currentEDF;
+            }
+        }
+
+
+        return null;
     }
 
     private boolean canPlaceTotoro(ArrayList<Tuple> totoroPlacementOptions) {
         return !totoroPlacementOptions.isEmpty();
+    }
+    private Tuple findClosestTupleToOrigin(ArrayList<Tuple> eruptionList) {
+        Tuple closestTuple = null;
+        int tupleDistance;
+        int minDistance = Integer.MAX_VALUE;
+        for(Tuple tuple : eruptionList) {
+            tupleDistance = Board.distanceFromTheOrigin(tuple);
+            if(tupleDistance < minDistance) {
+                closestTuple = tuple;
+                minDistance = tupleDistance;
+            }
+        }
+        return closestTuple;
     }
 
     public void executeMessage(Message message) {

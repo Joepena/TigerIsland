@@ -122,5 +122,9 @@ public class Board {
         }
     }
 
+    public static int distanceFromTheOrigin(Tuple tuple) {
+        return (int)(Math.pow(tuple.getX(),2)+Math.pow(tuple.getY(),2)+Math.pow(tuple.getZ(),2));
+    }
+
 
 }
