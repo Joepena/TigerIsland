@@ -82,28 +82,38 @@ public class PlayerRunnable implements Runnable {
             Message messageFromClient = new NoActionMessage(Message.MessageType.Welcome);
             try {
 
-               // System.out.println(GameClient.getP1Move().toString());
-               /* while(!GameClient.getP1Moves().isEmpty()) {
-                    Thread.sleep(20);
-                    System.out.println("Queue Size in try catch:  " + GameClient.getP1Moves().size());
-                    System.out.println("Goodnight player " + this.playerNum);
-                }*/
-                System.out.println("Player entering Synchronized block");
-               synchronized (GameClient.getP1Moves()){
-                   while(GameClient.getP1Moves().isEmpty())
-                       GameClient.getP1Moves().wait();
-                   messageFromClient = GameClient.getP1Moves().remove();
-                   GameClient.getP1Moves().notifyAll();
-               }
+                if (playerNum == 1) {
+                    System.out.println("Player1 entering Synchronized block");
+                    synchronized (GameClient.getP1Moves()) {
+                        while (GameClient.getP1Moves().isEmpty())
+                            GameClient.getP1Moves().wait();
+                        messageFromClient = GameClient.getP1Moves().remove();
+                        GameClient.getP1Moves().notifyAll();
+                    }
+                    this.gameID = GameClient.getGame1ID();
+                }
+                if (playerNum == 2) {
+                    System.out.println("Player2 entering Synchronized block");
+                    synchronized (GameClient.getP2Moves()) {
+                        while (GameClient.getP2Moves().isEmpty())
+                            GameClient.getP2Moves().wait();
+                        messageFromClient = GameClient.getP2Moves().remove();
+                        GameClient.getP2Moves().notifyAll();
+                    }
+                    this.gameID = GameClient.getGame2ID();
+                }
 
-            } catch (InterruptedException e) {
-                System.out.println("Player " + this.playerNum + " about to do stuff!");
-            }
+                } catch(InterruptedException e){
+                    System.out.println("Player " + this.playerNum + " about to do stuff!");
+                }
 
-            System.out.println("Troy knows how this works");
-            this.gameID = GameClient.getGame1ID();
 
-            if (this.playerNum == 1) {
+
+
+            System.out.println("Troy knows how this works for player " + playerNum);
+
+
+
                 System.out.println(messageFromClient);
                 if(!gameOver)
                     executeMessage(messageFromClient);
@@ -111,20 +121,9 @@ public class PlayerRunnable implements Runnable {
                // game.gameBoard.printSectionedBoard(game.gameBoard);
 
                 if(messageFromClient.getMessageType() == Message.MessageType.MakeYourMove)
-                    playTurn(1);
+                    playTurn();
                 //GameClient.setP1Move(null);
-            }
-            else {
-                System.out.println(GameClient.getP2Move());
-                if(!gameOver)
-                    executeMessage(GameClient.getP2Move());
-                //System.out.println("THis is player " + playerNum + "'s board\n");
-               // game.gameBoard.printSectionedBoard(game.gameBoard);
 
-                if(GameClient.getP2Move().getMessageType() == Message.MessageType.MakeYourMove)
-                    playTurn(2);
-               // GameClient.setP2Move(null);
-            }
 
 
 
@@ -142,7 +141,7 @@ public class PlayerRunnable implements Runnable {
     }
 
 
-    private void playTurn(int playerNum) {
+    private void playTurn() {
         moveMessage = new clientMoveMessages();
         //Update board state
         game.updateSettlements();
@@ -230,6 +229,7 @@ public class PlayerRunnable implements Runnable {
 
             System.out.println(moveMessage.toString(moveMessage.getMoveType()));
             System.out.println("Queue size player 1:  " + GameClient.getP1Moves().size());
+             System.out.println("Queue size player 2:  " + GameClient.getP2Moves().size());
             if(this.playerNum == 1)
                 GameClient.sendMessageFromPlayerToServer(moveMessage, 1);
             else

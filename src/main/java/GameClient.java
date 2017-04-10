@@ -104,14 +104,14 @@ public class GameClient {
             //
                     Thread player1 = new Thread(new PlayerRunnable(playerID, opponentPID, 1));
                     player1.start();
-//                    Thread player2 = new Thread(new PlayerRunnable(playerID, opponentPID, 2));
-//                    player2.start();
+                    Thread player2 = new Thread(new PlayerRunnable(playerID, opponentPID, 2));
+                    player2.start();
 
                     p1Moves = new LinkedList<Message>();
                     p2Moves = new LinkedList<Message>();
 
                     //SINGLE TURN
-                    while(!p1RoundIsDone) {
+                    while(!p1RoundIsDone || !p2RoundIsDone) {
 
                         Message turnMessage;
                         String serverMessage = "";
@@ -120,8 +120,8 @@ public class GameClient {
                         while (serverMessage.equals("")) {
                             serverMessage = in.readLine();
                         }
-                            System.out.println("ServerString:   " + serverMessage);
-                            turnMessage = parser.parseString(serverMessage);
+                        System.out.println("ServerString:   " + serverMessage);
+                        turnMessage = parser.parseString(serverMessage);
 
                         System.out.println("Server says: " + turnMessage + "  MessageType: " + turnMessage.getMessageType());
 
@@ -131,40 +131,40 @@ public class GameClient {
 
                         setGameIDs(tempGameID);
 
-                            if(turnMessage instanceof GameOverMessage){
-                                if(((GameOverMessage)turnMessage).getGid().equals(game1ID)){
-                                    p1RoundIsDone = true;
-
-                                }
-                                else {
-                                    p2RoundIsDone = true;
-//                                    player2.join();
-                                }
+                        if (turnMessage instanceof GameOverMessage) {
+                            if (((GameOverMessage) turnMessage).getGid().equals(game1ID)) {
+                                p1RoundIsDone = true;
+                            } else {
+                                p2RoundIsDone = true;
                             }
-
-//&&player1.isReady()
-                        //Send Message object to proper player
-                        System.out.println("GameID1:  " + game1ID + "   tempGameID:  " + tempGameID);
-                        if (tempGameID.equals(game1ID)) {
-                            System.out.println("Client entering Sycnhronized block");
-                                synchronized (p1Moves) {
-                                    p1Moves.add(turnMessage);
-                                    System.out.println("Added to Queue");
-                                    p1Moves.notifyAll();
-                                }
-                        } else if (tempGameID.equals(game2ID)) {
-                           // p2Move = turnMessage;
-                           // System.out.println("We got a move");
-                           // player2.interrupt();
                         }
 
+
+                        // System.out.println("GameID1:  " + game1ID + "   tempGameID:  " + tempGameID);
+                        if (tempGameID.equals(game1ID)) {
+                            System.out.println("Client entering Sycnhronized block1");
+                            synchronized (p1Moves) {
+                                p1Moves.add(turnMessage);
+                                System.out.println("Added to Queue1");
+                                p1Moves.notifyAll();
+                            }
+                        } else if (tempGameID.equals(game2ID)) {
+                            System.out.println("Client entering Sycnhronized block2");
+                            synchronized (p2Moves) {
+                                p2Moves.add(turnMessage);
+                                System.out.println("Added to Queue2");
+                                p2Moves.notifyAll();
+                            }
+
+                        }
                     }
-            player1.join();
+                        player1.join();
+                        player2.join();
 
 
 
 
-                //}
+
 
                 challengeIsDone = true;
 
@@ -284,8 +284,8 @@ public class GameClient {
 //        GameClient.p1Move = p1Move;
 //    }
 
-    public static Message getP2Move() {
-        return p2Moves.peek();
+    public static Queue<Message> getP2Moves() {
+        return p2Moves;
     }
 
 //    public static void setP2Move(Message p2Move) {

@@ -50,9 +50,9 @@ public class ServerTest {
             out.println(message5);
             out.println(message6);
             out.println(message7);
-        //    out.println(message8);
+            out.println(message8);
             out.println(message9);
-         //   out.println(message10);
+            out.println(message10);
 
 
             System.out.println("From our AI with love: " + in.readLine());
