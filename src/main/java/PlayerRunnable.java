@@ -77,6 +77,8 @@ public class PlayerRunnable implements Runnable {
             //Update board state
             game.updateSettlements();
 
+            System.out.println("NEW TURN ************************ ");
+
             //Check for tile placement options
             tilePlacementOptions = game.getAvailableTilePlacement();
 
@@ -113,23 +115,6 @@ public class PlayerRunnable implements Runnable {
                 }
                 moveMessage.setOrientation(moveMessage.orientationToNumber(orientation));
             }
-
-            //Totoro Turtle Strategy
-/*            if (totoroPiecesRemaining(game)) {
-                if (canNukeSafely(game)) {
-                    if (canSabotageEnemySettlement()) {
-                        //Sabotage enemy settlement
-                    }
-                } else {
-                    //Place tiles near existing settlements of < 5 w/ no totoro
-                }
-            } else{
-                if (canNukeSafely(game)) {
-                    //Nuke tiles near existing settlements (to prep for expansion)
-                } else {
-                    //Place tile
-                }
-            }*/
 
                 //FOR SERVER TESTING
                 //moveMessage.setTileLocation(tilePlacementOptions.get(0));
@@ -194,33 +179,19 @@ public class PlayerRunnable implements Runnable {
                         game.performLandGrab(expansionDF);
                         System.out.println("We expanded for turn: "+ newTile.getTileId());
                         System.out.println("Expanded cost: "+ expansionDF.getExpansionCost());
-                    } else {
+                    } else if (game.getVillagerCount() > 0){
                         //found settlement
                         buildDecisionCoords = findClosestTupleToOrigin(foundSettlementOptions);
                         moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Found);
                         moveMessage.setBuildLocation(buildDecisionCoords);
                         game.foundSettlement(buildDecisionCoords, Hex.Team.Black);
+                        System.out.println("We founded a settlement");
+                    } else {
+                        //We lost.
+                        moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Unable);
+                        System.out.println("We cannot build.");
                     }
                 }
-
-                //Totoro Turtle Strategy
-/*                if (totoroPiecesRemaining(game)) {
-                    if (canPlaceTotoro(totoroPlacementOptions)) {
-                        //place Totoro
-                    } else if (canPlaceTiger(tigerPlacementOptions)) {
-                        //place Tiger
-                    } else if (existsSub3ExpandOption()) {
-                        //perform expansion with cost of 1-2
-                    } else {
-                        //found settlement near largest settlement w/ no totoro
-                    }
-                } else {
-                    if (canExpand(expandSettlementOptions)) {
-                        //choose highest-cost expansion option
-                    } else {
-                        //Found settlement
-                    }
-                }*/
 
 
                 //FOR SERVER TESTING
