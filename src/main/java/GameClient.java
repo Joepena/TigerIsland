@@ -162,36 +162,44 @@ public class GameClient {
                         System.out.println("GameID1:  " + game1ID + "   tempGameID:  " + tempGameID);
                         System.out.println("GameID2:  " + game2ID);
 
+//                        if (tempGameID.equals(game1ID)) {
+//                            System.out.println("Client entering Sycnhronized block1");
+//                            synchronized (p1Moves) {
+//                                p1Moves.add(turnMessage);
+//                                System.out.println("Added to Queue1");
+//                                p1Moves.notifyAll();
+//                            }
+//                        } else if (tempGameID.equals(game2ID)) {
+//                            System.out.println("Client entering Sycnhronized block2");
+//                            synchronized (p2Moves) {
+//                                p2Moves.add(turnMessage);
+//                                System.out.println("Added to Queue2");
+//                                p2Moves.notifyAll();
+//                            }
+//
+//                        }
                         if (tempGameID.equals(game1ID)) {
-                            System.out.println("Client entering Sycnhronized block1");
-                            synchronized (p1Moves) {
-                                p1Moves.add(turnMessage);
-                                System.out.println("Added to Queue1");
-                                p1Moves.notifyAll();
-                            }
+                            p1Moves.add(turnMessage);
+                            player1.interrupt();
                         } else if (tempGameID.equals(game2ID)) {
-                            System.out.println("Client entering Sycnhronized block2");
-                            synchronized (p2Moves) {
-                                p2Moves.add(turnMessage);
-                                System.out.println("Added to Queue2");
-                                p2Moves.notifyAll();
-                            }
-
+                            p2Moves.add(turnMessage);
+                            player2.interrupt();
                         }
+
                     }
 
                    player1.join();
                    player2.join();
 
-                   player2.interrupt();
+                   //player2.interrupt();
                     System.out.println("Threads should be dead");
 
                     game1ID = "";
                     game2ID = "";
-                    synchronized (p1Moves) {
-                        System.out.println("p1Moves.size():  " + p1Moves.size());
-                        p1Moves.notifyAll();
-                    }
+//                    synchronized (p1Moves) {
+//                        System.out.println("p1Moves.size():  " + p1Moves.size());
+//                        p1Moves.notifyAll();
+//                    }
               //  }
                 System.out.println("currentRound: " + roundCount);
                 System.out.println("numRounds: " + numRounds);

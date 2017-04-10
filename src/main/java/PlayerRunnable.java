@@ -82,31 +82,41 @@ public class PlayerRunnable implements Runnable {
             Message messageFromClient = new NoActionMessage(Message.MessageType.Welcome);
             try {
 
-                if (playerNum == 1) {
-                    System.out.println("Player1 entering Synchronized block");
-                    synchronized (GameClient.getP1Moves()) {
-                        while (GameClient.getP1Moves().isEmpty())
-                            GameClient.getP1Moves().wait();
-                        messageFromClient = GameClient.getP1Moves().remove();
-                        GameClient.getP1Moves().notifyAll();
+//                if (playerNum == 1) {
+//                    System.out.println("Player1 entering Synchronized block");
+//                    synchronized (GameClient.getP1Moves()) {
+//                        while (GameClient.getP1Moves().isEmpty())
+//                            GameClient.getP1Moves().wait();
+//                        messageFromClient = GameClient.getP1Moves().remove();
+//                        GameClient.getP1Moves().notifyAll();
+//                    }
+//                    this.gameID = GameClient.getGame1ID();
+//                }
+//                if (playerNum == 2) {
+//                    System.out.println("Player2 entering Synchronized block");
+//                    synchronized (GameClient.getP2Moves()) {
+//                        while (GameClient.getP2Moves().isEmpty())
+//                            GameClient.getP2Moves().wait();
+//                        messageFromClient = GameClient.getP2Moves().remove();
+//                        GameClient.getP2Moves().notifyAll();
+//                    }
+//                    this.gameID = GameClient.getGame2ID();
+//                }
+
+                    while(true) {
+                        Thread.sleep(30);
                     }
-                    this.gameID = GameClient.getGame1ID();
-                }
-                if (playerNum == 2) {
-                    System.out.println("Player2 entering Synchronized block");
-                    synchronized (GameClient.getP2Moves()) {
-                        while (GameClient.getP2Moves().isEmpty())
-                            GameClient.getP2Moves().wait();
-                        messageFromClient = GameClient.getP2Moves().remove();
-                        GameClient.getP2Moves().notifyAll();
-                    }
-                    this.gameID = GameClient.getGame2ID();
-                }
 
                 } catch(InterruptedException e){
                     System.out.println("Player " + this.playerNum + " about to do stuff!");
-                    Thread.currentThread().interrupt();
-                    return;
+                    if (playerNum == 1) {
+                        messageFromClient = GameClient.getP1Moves().remove();
+                    } else {
+                        messageFromClient = GameClient.getP2Moves().remove();
+                    }
+
+                    //Thread.currentThread().interrupt();
+                    //return;
                 }
 
 
