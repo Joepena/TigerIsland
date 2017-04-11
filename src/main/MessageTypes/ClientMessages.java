@@ -14,12 +14,12 @@ public class ClientMessages {
 
     public String enterThunderdome(String gamePassword)
     {
-        return ("ENTER THUNDERDOME " + gamePassword + "\r\n");
+        return ("ENTER THUNDERDOME " + gamePassword);
     }
 
     public String usernamePassword()
     {
-        return ("I AM " + this.username + " " + this.password + "\r\n");
+        return ("I AM " + this.username + " " + this.password);
     }
 
 
