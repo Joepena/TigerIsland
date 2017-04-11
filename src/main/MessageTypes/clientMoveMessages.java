@@ -79,7 +79,7 @@ public class clientMoveMessages
     {
         String leftTerrain = terrainToString(tile.getLeft().getTerrain());
         String rightTerrain = terrainToString(tile.getRight().getTerrain());
-        return (leftTerrain + "+" + rightTerrain);
+        return (rightTerrain + "+" + leftTerrain);
     }
 
     public String toString(clientMoveMessageType messageType)

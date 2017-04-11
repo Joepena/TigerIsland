@@ -80,7 +80,7 @@ public class GameClient {
       System.out.println("This is our playerID: " + playerID);
 
       while (!challengeIsDone) {
-        System.out.println("challenge is done: " + false);
+        //System.out.println("challenge is done: " + false);
 
         //get number of rounds
         int roundCount = 1;
@@ -91,15 +91,15 @@ public class GameClient {
         if (parsedServerMessage instanceof NewChallengeMessage) {
           numRounds = ((NewChallengeMessage) parsedServerMessage).getRounds();
         }
-        System.out.println(
-          "Message type of beginning round message:  " + parsedServerMessage.getMessageType());
+        //System.out.println(
+          //"Message type of beginning round message:  "+ parsedServerMessage.getMessageType());
 
         // This loop performs an iteration for each individual opponent we play, playing a set of numRounds
         // rounds against them
 
         //
         while (roundCount++ <= numRounds) {
-          System.out.println((roundCount - 1) + " < " + numRounds);
+          //System.out.println((roundCount - 1) + " < " + numRounds);
           parsedServerMessage = parseServerInput(in, Message.MessageType.BeginRound);
           if (parsedServerMessage instanceof BeginRoundMessage) {
             int roundID = ((BeginRoundMessage) parsedServerMessage).getRid();
@@ -130,7 +130,7 @@ public class GameClient {
             while (serverMessage.equals("")) {
               serverMessage = in.readLine();
             }
-            System.out.println("ServerString:   " + serverMessage);
+            //System.out.println("ServerString:   " + serverMessage);
             turnMessage = parser.parseString(serverMessage);
             tempGameID = getGameIDFromMessage(turnMessage);
 
@@ -146,8 +146,8 @@ public class GameClient {
               }
             }
 
-            System.out.println("GameID1:  " + game1ID + "   tempGameID:  " + tempGameID);
-            System.out.println("GameID2:  " + game2ID);
+            //System.out.println("GameID1:  " + game1ID + "   tempGameID:  " + tempGameID);
+            //System.out.println("GameID2:  " + game2ID);
 
             if (tempGameID.equals(game1ID)) {
               p1Moves.add(turnMessage);
@@ -171,7 +171,7 @@ public class GameClient {
           player1.join();
           player2.join();
 
-          System.out.println("Threads should be dead");
+          //System.out.println("Threads should be dead");
 
           game1ID = "";
           game2ID = "";
@@ -230,7 +230,7 @@ public class GameClient {
   public static void sendMessageFromPlayerToServer(clientMoveMessages playerMessage) {
     String finalMessage = playerMessage.toString(playerMessage.getMessageType());
     outqueue.add(finalMessage);
-    System.out.println("To server with love: " + finalMessage);
+    //System.out.println("To server with love: " + finalMessage);
     try {
       PrintWriter playerWriter = new PrintWriter(socket.getOutputStream(), true);
       while (!outqueue.isEmpty()) {

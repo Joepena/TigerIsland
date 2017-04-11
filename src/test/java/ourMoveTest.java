@@ -13,7 +13,7 @@ public class ourMoveTest {
         player.setGameID("ABC");
     }
 
-
+/*
     @Test
     public void secondbasicMoveTest() throws Exception{
         player.getGame().placeFirstTile();
@@ -41,7 +41,7 @@ public class ourMoveTest {
         player.getGame().gameBoard.printSectionedBoard(player.getGame().gameBoard);
 
     }
-
+*/
 
     public void createLandMass() throws Exception {
         Tuple origin = Orientation.getOrigin();

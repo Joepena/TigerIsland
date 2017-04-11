@@ -89,7 +89,7 @@ public class PlayerRunnable implements Runnable {
         }
 
       } catch (InterruptedException e) {
-        System.out.println("Player " + this.playerNum + " about to do stuff!");
+        //System.out.println("Player " + this.playerNum + " about to do stuff!");
         if (playerNum == 1) {
           messageFromClient = GameClient.getP1Moves().remove();
           this.gameID = GameClient.getGame1ID();
@@ -100,7 +100,7 @@ public class PlayerRunnable implements Runnable {
 
       }
 
-      System.out.println("Troy knows how this works for player " + playerNum);
+      //System.out.println("Troy knows how this works for player " + playerNum);
 
       System.out.println(messageFromClient);
       if (!gameOver) {
@@ -200,24 +200,26 @@ public class PlayerRunnable implements Runnable {
         moveMessage.setBuildLocation(expansionDF.getExpansionStart());
         moveMessage.setTerrain(expansionDF.getTerrain());
         game.performLandGrab(expansionDF);
-        System.out.println("We expanded for turn: " + newTile.getTileId());
-        System.out.println("Expanded cost: " + expansionDF.getExpansionCost());
+        //System.out.println("We expanded for turn: " + newTile.getTileId());
+        //System.out.println("Expanded cost: " + expansionDF.getExpansionCost());
       } else if (game.getVillagerCount() > 0) {
         //found settlement
         buildDecisionCoords = findClosestTupleToOrigin(foundSettlementOptions);
         moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Found);
         moveMessage.setBuildLocation(buildDecisionCoords);
         game.foundSettlement(buildDecisionCoords, Hex.Team.Black);
-        System.out.println("We founded a settlement");
+        //System.out.println("We founded a settlement");
       } else {
         //We lost.
         moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Unable);
-        System.out.println("We cannot build.");
+        //System.out.println("We cannot build.");
       }
     }
 
     hasMove = false;
     GameClient.sendMessageFromPlayerToServer(moveMessage);
+    //System.out.println("Player " + playerNum + "'s Board\n");
+    //game.gameBoard.printSectionedBoard(game.gameBoard);
 
   }
 
@@ -298,12 +300,13 @@ public class PlayerRunnable implements Runnable {
       case Move:
         MoveMessage move = (MoveMessage) message;
         Move(move);
+        //game.gameBoard.printSectionedBoard(game.gameBoard);
         break;
     }
   }
 
   private void GameOver(GameOverMessage message) {
-    System.out.println("GAMEOVER!!!!!!!!!");
+    //System.out.println("GAMEOVER!!!!!!!!!");
     this.gameOver = true;
   }
 
