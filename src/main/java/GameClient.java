@@ -219,7 +219,7 @@ public class GameClient {
   private static void setGameIDs(String ID) {
     if (game1ID.equals("")) {
       game1ID = ID;
-    } else if (game2ID.equals("")) {
+    } else if (game2ID.equals("") && !game1ID.equals(ID)) {
       game2ID = ID;
     }
   }
