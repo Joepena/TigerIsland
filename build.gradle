@@ -61,3 +61,8 @@ test {
 repositories {
     mavenCentral()
 }
+
+task run(type: JavaExec, dependsOn: 'classes') {
+  main = 'com.GameClient'
+  classpath = configurations.runtime
+}

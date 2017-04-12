@@ -7,8 +7,8 @@ public class MessageParser {
     private Message message;
 
 
-    public MessageParser(String message){
-        parseString(message);
+    public MessageParser(){
+        this.message = null;
 
     }
 
@@ -17,10 +17,10 @@ public class MessageParser {
     }
 
 
-    private void parseString (String message) {
+    public Message parseString (String message) {
         Scanner scanner = new Scanner(message).useDelimiter(" ");
         if(!scanner.hasNext())
-            return;
+            return this.message;
         String messageStart = scanner.next();
         switch(messageStart){
             case "WELCOME":
@@ -52,7 +52,7 @@ public class MessageParser {
                 break;
         }
         scanner.close();
-
+        return this.message;
     }
 
     private void challengeOrMatch(String message, Scanner scanner){

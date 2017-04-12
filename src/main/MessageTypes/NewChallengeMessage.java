@@ -36,6 +36,6 @@ public class NewChallengeMessage extends Message{
     }
 
     public String toString(){
-        return "cid:  " + this.cid + "\nrounds:  " + this.rounds + "\n";
+        return "cid:  " + this.cid + "\nrounds:  " + this.rounds;
     }
 }
