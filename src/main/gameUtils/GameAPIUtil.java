@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,10 +12,12 @@ public class GameAPIUtil {
 
     private Board gameBoard;
     private GameAPI game;
+    private SearchTools search;
 
     public GameAPIUtil(GameAPI gameAPI) {
         this.game = gameAPI;
         this.gameBoard = gameAPI.gameBoard;
+        this.search = new SearchTools(gameBoard);
     }
 
     public void updateBothSettlement() {
@@ -24,13 +25,13 @@ public class GameAPIUtil {
         settlement.wipeSettlementSet();
 
         boolean[][][] copyArr = copyAvailabilityGrid(gameBoard.getGameBoardAvailability());
-        dfsSearch(copyArr, Orientation.getOrigin(), settlement, new SettlementDataFrame(0,new Tuple(0,0,0)));
+        search.dfsSearch(copyArr, Orientation.getOrigin(), settlement, new SettlementDataFrame(0,new Tuple(0,0,0)));
 
         Settlements.retriveWhiteSettlements(settlement, game.getWhiteSettlements());
         Settlements.retriveBlackSettlements(settlement, game.getBlackSettlements());
 
-        conglomerateAdjacentSettlements(Hex.Team.White);
-        conglomerateAdjacentSettlements(Hex.Team.Black);
+        mergeAdjacentSettlements(Hex.Team.White);
+        mergeAdjacentSettlements(Hex.Team.Black);
     }
 
     private boolean[][][] copyAvailabilityGrid(boolean[][][] array) {
@@ -47,87 +48,9 @@ public class GameAPIUtil {
       return copyArr;
     }
 
-    protected void dfsSearch(boolean[][][] availabilityGrid, Tuple coord, Settlements settlement, SettlementDataFrame df) {
-        int xCord = coord.getX();
-        int yCord = coord.getY();
-        int zCord = coord.getZ();
-        Tuple offset = gameBoard.calculateOffset(coord);
-        //edge case
-        if (xCord >= BOARD_EDGE || xCord <= -BOARD_EDGE || yCord >= BOARD_EDGE || yCord <= -BOARD_EDGE || zCord >= BOARD_EDGE || zCord <= -BOARD_EDGE
-                || !availabilityGrid[offset.getX()][offset.getY()][offset.getZ()]) return;
-
-        //invalidate the position
-        Hex h = gameBoard.getHex(coord);
 
 
-        if (h.getTeam() != Hex.Team.Neutral) {
-            // initial call
-            if (df.getOwnedBy() == null) {
-                df.setOwnedBy(h.getTeam());
-                df.setSettlementSize(1);
-                df.addLocationListOfHexes(coord);
-                df.setSettlementStartingLocation(coord);
-                settlement.addNewSettlement(df);
-            } else if (df.getOwnedBy() != h.getTeam()) {
-                // we call dfs for a new clean dataFrame
-                dfsSearch(availabilityGrid, coord, settlement, new SettlementDataFrame(0, Orientation.getOrigin()));
-            } else {
-                // matching ownership
-                df.setSettlementSize(df.getSettlementSize() + 1);
-                df.addLocationListOfHexes(coord);
-            }
-        }
-
-        availabilityGrid[offset.getX()][offset.getY()][offset.getZ()] = false;
-
-        //edge case #1: we have a team but this hex is neutral. We do not want to carry this df anymore
-        if (df.getOwnedBy() != null && h.getTeam() == Hex.Team.Neutral) {
-
-            dfsSearch(availabilityGrid, Orientation.downLeftOf(coord), settlement, new SettlementDataFrame(0, Orientation.getOrigin()));
-            dfsSearch(availabilityGrid, Orientation.downRightOf(coord), settlement, new SettlementDataFrame(0, Orientation.getOrigin()));
-            dfsSearch(availabilityGrid, Orientation.leftOf(coord), settlement, new SettlementDataFrame(0, Orientation.getOrigin()));
-            dfsSearch(availabilityGrid, Orientation.rightOf(coord), settlement, new SettlementDataFrame(0, Orientation.getOrigin()));
-            dfsSearch(availabilityGrid, Orientation.upLeftOf(coord), settlement, new SettlementDataFrame(0, Orientation.getOrigin()));
-            dfsSearch(availabilityGrid, Orientation.upRightOf(coord), settlement, new SettlementDataFrame(0, Orientation.getOrigin()));
-        }
-        //edge case #2: we have a team but this hex is not
-        else if (df.getOwnedBy() != null) {
-
-            // loop through all hexes same team first
-            Hex.Team dfTeam = df.getOwnedBy();
-
-            for (Orientation.Orientations orientation : Orientation.Orientations.values()) {
-
-                if (orientation == Orientation.Orientations.origin) continue;
-                // get adjacent hex
-                Tuple hexLocation = Orientation.addCoordinatesByOrientation(coord, orientation);
-                Hex adjacentHex = gameBoard.getHex(hexLocation);
-
-                if (adjacentHex == null || adjacentHex.getTeam() != dfTeam) continue;
-                // same team recurse through it
-
-                dfsSearch(availabilityGrid, hexLocation, settlement, df);
-            }
-        }
-        dfsSearch(availabilityGrid,
-                Orientation.addCoordinatesByOrientation(coord, Orientation.Orientations.downLeft), settlement,
-                df);
-        dfsSearch(availabilityGrid,
-                Orientation.addCoordinatesByOrientation(coord, Orientation.Orientations.downRight), settlement,
-                df);
-        dfsSearch(availabilityGrid,
-                Orientation.addCoordinatesByOrientation(coord, Orientation.Orientations.left), settlement, df);
-        dfsSearch(availabilityGrid,
-                Orientation.addCoordinatesByOrientation(coord, Orientation.Orientations.right), settlement, df);
-        dfsSearch(availabilityGrid,
-                Orientation.addCoordinatesByOrientation(coord, Orientation.Orientations.upLeft), settlement, df);
-        dfsSearch(availabilityGrid,
-                Orientation.addCoordinatesByOrientation(coord, Orientation.Orientations.upRight), settlement, df);
-
-
-    }
-
-    protected void conglomerateAdjacentSettlements(Hex.Team team) {
+    protected void mergeAdjacentSettlements(Hex.Team team) {
         Settlements listSettlements;
 
         if (team == Hex.Team.White) {
@@ -231,41 +154,6 @@ public class GameAPIUtil {
         return null;
     }
 
-    public Orientation.Orientations getViableNonNukingOrientation(Tuple volcanoCoordinates) {
-        boolean volcanoIsAdjacent = HexValidation.existsAdjacentHex(volcanoCoordinates,this.gameBoard);
-
-        if (gameBoard.getHex(Orientation.downLeftOf(volcanoCoordinates)) == null
-                && gameBoard.getHex(Orientation.downRightOf(volcanoCoordinates)) == null
-                && (volcanoIsAdjacent || HexValidation.existsAdjacentHex(Orientation.downLeftOf(volcanoCoordinates), this.gameBoard)
-                || HexValidation.existsAdjacentHex(Orientation.downRightOf(volcanoCoordinates), this.gameBoard)))
-            return Orientation.Orientations.downLeft;
-        if (gameBoard.getHex(Orientation.downRightOf(volcanoCoordinates)) == null
-                && gameBoard.getHex(Orientation.rightOf(volcanoCoordinates)) == null
-                && (volcanoIsAdjacent || HexValidation.existsAdjacentHex(Orientation.downRightOf(volcanoCoordinates), this.gameBoard)
-                || HexValidation.existsAdjacentHex(Orientation.rightOf(volcanoCoordinates), this.gameBoard)))
-            return  Orientation.Orientations.downRight;
-        if (gameBoard.getHex(Orientation.upLeftOf(volcanoCoordinates)) == null
-                && gameBoard.getHex(Orientation.rightOf(volcanoCoordinates)) == null
-                && (volcanoIsAdjacent || HexValidation.existsAdjacentHex(Orientation.upLeftOf(volcanoCoordinates), this.gameBoard)
-                || HexValidation.existsAdjacentHex(Orientation.rightOf(volcanoCoordinates), this.gameBoard)))
-            return Orientation.Orientations.upLeft;
-        if (gameBoard.getHex(Orientation.upRightOf(volcanoCoordinates)) == null
-                && gameBoard.getHex(Orientation.upLeftOf(volcanoCoordinates)) == null
-                && (volcanoIsAdjacent || HexValidation.existsAdjacentHex(Orientation.upRightOf(volcanoCoordinates), this.gameBoard)
-                || HexValidation.existsAdjacentHex(Orientation.upLeftOf(volcanoCoordinates), this.gameBoard)))
-            return Orientation.Orientations.upRight;
-        if (gameBoard.getHex(Orientation.leftOf(volcanoCoordinates)) == null
-                && gameBoard.getHex(Orientation.downLeftOf(volcanoCoordinates)) == null
-                && (volcanoIsAdjacent || HexValidation.existsAdjacentHex(Orientation.leftOf(volcanoCoordinates), this.gameBoard)
-                || HexValidation.existsAdjacentHex(Orientation.downLeftOf(volcanoCoordinates), this.gameBoard)))
-            return Orientation.Orientations.left;
-        if (gameBoard.getHex(Orientation.rightOf(volcanoCoordinates)) == null
-                && gameBoard.getHex(Orientation.upRightOf(volcanoCoordinates)) == null
-                && (volcanoIsAdjacent || HexValidation.existsAdjacentHex(Orientation.rightOf(volcanoCoordinates), this.gameBoard)
-                || HexValidation.existsAdjacentHex(Orientation.upRightOf(volcanoCoordinates), this.gameBoard)))
-            return Orientation.Orientations.right;
-        return null;
-    }
 
     public boolean isValidTileNukingPosition(TilePositionCoordinates tilePositionCoordinates) {
 
@@ -459,35 +347,13 @@ public class GameAPIUtil {
               if (terrain != tempTerrain || adjacentHex.getTeam() != Hex.Team.Neutral) {
                 continue;
               }
-              dfsExpansionSearch(copyArr, expansionOpDataFrame, tempTerrain, tempTuple);
+              search.dfsExpansionSearch(copyArr, expansionOpDataFrame, tempTerrain, tempTuple);
             }
           }
 
         }
       }
       return list;
-    }
-
-    private void dfsExpansionSearch(boolean[][][] availabilityGrid, ExpansionOpDataFrame df, Terrain.terrainType terrain, Tuple tuple) {
-      int xCord = tuple.getX();
-      int yCord = tuple.getY();
-      int zCord = tuple.getZ();
-      Tuple offSet = gameBoard.calculateOffset(tuple);
-      if(!availabilityGrid[offSet.getX()][offSet.getY()][offSet.getZ()] || xCord >= BOARD_EDGE || xCord <= -BOARD_EDGE || yCord >= BOARD_EDGE || yCord <= -BOARD_EDGE || zCord >= BOARD_EDGE || zCord <= -BOARD_EDGE) {
-        return;
-      }
-      availabilityGrid[offSet.getX()][offSet.getY()][offSet.getZ()] = false;
-      df.incrementExpansionCost(gameBoard.getHex(tuple).getLevel());
-      for(Orientation.Orientations orientation : Orientation.Orientations.values()) {
-        Tuple tempTuple = Orientation.addCoordinatesByOrientation(tuple,orientation);
-        Tuple tempTupleOff = gameBoard.calculateOffset(tempTuple);
-        if(!availabilityGrid[tempTupleOff.getX()][tempTupleOff.getY()][tempTupleOff.getZ()]) continue;
-        Hex tempHex = gameBoard.getHex(tempTuple);
-        if(tempHex == null) continue;
-        Terrain.terrainType tempTerrain = tempHex.getTerrain();
-        if(tempTuple == Orientation.getOrigin() || terrain != tempTerrain || tempHex.getTeam() != Hex.Team.Neutral) continue;
-        dfsExpansionSearch(availabilityGrid,df,terrain,tempTuple);
-      }
     }
 
 
