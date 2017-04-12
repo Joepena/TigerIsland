@@ -24,9 +24,7 @@ public class GameClient {
   public static void main(String[] args) throws Exception {
 
     String host = args[0];
-    System.out.println(args[0]);
     int port = Integer.parseInt(args[1]);
-    System.out.println(args[1]);
     String userName = args[2];
     System.out.println(args[2]);
     String password = args[3];
