@@ -4,10 +4,6 @@ import java.util.Scanner;
  * Created by T K Vicious on 4/6/2017.
  */
 public class BuildTigerMessage extends MoveMessage {
-    private Tuple tileLocation;
-    private Tuple buildLocation;
-    private Tile tile;
-
     public Tile getTile() {
         return tile;
     }
@@ -21,7 +17,9 @@ public class BuildTigerMessage extends MoveMessage {
     }
 
     BuildTigerMessage(String message){
-        super(message, MoveType.Tiger);
+        super(message);
+        messageType = MessageType.Move;
+        setMoveType(MoveType.Tiger);
         Scanner scanner = new Scanner(message).useDelimiter(" ");
         if(!scanner.hasNext())
             return;
@@ -30,13 +28,13 @@ public class BuildTigerMessage extends MoveMessage {
         scanner.next();
         String tileString = scanner.next();
         scanner.next();
-        this.tileLocation = new Tuple(scanner.nextInt(), scanner.nextInt(), scanner.nextInt());
-        this.tile = makeTileFromString(tileString, getMoveNumber(), this.numberToOrientation(scanner.nextInt()));
+        tileLocation = new Tuple(scanner.nextInt(), scanner.nextInt(), scanner.nextInt());
+        tile = makeTileFromString(tileString, getMoveNumber(), this.numberToOrientation(scanner.nextInt()));
         scanner.next();
         scanner.next();
         scanner.next();
         scanner.next();
-        this.buildLocation = new Tuple(scanner.nextInt(), scanner.nextInt(), scanner.nextInt());
+        buildLocation = new Tuple(scanner.nextInt(), scanner.nextInt(), scanner.nextInt());
 
 
     }

@@ -5,7 +5,8 @@ import java.util.Scanner;
  */
 public class ForfeitMessage extends MoveMessage{
     ForfeitMessage(String message){
-        super(message, MoveType.Forfeit);
+        super(message);
+        moveType = MoveType.Forfeit;
     }
 
     public boolean equals(BuildTigerMessage message){

@@ -4,11 +4,6 @@ import java.util.Scanner;
  * Created by T K Vicious on 4/6/2017.
  */
 public class MakeYourMoveMessage extends Message{
-    private String gid;
-    private double moveTime;
-    private int moveNumber;
-    private Tile tile;
-
     public String getGid() {
         return gid;
     }
@@ -26,18 +21,19 @@ public class MakeYourMoveMessage extends Message{
     }
 
     MakeYourMoveMessage(String message){
-        super(MessageType.MakeYourMove);
+        super();
+        messageType = MessageType.MakeYourMove;
         Scanner scanner = new Scanner(message).useDelimiter(" ");
         for(int i = 0; i < 5; i++)
             scanner.next();
-        this.gid = scanner.next();
+        gid = scanner.next();
         scanner.next();
-        this.moveTime = scanner.nextDouble();
+        moveTime = scanner.nextDouble();
         scanner.next();
         scanner.next();
-        this.moveNumber = scanner.nextInt();
+        moveNumber = scanner.nextInt();
         scanner.next();
-        this.tile = makeTileFromString(scanner.next(), this.moveNumber, Orientation.Orientations.downLeft);
+        tile = makeTileFromString(scanner.next(), this.moveNumber, Orientation.Orientations.downLeft);
         scanner.close();
     }
 

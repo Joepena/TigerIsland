@@ -5,14 +5,13 @@ import java.util.Scanner;
  * Created by TomasK on 4/6/2017.
  */
 public class WaitToBeginMessage extends Message{
-    private String pid;
-
     public String getPid() {
         return pid;
     }
 
     public WaitToBeginMessage(String message){
-        super(Message.MessageType.WaitToBegin);
+        super();
+        messageType = MessageType.WaitToBegin;
 
         Scanner scanner = new Scanner(message).useDelimiter(" ");
         for(int i = 0 ; i < 6; i++){

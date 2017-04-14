@@ -3,6 +3,7 @@
  */
 public class NoActionMessage extends Message {
     NoActionMessage(Message.MessageType messageType){
-        super(messageType);
+        super();
+        this.messageType = messageType;
     }
 }

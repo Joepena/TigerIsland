@@ -16,6 +16,7 @@ public class MessageParserTest {
 
     @Before
     public void setUp() throws Exception {
+        this.mP = new MessageParser();
     }
 
     @After
@@ -24,156 +25,159 @@ public class MessageParserTest {
 
     @Test
     public void NewChallengeMessageTest () throws Exception {
-        this.mP = new MessageParser();
-        mP.parseString("NEW CHALLENGE A1$ YOU WILL PLAY 12 MATCHES");
-        NewChallengeMessage message = new NewChallengeMessage("NEW CHALLENGE A1$ YOU WILL PLAY 12 MATCHES");
+        Message message = mP.parseString("NEW CHALLENGE A1$ YOU WILL PLAY 12 MATCHES");
 
-        Assert.assertTrue("NewChallengeMessage Generation from server string" , message.equals((NewChallengeMessage) mP.getMessage()));
-        Assert.assertTrue("NewChallengeMessage sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.NewChallenge);
+        Assert.assertTrue("NewChallengeMessage sets challengeID" , message.getCid().equals("A1$"));
+        Assert.assertTrue("NewChallengeMessage sets rounds", message.getRounds() == 12);
+        Assert.assertTrue("NewChallengeMessage sets messageType", message.getMessageType() == Message.MessageType.NewChallenge);
     }
 
     @Test
     public void WaitToBeginMessageTest () throws Exception {
-        this.mP = new MessageParser();
-        mP.parseString("WAIT FOR THE TOURNAMENT TO BEGIN 56^T");
-        WaitToBeginMessage message = new WaitToBeginMessage("WAIT FOR THE TOURNAMENT TO BEGIN 56^T");
+        Message message = mP.parseString("WAIT FOR THE TOURNAMENT TO BEGIN 56^T");
 
-        Assert.assertTrue("WaitToBeginMessage Generation from server string" , message.equals((WaitToBeginMessage) mP.getMessage()));
-        Assert.assertTrue("WaitToBeginMessage sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.WaitToBegin);
+        Assert.assertTrue("WaitToBeginMessage sets PID" , message.getPid().equals("56^T"));
+        Assert.assertTrue("WaitToBeginMessage sets messageType", message.getMessageType() == Message.MessageType.WaitToBegin);
     }
 
     @Test
     public void BeginRoundMessageTest () throws Exception {
-        this.mP = new MessageParser();
-        mP.parseString("BEGIN ROUND 8 OF 12");
-        BeginRoundMessage message = new BeginRoundMessage("BEGIN ROUND 8 OF 12");
+        Message message = mP.parseString("BEGIN ROUND 8 OF 12");
 
-        Assert.assertTrue("BeginRoundMessage Generation from server string" , message.equals((BeginRoundMessage) mP.getMessage()));
-        Assert.assertTrue("BeginRoundMessage sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.BeginRound);
+        Assert.assertTrue("BeginRoundMessage sets RID" , message.getRid() == 8);
+        Assert.assertTrue("BeginRoundMessage sets rounds", message.getRounds() == 12);
+        Assert.assertTrue("BeginRoundMessage sets messageType", message.getMessageType() == Message.MessageType.BeginRound);
+
     }
 
     @Test
     public void EndRoundMessageTest () throws Exception {
-        this.mP = new MessageParser();
-        mP.parseString("END OF ROUND 99 OF 112");
-        EndRoundMessage message = new EndRoundMessage("END OF ROUND 99 OF 112");
+        Message message = mP.parseString("END OF ROUND 99 OF 112");
 
-        Assert.assertTrue("EndRoundMessage Generation from server string" , message.equals((EndRoundMessage) mP.getMessage()));
-        Assert.assertTrue("EndRoundMessage sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.EndRound);
+        Assert.assertTrue("EndRoundMessage sets RID" , message.getRid() == 99);
+        Assert.assertTrue("EndRoundMessage sets Rounds", message.getRounds() == 112);
+        Assert.assertTrue("EndRoundMessage sets messageType", message.getMessageType() == Message.MessageType.EndRound);
+
     }
 
     @Test
     public void MatchBeginningMessageTest () throws Exception {
-        this.mP = new MessageParser();
-        mP.parseString("NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER ABC");
-        MatchBeginningMessage message = new MatchBeginningMessage("NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER ABC");
+        Message message = mP.parseString("NEW MATCH BEGINNING NOW YOUR OPPONENT IS PLAYER ABC");
 
-        Assert.assertTrue("MatchBeginningMessage Generation from server string" , message.equals((MatchBeginningMessage) mP.getMessage()));
-        Assert.assertTrue("MatchBeginningMessage sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.MatchBeginning);
+        Assert.assertTrue("MatchBeginningMessage sets opponentPID" , message.getPid().equals("ABC"));
+        Assert.assertTrue("MatchBeginningMessage sets MessageFields type field correctly", message.getMessageType() == Message.MessageType.MatchBeginning);
     }
 
     @Test
     public void MoveFoundSettlementMessageTest () throws Exception {
-        this.mP = new MessageParser();
-        mP.parseString("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 FOUNDED SETTLEMENT AT 12 23 1");
-        FoundSettlementMessage message = new FoundSettlementMessage("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 FOUNDED SETTLEMENT AT 12 23 1");
+        Message message = mP.parseString("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 FOUNDED SETTLEMENT AT 12 23 1");
 
-        System.out.println(((FoundSettlementMessage)mP.getMessage()).toString());
+        Assert.assertTrue("FoundSettlementMessage sets GID" , message.getGid().equals("123"));
+        Assert.assertTrue("FoundSettlementMessage sets moveNumber" , message.getMoveNumber() == 12);
+        Assert.assertTrue("FoundSettlementMessage sets PID", message.getPid().equals("DGD"));
+        Assert.assertTrue("FoundSettlementMessage sets Tile", message.getTile().equals(new Tile(12, Terrain.terrainType.Rocky, Terrain.terrainType.Lake, Orientation.Orientations.downRight)));
+        Assert.assertTrue("FoundSettlementMessage sets TileLocation", message.getTileLocation().equals(new Tuple(10, -12, 11)));
+        Assert.assertTrue("FoundSettlementMessage sets BuildLocation", message.getBuildLocation().equals(new Tuple(12, 23, 1)));
 
-        Assert.assertTrue("FoundSettlementMessage Generation from server string" , message.equals((FoundSettlementMessage) mP.getMessage()));
-        Assert.assertTrue("FoundSettlementMessage sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.Move);
-        Assert.assertTrue("FoundSettlementMessage sets MessageFields MoveType field correctly", ((FoundSettlementMessage)(mP.getMessage())).getMoveType() == MoveMessage.MoveType.Found);
+        Assert.assertTrue("FoundSettlementMessage sets MessageType field correctly", message.getMessageType() == Message.MessageType.Move);
+        Assert.assertTrue("FoundSettlementMessage sets MoveType field correctly", message.getMoveType() == MoveMessage.MoveType.Found);
+
     }
 
     @Test
     public void MoveExpandSettlementMessageTest () throws Exception {
-        this.mP = new MessageParser();
-        mP.parseString("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 EXPANDED SETTLEMENT AT 65 89 45 JUNGLE");
-        ExpandSettlementMessage message = new ExpandSettlementMessage("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 EXPANDED SETTLEMENT AT 65 89 45 JUNGLE");
+        Message message = mP.parseString("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 EXPANDED SETTLEMENT AT 65 89 45 JUNGLE");
 
-        Assert.assertTrue("ExpandSettlementMessage Generation from server string" , message.equals((ExpandSettlementMessage) mP.getMessage()));
-        Assert.assertTrue("ExpandSettlementMessage sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.Move);
-        Assert.assertTrue("ExpandSettlementMessage sets MessageFields MoveType field correctly", ((ExpandSettlementMessage)(mP.getMessage())).getMoveType() == MoveMessage.MoveType.Expand);
+        Assert.assertTrue("ExpandSettlementMessage sets GID" , message.getGid().equals("123"));
+        Assert.assertTrue("ExpandSettlementMessage sets moveNumber" , message.getMoveNumber() == 12);
+        Assert.assertTrue("ExpandSettlementMessage sets PID", message.getPid().equals("DGD"));
+        Assert.assertTrue("ExpandSettlementMessage sets Tile", message.getTile().equals(new Tile(12, Terrain.terrainType.Rocky, Terrain.terrainType.Lake, Orientation.Orientations.downRight)));
+        Assert.assertTrue("ExpandSettlementMessage sets TileLocation", message.getTileLocation().equals(new Tuple(10, -12, 11)));
+        Assert.assertTrue("ExpandSettlementMessage sets BuildLocation", message.getBuildLocation().equals(new Tuple(65, 89, 45)));
+        Assert.assertTrue("ExpandSettlementMessage sets expandTerrain", message.getExpandTerrain() == Terrain.terrainType.Jungle);
+
+        Assert.assertTrue("ExpandSettlementMessage sets MessageType field correctly", message.getMessageType() == Message.MessageType.Move);
+        Assert.assertTrue("ExpandSettlementMessage sets MoveType field correctly", message.getMoveType() == MoveMessage.MoveType.Expand);
     }
 
     @Test
     public void MoveBuildTotoroMessageTest () throws Exception {
-        this.mP = new MessageParser();
-        mP.parseString("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 BUILT TOTORO SANCTUARY AT 15 53 44");
-        BuildTotoroMessage message = new BuildTotoroMessage("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 BUILT TOTORO SANCTUARY AT 15 53 44");
+        Message message = mP.parseString("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 BUILT TOTORO SANCTUARY AT 15 53 44");
 
-        Assert.assertTrue("BuildTotoroMessage Generation from server string" , message.equals((BuildTotoroMessage) mP.getMessage()));
-        Assert.assertTrue("BuildTotoroMessage sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.Move);
-        Assert.assertTrue("BuildTotoroMessage sets MessageFields MoveType field correctly", ((BuildTotoroMessage)(mP.getMessage())).getMoveType() == MoveMessage.MoveType.Totoro);
+        Assert.assertTrue("BuildTotoroMessage sets GID" , message.getGid().equals("123"));
+        Assert.assertTrue("BuildTotoroMessage sets moveNumber" , message.getMoveNumber() == 12);
+        Assert.assertTrue("BuildTotoroMessage sets PID", message.getPid().equals("DGD"));
+        Assert.assertTrue("BuildTotoroMessage sets Tile", message.getTile().equals(new Tile(12, Terrain.terrainType.Rocky, Terrain.terrainType.Lake, Orientation.Orientations.downRight)));
+        Assert.assertTrue("BuildTotoroMessage sets TileLocation", message.getTileLocation().equals(new Tuple(10, -12, 11)));
+        Assert.assertTrue("BuildTotoroMessage sets BuildLocation", message.getBuildLocation().equals(new Tuple(15, 53, 44)));
+
+        Assert.assertTrue("BuildTotoroMessage sets MessageType field correctly", message.getMessageType() == Message.MessageType.Move);
+        Assert.assertTrue("BuildTotoroMessage sets MoveType field correctly", message.getMoveType() == MoveMessage.MoveType.Totoro);
 
     }
 
     @Test
     public void MoveBuildTigerMessageTest () throws Exception {
-        this.mP = new MessageParser();
-        mP.parseString("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 BUILT TIGER PLAYGROUND AT 15 53 44");
-        BuildTigerMessage message = new BuildTigerMessage("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 BUILT TIGER PLAYGROUND AT 15 53 44");
+        Message message = mP.parseString("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 BUILT TIGER PLAYGROUND AT 15 53 44");
 
-        Assert.assertTrue("BuildTigerMessage Generation from server string" , message.equals((BuildTigerMessage) mP.getMessage()));
-        Assert.assertTrue("BuildTigerMessage sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.Move);
-        Assert.assertTrue("BuildTigerMessage sets MessageFields MoveType field correctly", ((BuildTigerMessage)(mP.getMessage())).getMoveType() == MoveMessage.MoveType.Tiger);
+        Assert.assertTrue("BuildTigerMessage sets GID" , message.getGid().equals("123"));
+        Assert.assertTrue("BuildTigerMessage sets moveNumber" , message.getMoveNumber() == 12);
+        Assert.assertTrue("BuildTigerMessage sets PID", message.getPid().equals("DGD"));
+        Assert.assertTrue("BuildTigerMessage sets Tile", message.getTile().equals(new Tile(12, Terrain.terrainType.Rocky, Terrain.terrainType.Lake, Orientation.Orientations.downRight)));
+        Assert.assertTrue("BuildTigerMessage sets TileLocation", message.getTileLocation().equals(new Tuple(10, -12, 11)));
+        Assert.assertTrue("BuildTigerMessage sets BuildLocation", message.getBuildLocation().equals(new Tuple(15, 53, 44)));
 
+        Assert.assertTrue("BuildTigerMessage sets MessageType field correctly", message.getMessageType() == Message.MessageType.Move);
+        Assert.assertTrue("BuildTigerMessage sets MoveType field correctly", message.getMoveType() == MoveMessage.MoveType.Tiger);
     }
 
     @Test
     public void ForfeitMessageTest () {
-        this.mP = new MessageParser();
-        mP.parseString("GAME 123 MOVE 12 PLAYER DGD FORFEITED: ILLEGAL TILE PLACEMENT");
-        ForfeitMessage message = new ForfeitMessage("GAME 123 MOVE 12 PLAYER DGD FORFEITED: ILLEGAL TILE PLACEMENT");
+        Message message = mP.parseString("GAME 123 MOVE 12 PLAYER DGD FORFEITED: ILLEGAL TILE PLACEMENT");
 
-        Assert.assertTrue("ForfeitMessage Generation from server string" , message.equals((ForfeitMessage) mP.getMessage()));
-        Assert.assertTrue("ForfeitMessage sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.Move);
-        Assert.assertTrue("ForfeitMessage sets MessageFields MoveType field correctly", ((ForfeitMessage)(mP.getMessage())).getMoveType() == MoveMessage.MoveType.Forfeit);
+        Assert.assertTrue("ForfeitMessage sets MessageFields type field correctly", message.getMessageType() == Message.MessageType.Move);
+        Assert.assertTrue("ForfeitMessage sets MessageFields MoveType field correctly", message.getMoveType() == MoveMessage.MoveType.Forfeit);
 
     }
 
     @Test
     public void GameOverMessageTest() {
-        this.mP = new MessageParser();
-        mP.parseString("GAME 1290 OVER PLAYER ABC 23000 PLAYER DEF 230000");
-        GameOverMessage message = new GameOverMessage("GAME 1290 OVER PLAYER ABC 23000 PLAYER DEF 230000");
+        Message message = mP.parseString("GAME 1290 OVER PLAYER ABC 23000 PLAYER DEF 230000");
 
-        Assert.assertTrue("GameOverMessage Generation from server string" , message.equals((GameOverMessage) mP.getMessage()));
-        Assert.assertTrue("GameOverMessage sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.GameOver);
+        Assert.assertTrue("GameOverMessage Generation from server string" , message.getGid().equals("1290"));
+        Assert.assertTrue("GameOverMessage sets MessageFields type field correctly", message.getMessageType() == Message.MessageType.GameOver);
     }
 
     @Test
     public void MakeYourMoveMessageTest() {
-        this.mP = new MessageParser();
-        mP.parseString("MAKE YOUR MOVE IN GAME 12345 WITHIN 1.545 SECONDS: MOVE 1234 PLACE ROCK+LAKE");
-        MakeYourMoveMessage message = new MakeYourMoveMessage("MAKE YOUR MOVE IN GAME 12345 WITHIN 1.545 SECONDS: MOVE 1234 PLACE ROCK+LAKE");
+        Message message = mP.parseString("MAKE YOUR MOVE IN GAME 12345 WITHIN 1.545 SECONDS: MOVE 1234 PLACE ROCK+LAKE");
 
-        Assert.assertTrue("MakeYourMoveMessage Generation from server string" , message.equals((MakeYourMoveMessage) mP.getMessage()));
-        Assert.assertTrue("MakeYourMoveMessage sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.MakeYourMove);
+        System.out.println(message.getTile().toString());
+
+        Assert.assertTrue("MakeYourMoveMessage set GID" , message.getGid().equals("12345"));
+        Assert.assertTrue("MakeYourMoveMessage set moveTime" , message.getMoveTime() == 1.545);
+        Assert.assertTrue("MakeYourMoveMessage set moveNumber" , message.getMoveNumber() == 1234);
+        Assert.assertTrue("MakeYourMoveMessage set Tile" , message.getTile().equals(new Tile(1234, Terrain.terrainType.Lake, Terrain.terrainType.Rocky, Orientation.Orientations.downLeft)));
+        Assert.assertTrue("MakeYourMoveMessage sets MessageFields type field correctly", message.getMessageType() == Message.MessageType.MakeYourMove);
 
     }
 
     @Test
     public void noActionMessageTest () throws Exception {
-        this.mP = new MessageParser();
-        mP.parseString("WELCOME TO ANOTHER EDITION OF THUNDERDOME!");
-        Assert.assertTrue("Welcome message sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.Welcome);
+        Message message = mP.parseString("WELCOME TO ANOTHER EDITION OF THUNDERDOME!");
+        Assert.assertTrue("Welcome message sets MessageFields type field correctly", message.getMessageType() == Message.MessageType.Welcome);
 
-        this.mP = new MessageParser();
-        mP.parseString("TWO SHALL ENTER ONE SHALL LEAVE");
-        Assert.assertTrue("Welcome message sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.Enter);
+        message = mP.parseString("TWO SHALL ENTER ONE SHALL LEAVE");
+        Assert.assertTrue("Welcome message sets MessageFields type field correctly", message.getMessageType() == Message.MessageType.Enter);
 
-        this.mP = new MessageParser();
-        mP.parseString("END OF CHALLENGES");
-        Assert.assertTrue("Welcome message sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.EndOfChallenges);
+        message = mP.parseString("END OF CHALLENGES");
+        Assert.assertTrue("Welcome message sets MessageFields type field correctly", message.getMessageType() == Message.MessageType.EndOfChallenges);
 
-        this.mP = new MessageParser();
-        mP.parseString("WAIT FOR THE NEXT CHALLENGE TO BEGIN");
-        Assert.assertTrue("Welcome message sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.WaitForNext);
+        message = mP.parseString("WAIT FOR THE NEXT CHALLENGE TO BEGIN");
+        Assert.assertTrue("Welcome message sets MessageFields type field correctly", message.getMessageType() == Message.MessageType.WaitForNext);
 
-        this.mP = new MessageParser();
-        mP.parseString("THANK YOU FOR PLAYING! GOODBYE");
-        Assert.assertTrue("Welcome message sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.Goodbye);
+        message = mP.parseString("THANK YOU FOR PLAYING! GOODBYE");
+        Assert.assertTrue("Welcome message sets MessageFields type field correctly", message.getMessageType() == Message.MessageType.Goodbye);
     }
 
 
@@ -181,7 +185,7 @@ public class MessageParserTest {
 
     @Test
     public void makeTileFromStringTest() throws Exception {
-        Message message = new Message(Message.MessageType.BeginRound);
+        Message message = new Message();
         Tile compareTile = new Tile(1, Terrain.terrainType.Grassland, Terrain.terrainType.Lake, Orientation.Orientations.downLeft);
         Tile testTile = message.makeTileFromString("LAKE+GRASS", 1, Orientation.Orientations.downLeft);
 
@@ -190,17 +194,9 @@ public class MessageParserTest {
 
     @Test
     public void stringToTerrainTest() throws Exception {
-        Message message = new Message(Message.MessageType.BeginRound);
+        Message message = new Message();
         Assert.assertTrue("Creating terrainType from server terrain string", Terrain.terrainType.Grassland == message.stringToTerrain("GRASS"));
     }
 
-
-
-    /*
-    @Test
-    public void parsePlacementMessageTest() {
-        MessageParser m = new MessageParser("GAME 5 MOVE 4 PLAYER 23 PLACED LAKE+ROCKY AT 3 5 4 6");
-        System.out.println(m.toString());
-    }*/
 
 }
