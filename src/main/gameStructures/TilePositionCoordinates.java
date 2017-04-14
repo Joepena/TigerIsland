@@ -24,9 +24,6 @@ public class TilePositionCoordinates {
         this.rightHexCoordinates = rightHexCoordinates;
     }
 
-    public void setVolcanoCoordinates(Tuple volcanoCoordinates) {
-        this.volcanoCoordinates = volcanoCoordinates;
-    }
     public Tuple getVolcanoCoordinates() {
         return volcanoCoordinates;
     }
@@ -34,16 +31,9 @@ public class TilePositionCoordinates {
         return leftHexCoordinates;
     }
 
-    public void setLeftHexCoordinates(Tuple leftHexCoordinates) {
-        this.leftHexCoordinates = leftHexCoordinates;
-    }
-
     public Tuple getRightHexCoordinates() {
         return rightHexCoordinates;
     }
 
-    public void setRightHexCoordinates(Tuple rightHexCoordinates) {
-        this.rightHexCoordinates = rightHexCoordinates;
-    }
 
 }

@@ -26,11 +26,8 @@ public class GameClient {
     String host = args[0];
     int port = Integer.parseInt(args[1]);
     String userName = args[2];
-    System.out.println(args[2]);
     String password = args[3];
-    System.out.println(args[3]);
-    String tournamentpass = args[4];
-    System.out.println(args[4]);
+    String tournamentPass = args[4];
 
     //Game Flags
     boolean challengeIsDone = false;
@@ -38,7 +35,6 @@ public class GameClient {
     boolean p2RoundIsDone;
 
     try {
-
       //Create socket and buffers
       socket = new Socket(host, port);
       PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
@@ -55,8 +51,8 @@ public class GameClient {
       //Get Welcome, send game password
       beginMessage = parseServerInput(in, Message.MessageType.Welcome);
       if (beginMessage.getMessageType() == Message.MessageType.Welcome) {
-        output.println(authentication.enterThunderdome(tournamentpass));
-        System.out.println("said pass: "+tournamentpass);
+        output.println(authentication.enterThunderdome(tournamentPass));
+        System.out.println("said pass: "+tournamentPass);
       }
 
       //Get enter, send in username and password
@@ -78,7 +74,6 @@ public class GameClient {
       System.out.println("This is our playerID: " + playerID);
 
       while (!challengeIsDone) {
-        //System.out.println("challenge is done: " + false);
 
         //get number of rounds
         int roundCount = 1;
@@ -89,13 +84,6 @@ public class GameClient {
         if (parsedServerMessage instanceof NewChallengeMessage) {
           numRounds = ((NewChallengeMessage) parsedServerMessage).getRounds();
         }
-        //System.out.println(
-          //"Message type of beginning round message:  "+ parsedServerMessage.getMessageType());
-
-        // This loop performs an iteration for each individual opponent we play, playing a set of numRounds
-        // rounds against them
-
-        //
         while (roundCount++ <= numRounds) {
           //System.out.println((roundCount - 1) + " < " + numRounds);
           parsedServerMessage = parseServerInput(in, Message.MessageType.BeginRound);
@@ -106,7 +94,6 @@ public class GameClient {
           if (parsedServerMessage instanceof MatchBeginningMessage) {
             opponentPID = ((MatchBeginningMessage) parsedServerMessage).getPid();
           }
-          //
           Thread player1 = new Thread(new PlayerRunnable(playerID, opponentPID, 1));
           player1.start();
           Thread player2 = new Thread(new PlayerRunnable(playerID, opponentPID, 2));
@@ -128,7 +115,6 @@ public class GameClient {
             while (serverMessage.equals("")) {
               serverMessage = in.readLine();
             }
-            //System.out.println("ServerString:   " + serverMessage);
             turnMessage = parser.parseString(serverMessage);
             tempGameID = getGameIDFromMessage(turnMessage);
 
@@ -143,9 +129,6 @@ public class GameClient {
                 p2RoundIsDone = true;
               }
             }
-
-            //System.out.println("GameID1:  " + game1ID + "   tempGameID:  " + tempGameID);
-            //System.out.println("GameID2:  " + game2ID);
 
             if (tempGameID.equals(game1ID)) {
               p1Moves.add(turnMessage);
@@ -169,15 +152,12 @@ public class GameClient {
           player1.join();
           player2.join();
 
-          //System.out.println("Threads should be dead");
-
           game1ID = "";
           game2ID = "";
 
           while (parsedServerMessage.getMessageType() != Message.MessageType.EndRound) {
             parsedServerMessage = parseServerInput(in, Message.MessageType.EndRound);
           }
-
 
         }
 
@@ -249,7 +229,7 @@ public class GameClient {
     MessageParser parser = new MessageParser();
 
     int i = 0;
-    int arbitraryTimeoutNumber = 15; //how long we want to run before we realize maybe we entered bad input
+    int arbitraryTimeoutNumber = 15;
     while (i < arbitraryTimeoutNumber) {
       rawServerMessage = in.readLine();
       if (!rawServerMessage.equals("")) {

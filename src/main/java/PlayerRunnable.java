@@ -208,18 +208,14 @@ public class PlayerRunnable implements Runnable {
         moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Found);
         moveMessage.setBuildLocation(buildDecisionCoords);
         game.foundSettlement(buildDecisionCoords, Hex.Team.Black);
-        //System.out.println("We founded a settlement");
       } else {
         //We lost.
         moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Unable);
-        //System.out.println("We cannot build.");
       }
     }
 
     hasMove = false;
     GameClient.sendMessageFromPlayerToServer(moveMessage);
-    //System.out.println("Player " + playerNum + "'s Board\n");
-    //game.gameBoard.printSectionedBoard(game.gameBoard);
 
   }
 
@@ -306,7 +302,6 @@ public class PlayerRunnable implements Runnable {
   }
 
   private void GameOver(GameOverMessage message) {
-    //System.out.println("GAMEOVER!!!!!!!!!");
     this.gameOver = true;
   }
 
@@ -381,15 +376,5 @@ public class PlayerRunnable implements Runnable {
     return string;
   }
 
-  public void receiveMessage(Message m) {
-    gotMessage = true;
-  }
-
-  public String getGameID() {
-    return this.gameID;
-  }
-  public void setGameOver(Boolean gameOver) {
-    this.gameOver = gameOver;
-  }
 }
 

@@ -5,29 +5,9 @@ import java.util.Scanner;
  */
 public class GameOverMessage extends Message{
     private String gid;
-    private String pid1;
-    private String pid2;
-    private int score1;
-    private int score2;
 
     public String getGid() {
         return gid;
-    }
-
-    public String getPid1() {
-        return pid1;
-    }
-
-    public String getPid2() {
-        return pid2;
-    }
-
-    public int getScore1() {
-        return score1;
-    }
-
-    public int getScore2() {
-        return score2;
     }
 
     GameOverMessage(String message){

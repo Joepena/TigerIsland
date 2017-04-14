@@ -3,64 +3,58 @@
  */
 public class clientMoveMessages
 {
-    public void setGid(String gid) {
-        this.gid = gid;
-    }
-
-    public void setMoveNumber(int moveNumber) {
-        this.moveNumber = moveNumber;
-    }
-
-    public void setTileLocation(Tuple tileLocation) {
-        this.tileLocation = tileLocation;
-    }
-
-    public void setOrientation(int orientation) {
-        this.orientation = orientation;
-    }
-
-    public void setBuildLocation(Tuple buildLocation) {
-        this.buildLocation = buildLocation;
-    }
-
-    public Tuple getBuildLocation() {return buildLocation;}
-
-    public void setTile(Tile tile) {
-        this.tile = tile;
-    }
-
-    public void setTerrain(Terrain.terrainType terrain) {
-        this.terrain = terrain;
-    }
-
-    public clientMoveMessageType getMessageType() {
-        return moveType;
-    }
-
     private String gid;
     private int moveNumber;
     private Tuple tileLocation;
     private int orientation;
-
-
 
     private Tuple buildLocation;
     private Tile tile;
     private Terrain.terrainType terrain;
     private clientMoveMessageType moveType;
 
-    public clientMoveMessageType getMoveType() {
-        return moveType;
-    }
 
     public void setMoveType(clientMoveMessageType moveType) {
         this.moveType = moveType;
     }
 
 
-    public static enum clientMoveMessageType{
+    public enum clientMoveMessageType{
         Found, Totoro, Expand, Unable, Tiger;
     }
+
+    public void setGid(String gid) {
+    this.gid = gid;
+  }
+
+    public void setMoveNumber(int moveNumber) {
+    this.moveNumber = moveNumber;
+  }
+
+    public void setTileLocation(Tuple tileLocation) {
+    this.tileLocation = tileLocation;
+  }
+
+    public void setOrientation(int orientation) {
+    this.orientation = orientation;
+  }
+
+    public void setBuildLocation(Tuple buildLocation) {
+    this.buildLocation = buildLocation;
+  }
+
+    public void setTile(Tile tile) {
+    this.tile = tile;
+  }
+
+    public void setTerrain(Terrain.terrainType terrain) {
+    this.terrain = terrain;
+  }
+
+    public clientMoveMessageType getMessageType() {
+    return moveType;
+  }
+
 
     private String terrainToString(Terrain.terrainType terrain)
     {

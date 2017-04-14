@@ -11,15 +11,7 @@ public class SettlementDataFrame implements Comparable<SettlementDataFrame>{
 
   private ArrayList<Tuple> listOfHexes;
   private Hex.Team ownedBy;
-  private Hex.gamePieces gamePiece;
 
-  public Hex.gamePieces getGamePiece() {
-    return gamePiece;
-  }
-
-  public void setGamePiece(Hex.gamePieces gamePiece) {
-    this.gamePiece = gamePiece;
-  }
 
   public SettlementDataFrame(int settlementSize,
     Tuple settlementStartingLocation) {

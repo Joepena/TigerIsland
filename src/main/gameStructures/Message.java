@@ -6,13 +6,9 @@ import java.util.Scanner;
 public class Message {
     private MessageType messageType;
 
-    public static enum MessageType{
+    public enum MessageType{
         Welcome, Enter, WaitToBegin, NewChallenge, BeginRound, EndRound, EndOfChallenges, WaitForNext, MatchBeginning,
         GameOver, MakeYourMove, Move, Goodbye
-    }
-
-    public boolean sameMessageType(MessageType type){
-        return this.messageType == type;
     }
 
     Message(MessageType messageType){
