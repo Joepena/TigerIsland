@@ -4,8 +4,6 @@ import java.util.Scanner;
  * Created by TomasK on 4/6/2017.
  */
 public class NewChallengeMessage extends Message{
-    private String cid;
-    private int rounds;
 
     public String getCid() {
         return cid;
@@ -16,16 +14,17 @@ public class NewChallengeMessage extends Message{
     }
 
     NewChallengeMessage(String message){
-        super(MessageType.NewChallenge);
+        super();
+        messageType = MessageType.NewChallenge;
         Scanner scanner = new Scanner(message).useDelimiter(" ");
         if(!scanner.hasNext())
             return;
         scanner.next();
         scanner.next();
-        this.cid = scanner.next();
+        cid = scanner.next();
         for(int i = 0; i < 3; i++)
             scanner.next();
-        this.rounds = scanner.nextInt();
+        rounds = scanner.nextInt();
         scanner.close();
     }
 

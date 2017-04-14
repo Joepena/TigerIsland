@@ -12,7 +12,8 @@ public class WaitToBeginMessage extends Message{
     }
 
     public WaitToBeginMessage(String message){
-        super(Message.MessageType.WaitToBegin);
+        super();
+        messageType = MessageType.WaitToBegin;
 
         Scanner scanner = new Scanner(message).useDelimiter(" ");
         for(int i = 0 ; i < 6; i++){

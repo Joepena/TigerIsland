@@ -11,10 +11,11 @@ public class GameOverMessage extends Message{
     }
 
     GameOverMessage(String message){
-        super(MessageType.GameOver);
+        super();
+        messageType = MessageType.GameOver;
         Scanner scanner = new Scanner(message).useDelimiter(" ");
         scanner.next();
-        this.gid = scanner.next();
+        gid = scanner.next();
         scanner.close();
     }
 

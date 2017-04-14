@@ -319,7 +319,6 @@ public class PlayerRunnable implements Runnable {
         Expand((ExpandSettlementMessage) message);
         break;
       case Forfeit:
-        Forfeit((ForfeitMessage) message);
         break;
       case Tiger:
         Tiger((BuildTigerMessage) message);
@@ -344,12 +343,8 @@ public class PlayerRunnable implements Runnable {
     }
     game.placeTile(message.getTile(), message.getTileLocation());
     SettlementDataFrame settlement = game.APIUtils
-      .getWhiteSettlementFromLocation(message.getExpandLocation(), game.getWhiteSettlements());
+      .getWhiteSettlementFromLocation(message.getBuildLocation(), game.getWhiteSettlements());
     game.APIUtils.performLandGrab(settlement, message.getExpandTerrain());
-  }
-
-  private void Forfeit(ForfeitMessage message) {
-    return;
   }
 
   private void Tiger(BuildTigerMessage message) {

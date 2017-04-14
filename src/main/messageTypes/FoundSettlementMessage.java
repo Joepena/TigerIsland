@@ -21,7 +21,8 @@ public class FoundSettlementMessage extends MoveMessage {
     }
 
     FoundSettlementMessage(String message){
-        super(message, MoveMessage.MoveType.Found);
+        super(message);
+        setMoveType(MoveType.Found);
         Scanner scanner = new Scanner(message).useDelimiter(" ");
         if(!scanner.hasNext())
             return;
@@ -30,12 +31,12 @@ public class FoundSettlementMessage extends MoveMessage {
         scanner.next();
         String tileString = scanner.next();
         scanner.next();
-        this.tileLocation = new Tuple(scanner.nextInt(), scanner.nextInt(), scanner.nextInt());
-        this.tile = makeTileFromString(tileString, getMoveNumber(), this.numberToOrientation(scanner.nextInt()));
+        tileLocation = new Tuple(scanner.nextInt(), scanner.nextInt(), scanner.nextInt());
+        tile = makeTileFromString(tileString, getMoveNumber(), this.numberToOrientation(scanner.nextInt()));
         scanner.next();
         scanner.next();
         scanner.next();
-        this.buildLocation = new Tuple(scanner.nextInt(), scanner.nextInt(), scanner.nextInt());
+        buildLocation = new Tuple(scanner.nextInt(), scanner.nextInt(), scanner.nextInt());
         scanner.close();
 
     }

@@ -122,8 +122,8 @@ public class GameClient {
 
             setGameIDs(tempGameID);
 
-            if (turnMessage instanceof GameOverMessage) {
-              if (((GameOverMessage) turnMessage).getGid().equals(game1ID)) {
+            if (turnMessage.getMessageType() ==  Message.MessageType.GameOver) {
+              if (turnMessage.getGid().equals(game1ID)) {
                 p1RoundIsDone = true;
               } else {
                 p2RoundIsDone = true;
@@ -182,17 +182,18 @@ public class GameClient {
   //Find gameID of the message we received
   private static String getGameIDFromMessage(Message serverMessage) {
 
-    String returnID = "";
+//    String returnID = "";
 
-    if (serverMessage instanceof MakeYourMoveMessage) {
-      returnID = ((MakeYourMoveMessage) serverMessage).getGid();
-    } else if (serverMessage instanceof MoveMessage) {
-      returnID = ((MoveMessage) serverMessage).getGid();
-    } else if (serverMessage instanceof GameOverMessage) {
-      returnID = ((GameOverMessage) serverMessage).getGid();
-    }
+//    if (serverMessage instanceof MakeYourMoveMessage) {
+//      returnID = ((MakeYourMoveMessage) serverMessage).getGid();
+//    } else if (serverMessage instanceof MoveMessage) {
+//      returnID = ((MoveMessage) serverMessage).getGid();
+//    } else if (serverMessage instanceof GameOverMessage) {
+//      returnID = ((GameOverMessage) serverMessage).getGid();
+//    }
 
-    return returnID;
+
+    return serverMessage.getGid();
   }
 
   //Set gameIDs for players if they don't have them already
@@ -238,7 +239,7 @@ public class GameClient {
       }
       i++;
     }
-    return new Message(Message.MessageType.Welcome);
+    return new Message();
   }
 
 

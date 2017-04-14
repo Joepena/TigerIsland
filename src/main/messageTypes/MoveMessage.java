@@ -4,11 +4,6 @@ import java.util.Scanner;
  * Created by TomasK on 4/6/2017.
  */
 public class MoveMessage extends Message {
-    private String gid;
-    private int moveNumber;
-    private String pid;
-    private MoveType moveType;
-
     public static enum MoveType{
         Found, Expand, Totoro, Tiger, Forfeit
     }
@@ -30,9 +25,11 @@ public class MoveMessage extends Message {
         return moveType;
     }
 
-    MoveMessage(String message, MoveType moveType){
-        super(Message.MessageType.Move);
-        this.moveType = moveType;
+    public void setMoveType(MoveType moveType) {this.moveType = moveType;}
+
+    MoveMessage(String message){
+        super();
+        messageType = MessageType.Move;
         Scanner scanner = new Scanner(message).useDelimiter(" ");
         if(!scanner.hasNext())
             return;

@@ -5,9 +5,6 @@ import java.util.Scanner;
  * Created by TomasK on 4/6/2017.
  */
 public class BeginRoundMessage extends Message{
-    private int rid;
-    private int rounds;
-
     public int getRid() {
         return rid;
     }
@@ -17,15 +14,15 @@ public class BeginRoundMessage extends Message{
     }
 
     BeginRoundMessage(String message){
-        super(MessageType.BeginRound);
+        messageType = MessageType.BeginRound;
         Scanner scanner = new Scanner(message).useDelimiter(" ");
         if(!scanner.hasNext())
             return;
         scanner.next();
         scanner.next();
-        this.rid = scanner.nextInt();
+        rid = scanner.nextInt();
         scanner.next();
-        this.rounds = scanner.nextInt();
+        rounds = scanner.nextInt();
         scanner.close();
     }
 
