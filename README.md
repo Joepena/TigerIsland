@@ -13,6 +13,9 @@ We Make sure to rush a win by expending all tigers and after land-grabbing until
   ```
   Run > Edit Configurations > Application > GameClient
   ```
-  **Program Arguments:** `<host_name> <port> <username> <password> <tournament_password>`
 2. If you wish to test in intellij you right click src/test/java folder and press 'Select Tests in Java'
+
 3. If you wish to run tests from the terminal run: `./gradlew clean test` make sure you are in the project directory before using this command.
+  
+**Program Arguments:** `<host_name> <port> <username> <password> <tournament_password>`
+
