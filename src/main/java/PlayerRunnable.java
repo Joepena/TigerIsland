@@ -12,7 +12,6 @@ public class PlayerRunnable implements Runnable {
   private Tile newTile;
   private Tuple decisionCoords;
   private Tuple buildDecisionCoords;
-  private BuildDecision buildDecision;
   private GameAPI game;
   private Hex.Team playerTeam;
   private Hex.Team opponentTeam;
@@ -40,7 +39,6 @@ public class PlayerRunnable implements Runnable {
     this.gameOver = false;
     this.hasMove = false;
     this.decisionCoords = null;
-    this.buildDecision = null;
     this.buildDecisionCoords = null;
     this.game = new GameAPI();
     this.moveMessage = null;
