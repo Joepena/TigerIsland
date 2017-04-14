@@ -80,86 +80,104 @@ public class MessageParserTest {
         Assert.assertTrue("FoundSettlementMessage sets BuildLocation", message.getBuildLocation().equals(new Tuple(12, 23, 1)));
 
         Assert.assertTrue("FoundSettlementMessage sets MessageType field correctly", message.getMessageType() == Message.MessageType.Move);
+        Assert.assertTrue("FoundSettlementMessage sets MoveType field correctly", message.getMoveType() == MoveMessage.MoveType.Found);
+
     }
 
     @Test
     public void MoveExpandSettlementMessageTest () throws Exception {
-        mP.parseString("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 EXPANDED SETTLEMENT AT 65 89 45 JUNGLE");
-        ExpandSettlementMessage message = new ExpandSettlementMessage("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 EXPANDED SETTLEMENT AT 65 89 45 JUNGLE");
+        Message message = mP.parseString("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 EXPANDED SETTLEMENT AT 65 89 45 JUNGLE");
 
-        Assert.assertTrue("ExpandSettlementMessage Generation from server string" , message.equals((ExpandSettlementMessage) mP.getMessage()));
-        Assert.assertTrue("ExpandSettlementMessage sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.Move);
-        Assert.assertTrue("ExpandSettlementMessage sets MessageFields MoveType field correctly", ((ExpandSettlementMessage)(mP.getMessage())).getMoveType() == MoveMessage.MoveType.Expand);
+        Assert.assertTrue("ExpandSettlementMessage sets GID" , message.getGid().equals("123"));
+        Assert.assertTrue("ExpandSettlementMessage sets moveNumber" , message.getMoveNumber() == 12);
+        Assert.assertTrue("ExpandSettlementMessage sets PID", message.getPid().equals("DGD"));
+        Assert.assertTrue("ExpandSettlementMessage sets Tile", message.getTile().equals(new Tile(12, Terrain.terrainType.Rocky, Terrain.terrainType.Lake, Orientation.Orientations.downRight)));
+        Assert.assertTrue("ExpandSettlementMessage sets TileLocation", message.getTileLocation().equals(new Tuple(10, -12, 11)));
+        Assert.assertTrue("ExpandSettlementMessage sets BuildLocation", message.getBuildLocation().equals(new Tuple(65, 89, 45)));
+        Assert.assertTrue("ExpandSettlementMessage sets expandTerrain", message.getExpandTerrain() == Terrain.terrainType.Jungle);
+
+        Assert.assertTrue("ExpandSettlementMessage sets MessageType field correctly", message.getMessageType() == Message.MessageType.Move);
+        Assert.assertTrue("ExpandSettlementMessage sets MoveType field correctly", message.getMoveType() == MoveMessage.MoveType.Expand);
     }
 
     @Test
     public void MoveBuildTotoroMessageTest () throws Exception {
-        mP.parseString("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 BUILT TOTORO SANCTUARY AT 15 53 44");
-        BuildTotoroMessage message = new BuildTotoroMessage("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 BUILT TOTORO SANCTUARY AT 15 53 44");
+        Message message = mP.parseString("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 BUILT TOTORO SANCTUARY AT 15 53 44");
 
-        Assert.assertTrue("BuildTotoroMessage Generation from server string" , message.equals((BuildTotoroMessage) mP.getMessage()));
-        Assert.assertTrue("BuildTotoroMessage sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.Move);
-        Assert.assertTrue("BuildTotoroMessage sets MessageFields MoveType field correctly", ((BuildTotoroMessage)(mP.getMessage())).getMoveType() == MoveMessage.MoveType.Totoro);
+        Assert.assertTrue("BuildTotoroMessage sets GID" , message.getGid().equals("123"));
+        Assert.assertTrue("BuildTotoroMessage sets moveNumber" , message.getMoveNumber() == 12);
+        Assert.assertTrue("BuildTotoroMessage sets PID", message.getPid().equals("DGD"));
+        Assert.assertTrue("BuildTotoroMessage sets Tile", message.getTile().equals(new Tile(12, Terrain.terrainType.Rocky, Terrain.terrainType.Lake, Orientation.Orientations.downRight)));
+        Assert.assertTrue("BuildTotoroMessage sets TileLocation", message.getTileLocation().equals(new Tuple(10, -12, 11)));
+        Assert.assertTrue("BuildTotoroMessage sets BuildLocation", message.getBuildLocation().equals(new Tuple(15, 53, 44)));
+
+        Assert.assertTrue("BuildTotoroMessage sets MessageType field correctly", message.getMessageType() == Message.MessageType.Move);
+        Assert.assertTrue("BuildTotoroMessage sets MoveType field correctly", message.getMoveType() == MoveMessage.MoveType.Totoro);
 
     }
 
     @Test
     public void MoveBuildTigerMessageTest () throws Exception {
-        mP.parseString("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 BUILT TIGER PLAYGROUND AT 15 53 44");
-        BuildTigerMessage message = new BuildTigerMessage("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 BUILT TIGER PLAYGROUND AT 15 53 44");
+        Message message = mP.parseString("GAME 123 MOVE 12 PLAYER DGD PLACED LAKE+ROCK AT 10 -12 11 3 BUILT TIGER PLAYGROUND AT 15 53 44");
 
-        Assert.assertTrue("BuildTigerMessage Generation from server string" , message.equals((BuildTigerMessage) mP.getMessage()));
-        Assert.assertTrue("BuildTigerMessage sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.Move);
-        Assert.assertTrue("BuildTigerMessage sets MessageFields MoveType field correctly", ((BuildTigerMessage)(mP.getMessage())).getMoveType() == MoveMessage.MoveType.Tiger);
+        Assert.assertTrue("BuildTigerMessage sets GID" , message.getGid().equals("123"));
+        Assert.assertTrue("BuildTigerMessage sets moveNumber" , message.getMoveNumber() == 12);
+        Assert.assertTrue("BuildTigerMessage sets PID", message.getPid().equals("DGD"));
+        Assert.assertTrue("BuildTigerMessage sets Tile", message.getTile().equals(new Tile(12, Terrain.terrainType.Rocky, Terrain.terrainType.Lake, Orientation.Orientations.downRight)));
+        Assert.assertTrue("BuildTigerMessage sets TileLocation", message.getTileLocation().equals(new Tuple(10, -12, 11)));
+        Assert.assertTrue("BuildTigerMessage sets BuildLocation", message.getBuildLocation().equals(new Tuple(15, 53, 44)));
 
+        Assert.assertTrue("BuildTigerMessage sets MessageType field correctly", message.getMessageType() == Message.MessageType.Move);
+        Assert.assertTrue("BuildTigerMessage sets MoveType field correctly", message.getMoveType() == MoveMessage.MoveType.Tiger);
     }
 
     @Test
     public void ForfeitMessageTest () {
-        mP.parseString("GAME 123 MOVE 12 PLAYER DGD FORFEITED: ILLEGAL TILE PLACEMENT");
-        ForfeitMessage message = new ForfeitMessage("GAME 123 MOVE 12 PLAYER DGD FORFEITED: ILLEGAL TILE PLACEMENT");
+        Message message = mP.parseString("GAME 123 MOVE 12 PLAYER DGD FORFEITED: ILLEGAL TILE PLACEMENT");
 
-        Assert.assertTrue("ForfeitMessage Generation from server string" , message.equals((ForfeitMessage) mP.getMessage()));
-        Assert.assertTrue("ForfeitMessage sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.Move);
-        Assert.assertTrue("ForfeitMessage sets MessageFields MoveType field correctly", ((ForfeitMessage)(mP.getMessage())).getMoveType() == MoveMessage.MoveType.Forfeit);
+        Assert.assertTrue("ForfeitMessage sets MessageFields type field correctly", message.getMessageType() == Message.MessageType.Move);
+        Assert.assertTrue("ForfeitMessage sets MessageFields MoveType field correctly", message.getMoveType() == MoveMessage.MoveType.Forfeit);
 
     }
 
     @Test
     public void GameOverMessageTest() {
-        mP.parseString("GAME 1290 OVER PLAYER ABC 23000 PLAYER DEF 230000");
-        GameOverMessage message = new GameOverMessage("GAME 1290 OVER PLAYER ABC 23000 PLAYER DEF 230000");
+        Message message = mP.parseString("GAME 1290 OVER PLAYER ABC 23000 PLAYER DEF 230000");
 
-        Assert.assertTrue("GameOverMessage Generation from server string" , message.equals((GameOverMessage) mP.getMessage()));
-        Assert.assertTrue("GameOverMessage sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.GameOver);
+        Assert.assertTrue("GameOverMessage Generation from server string" , message.getGid().equals("1290"));
+        Assert.assertTrue("GameOverMessage sets MessageFields type field correctly", message.getMessageType() == Message.MessageType.GameOver);
     }
 
     @Test
     public void MakeYourMoveMessageTest() {
-        mP.parseString("MAKE YOUR MOVE IN GAME 12345 WITHIN 1.545 SECONDS: MOVE 1234 PLACE ROCK+LAKE");
-        MakeYourMoveMessage message = new MakeYourMoveMessage("MAKE YOUR MOVE IN GAME 12345 WITHIN 1.545 SECONDS: MOVE 1234 PLACE ROCK+LAKE");
+        Message message = mP.parseString("MAKE YOUR MOVE IN GAME 12345 WITHIN 1.545 SECONDS: MOVE 1234 PLACE ROCK+LAKE");
 
-        Assert.assertTrue("MakeYourMoveMessage Generation from server string" , message.equals((MakeYourMoveMessage) mP.getMessage()));
-        Assert.assertTrue("MakeYourMoveMessage sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.MakeYourMove);
+        System.out.println(message.getTile().toString());
+
+        Assert.assertTrue("MakeYourMoveMessage set GID" , message.getGid().equals("12345"));
+        Assert.assertTrue("MakeYourMoveMessage set moveTime" , message.getMoveTime() == 1.545);
+        Assert.assertTrue("MakeYourMoveMessage set moveNumber" , message.getMoveNumber() == 1234);
+        Assert.assertTrue("MakeYourMoveMessage set Tile" , message.getTile().equals(new Tile(1234, Terrain.terrainType.Lake, Terrain.terrainType.Rocky, Orientation.Orientations.downLeft)));
+        Assert.assertTrue("MakeYourMoveMessage sets MessageFields type field correctly", message.getMessageType() == Message.MessageType.MakeYourMove);
 
     }
 
     @Test
     public void noActionMessageTest () throws Exception {
-        mP.parseString("WELCOME TO ANOTHER EDITION OF THUNDERDOME!");
-        Assert.assertTrue("Welcome message sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.Welcome);
+        Message message = mP.parseString("WELCOME TO ANOTHER EDITION OF THUNDERDOME!");
+        Assert.assertTrue("Welcome message sets MessageFields type field correctly", message.getMessageType() == Message.MessageType.Welcome);
 
-        mP.parseString("TWO SHALL ENTER ONE SHALL LEAVE");
-        Assert.assertTrue("Welcome message sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.Enter);
+        message = mP.parseString("TWO SHALL ENTER ONE SHALL LEAVE");
+        Assert.assertTrue("Welcome message sets MessageFields type field correctly", message.getMessageType() == Message.MessageType.Enter);
 
-        mP.parseString("END OF CHALLENGES");
-        Assert.assertTrue("Welcome message sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.EndOfChallenges);
+        message = mP.parseString("END OF CHALLENGES");
+        Assert.assertTrue("Welcome message sets MessageFields type field correctly", message.getMessageType() == Message.MessageType.EndOfChallenges);
 
-        mP.parseString("WAIT FOR THE NEXT CHALLENGE TO BEGIN");
-        Assert.assertTrue("Welcome message sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.WaitForNext);
+        message = mP.parseString("WAIT FOR THE NEXT CHALLENGE TO BEGIN");
+        Assert.assertTrue("Welcome message sets MessageFields type field correctly", message.getMessageType() == Message.MessageType.WaitForNext);
 
-        mP.parseString("THANK YOU FOR PLAYING! GOODBYE");
-        Assert.assertTrue("Welcome message sets MessageFields type field correctly", mP.getMessage().getMessageType() == Message.MessageType.Goodbye);
+        message = mP.parseString("THANK YOU FOR PLAYING! GOODBYE");
+        Assert.assertTrue("Welcome message sets MessageFields type field correctly", message.getMessageType() == Message.MessageType.Goodbye);
     }
 
 
