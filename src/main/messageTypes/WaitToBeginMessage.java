@@ -5,8 +5,6 @@ import java.util.Scanner;
  * Created by TomasK on 4/6/2017.
  */
 public class WaitToBeginMessage extends Message{
-    private String pid;
-
     public String getPid() {
         return pid;
     }

@@ -4,10 +4,6 @@ import java.util.Scanner;
  * Created by TomasK on 4/6/2017.
  */
 public class FoundSettlementMessage extends MoveMessage {
-    private Tuple tileLocation;
-    private Tuple buildLocation;
-    private Tile tile;
-
     public Tile getTile() {
         return tile;
     }

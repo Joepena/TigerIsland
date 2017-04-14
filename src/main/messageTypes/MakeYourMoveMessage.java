@@ -4,11 +4,6 @@ import java.util.Scanner;
  * Created by T K Vicious on 4/6/2017.
  */
 public class MakeYourMoveMessage extends Message{
-    private String gid;
-    private double moveTime;
-    private int moveNumber;
-    private Tile tile;
-
     public String getGid() {
         return gid;
     }
