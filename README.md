@@ -1,30 +1,18 @@
 # TigerIsland
-CEN3031 Term Project
+CEN3031 Term Project - Team K
 
+## Features
+There are no features missing as far as game functionality goes. Our AI strategy prioritizes as follows:
+  1. Tigers
+  2. Meeples
+  3. Totoros
+We Make sure to rush a win by expending all tigers and after land-grabbing until we run out of meeples so we can win by using up two game pieces. 
 
-<h1>HOW TO NETWORK IF UR INTO THAT</h1>
-<b>Stepz</b>
-<ul>Go to (src/main/java/) GameClient</ul>
-<ul>Host can be changed to "localhost" for testing on your machine</ul>
-<ul>If you want to test on my computer lmk and I'll turn it on</ul>
-<ul>Port can be w/e u want, but stick with 8000 if u don't want to change ServerTest</ul>
-<ul>If u do change the port number then in (src/test/java) ServerTest u need to update the port field</ul>
-<ul>Open two terminals of ur choice</ul>
-<ul><ul>On the first, compile then run ServerTest</ul></ul>
-<ul><ul>On the second, compile then run GameClient</ul></ul>
-<b>Note:</b> 
-<ul>If u wild n u want to see different strings, change the outputLine variable's value</ul>
-<h3>End of networking tutorial, have fun kiddos</h3>
-<br></br>
-Added toString() to tuple class for debugging purposes
-addPairTest() -> add overwridden equals() to Tuple because .assertEquals compares references
-
-Fixed Left coordinate values?
-
-existsAdjacentHexFailureTest, test was incorrect not function so we good
-
-Attempt to fix settlement dfs functions and pass tests
--Settlement test infinite loop?
--Changed availablity grid to all true for debugging purposes
--Added is null check to location in dfs
--Used correctedOffset for coordinated that check availablilty grid
+## Instructions
+1. If you're running from within IntelliJ:
+  ```
+  Run > Edit Configurations > Application > GameClient
+  ```
+  **Program Arguments:** `<host_name> <port> <username> <password> <tournament_password>`
+2. If you wish to test in intellij you right click src/test/java folder and press 'Select Tests in Java'
+3. If you wish to run tests from the terminal run: `./gradlew clean test` make sure you are in the project directory before using this command.
