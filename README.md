@@ -6,7 +6,8 @@ There are no features missing as far as game functionality goes. Our AI strategy
   1. Tigers
   2. Meeples
   3. Totoros
-We Make sure to rush a win by expending all tigers and after land-grabbing until we run out of meeples so we can win by using up two game pieces. 
+  
+Our program implements a "rush" strategy by focusing on placing all Meeples and Tigers, resulting in a 200 point tournament win. While there are tiger pieces remaining, the program will nuke tiles and found settlements closest to the origin. After all tiger pieces have been placed, the program will nuke tiles closest the origin, and expand settlements with a focus on placing the most Meeples as possible. 
 
 ## Instructions
 1. If you're running from within IntelliJ:
