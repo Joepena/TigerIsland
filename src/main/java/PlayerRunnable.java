@@ -164,9 +164,9 @@ public class PlayerRunnable implements Runnable {
 
     //Find Placement options
     foundSettlementOptions = game.findListOfValidSettlementLocations();
-    expandSettlementOptions = game.getExpansionOptions(Hex.Team.Black);
-    totoroPlacementOptions = game.validTotoroPlacements(Hex.Team.Black);
-    tigerPlacementOptions = game.validTigerPlacements(Hex.Team.Black);
+    expandSettlementOptions = game.getExpansionOptions(playerTeam);
+    totoroPlacementOptions = game.validTotoroPlacements(playerTeam);
+    tigerPlacementOptions = game.validTigerPlacements(playerTeam);
 
     //Decide Build Action
     //Tiger Rush Strategy
@@ -175,7 +175,7 @@ public class PlayerRunnable implements Runnable {
         //place Tiger
         moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Tiger);
         moveMessage.setBuildLocation(tigerPlacementOptions.get(0));
-        game.createTigerPlayground(tigerPlacementOptions.get(0), Hex.Team.Black);
+        game.createTigerPlayground(tigerPlacementOptions.get(0), playerTeam);
       } else if (canPlaceTotoro(totoroPlacementOptions)) {
         //place Totoro
         moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Totoro);
@@ -187,7 +187,7 @@ public class PlayerRunnable implements Runnable {
         buildDecisionCoords = findClosestTupleToOrigin(foundSettlementOptions);
         moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Found);
         moveMessage.setBuildLocation(buildDecisionCoords);
-        game.foundSettlement(buildDecisionCoords, Hex.Team.Black);
+        game.foundSettlement(buildDecisionCoords, playerTeam);
       }
     } else {
       ExpansionOpDataFrame expansionDF = chooseHighestCostValidExpansion(
@@ -205,7 +205,7 @@ public class PlayerRunnable implements Runnable {
         buildDecisionCoords = findClosestTupleToOrigin(foundSettlementOptions);
         moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Found);
         moveMessage.setBuildLocation(buildDecisionCoords);
-        game.foundSettlement(buildDecisionCoords, Hex.Team.Black);
+        game.foundSettlement(buildDecisionCoords, playerTeam);
       } else {
         //We lost.
         moveMessage.setMoveType(clientMoveMessages.clientMoveMessageType.Unable);
