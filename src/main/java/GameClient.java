@@ -18,21 +18,27 @@ public class GameClient {
   private static Queue<Message> p1Moves;
   private static Queue<Message> p2Moves;
   private static Queue<String> outqueue;
-
+  private static long thread1ID;
+  private static long thread2ID;
 
   // 0:IP/Host, 1:port, 2:username, 3:pass, 4:tournament pass
   public static void main(String[] args) throws Exception {
 
     String host = args[0];
     int port = Integer.parseInt(args[1]);
-    String userName = args[2];
-    String password = args[3];
+//    String userName = args[2];
+//    String password = args[3];
+    String userName = "TEAM_S";
+    String password = "PASS_S";
     String tournamentPass = args[4];
 
     //Game Flags
     boolean challengeIsDone = false;
     boolean p1RoundIsDone;
     boolean p2RoundIsDone;
+
+    thread1ID = 0;
+    thread2ID = 0;
 
     try {
       //Create socket and buffers
@@ -99,6 +105,9 @@ public class GameClient {
           Thread player2 = new Thread(new PlayerRunnable(playerID, opponentPID, 2));
           player2.start();
 
+          thread1ID = player1.getId();
+          thread2ID = player2.getId();
+
           p1Moves = new LinkedList<>();
           p2Moves = new LinkedList<>();
 
@@ -112,9 +121,11 @@ public class GameClient {
             String serverMessage = "";
             String tempGameID;
 
+            Thread.sleep(100);
             while (serverMessage.equals("")) {
               serverMessage = in.readLine();
             }
+            System.out.println("SERVER: " + serverMessage);
             turnMessage = parser.parseString(serverMessage);
             tempGameID = getGameIDFromMessage(turnMessage);
 
@@ -130,27 +141,45 @@ public class GameClient {
               }
             }
 
-            if (tempGameID.equals(game1ID)) {
-              p1Moves.add(turnMessage);
-              player1.interrupt();
-            } else if (tempGameID.equals(game2ID)) {
-              p2Moves.add(turnMessage);
-              player2.interrupt();
-            }
+            System.out.println("Client dropping off " + turnMessage.toString());
+            System.out.println("Game1ID:  " + game1ID + "    Game2ID:   " + game2ID);
+            System.out.println("Message Game ID:  " + turnMessage.getGid());
+           // synchronized (p1Moves) {
+             // while(p1Moves.size() > 0)
+               // wait()
+                if (tempGameID.equals(game1ID)) {
+                  p1Moves.add(turnMessage);
+                  player1.interrupt();
+                } else if (tempGameID.equals(game2ID)) {
+                  p2Moves.add(turnMessage);
+                  player2.interrupt();
+                }
+           // }
 
           }
 
-          while (!p1Moves.isEmpty() || !p2Moves.isEmpty()) {
-            if (!p1Moves.isEmpty()) {
-              player1.interrupt();
-            }
-            if (!p2Moves.isEmpty()) {
-              player2.interrupt();
-            }
-          }
+//          while (!p1Moves.isEmpty() || !p2Moves.isEmpty()) {
+//            System.out.println("Something isn't empty.");
+//            if (!p1Moves.isEmpty()) {
+//              player1.interrupt();
+//              System.out.println("Player 1 queue isn't empty");
+//            }
+//            if (!p2Moves.isEmpty()) {
+//              player2.interrupt();
+//              System.out.println("Player 2 queue isn't empty");
+//            }
+//          }
+          System.out.println("Client now joining threads\nThread1: " + player1.getId() + "  Thread2: " + player2.getId());
 
-          player1.join();
-          player2.join();
+          while(player1.isAlive()) {
+            player1.join();
+            System.out.println("Thread " + thread1ID + " Why Won't you die?");
+          }
+          while(player2.isAlive()) {
+            player2.join();
+            System.out.println("Thread " + thread2ID + " Why Won't you die?");
+          }
+          Thread.sleep(50);
 
           game1ID = "";
           game2ID = "";
@@ -206,7 +235,10 @@ public class GameClient {
   }
 
 
-  public static void sendMessageFromPlayerToServer(clientMoveMessages playerMessage) {
+  public static void sendMessageFromPlayerToServer(clientMoveMessages playerMessage, long id) {
+    if(id != thread1ID && id != thread2ID){
+      System.out.println("Mismatched thread ids");
+    }
     String finalMessage = playerMessage.toString(playerMessage.getMessageType());
     outqueue.add(finalMessage);
     //System.out.println("To server with love: " + finalMessage);
@@ -230,7 +262,7 @@ public class GameClient {
     MessageParser parser = new MessageParser();
 
     int i = 0;
-    int arbitraryTimeoutNumber = 15;
+    int arbitraryTimeoutNumber = 1000;
     while (i < arbitraryTimeoutNumber) {
       rawServerMessage = in.readLine();
       if (!rawServerMessage.equals("")) {

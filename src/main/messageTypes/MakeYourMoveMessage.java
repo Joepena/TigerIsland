@@ -4,6 +4,7 @@ import java.util.Scanner;
  * Created by T K Vicious on 4/6/2017.
  */
 public class MakeYourMoveMessage extends Message{
+    private String message;
     public String getGid() {
         return gid;
     }
@@ -22,6 +23,7 @@ public class MakeYourMoveMessage extends Message{
 
     MakeYourMoveMessage(String message){
         super();
+        this.message = message;
         messageType = MessageType.MakeYourMove;
         Scanner scanner = new Scanner(message).useDelimiter(" ");
         for(int i = 0; i < 5; i++)
@@ -42,5 +44,8 @@ public class MakeYourMoveMessage extends Message{
                 this.tile.equals(message.getTile()) &&
                 this.moveNumber == message.getMoveNumber() &&
                 this.moveTime == message.getMoveTime());
+    }
+    public String toString(){
+        return message;
     }
 }

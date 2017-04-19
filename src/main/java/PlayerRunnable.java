@@ -79,7 +79,9 @@ public class PlayerRunnable implements Runnable {
     game.placeFirstTile();
 
     while (!gameOver) {
+
       Message messageFromClient = new NoActionMessage(Message.MessageType.Welcome);
+      System.out.println("Player " + playerNum + " ready to pick up again!");
       try {
 
         while (true) {
@@ -97,10 +99,11 @@ public class PlayerRunnable implements Runnable {
         }
 
       }
+      System.out.println("Player " + this.playerNum + " picking up " + messageFromClient.toString());
 
       //System.out.println("Troy knows how this works for player " + playerNum);
 
-      System.out.println(messageFromClient);
+      //System.out.println(messageFromClient);
       if (!gameOver) {
         executeMessage(messageFromClient);
       }
@@ -213,7 +216,8 @@ public class PlayerRunnable implements Runnable {
     }
 
     hasMove = false;
-    GameClient.sendMessageFromPlayerToServer(moveMessage);
+    GameClient.sendMessageFromPlayerToServer(moveMessage, Thread.currentThread().getId());
+    System.out.println("PLAYER: " + moveMessage.toString(moveMessage.getMessageType()));
 
   }
 
@@ -319,6 +323,7 @@ public class PlayerRunnable implements Runnable {
         Expand((ExpandSettlementMessage) message);
         break;
       case Forfeit:
+        gameOver = true;
         break;
       case Tiger:
         Tiger((BuildTigerMessage) message);

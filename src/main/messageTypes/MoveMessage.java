@@ -4,6 +4,7 @@ import java.util.Scanner;
  * Created by TomasK on 4/6/2017.
  */
 public class MoveMessage extends Message {
+    private String message;
     public static enum MoveType{
         Found, Expand, Totoro, Tiger, Forfeit
     }
@@ -28,7 +29,9 @@ public class MoveMessage extends Message {
     public void setMoveType(MoveType moveType) {this.moveType = moveType;}
 
     MoveMessage(String message){
+
         super();
+        this.message = message;
         messageType = MessageType.Move;
         Scanner scanner = new Scanner(message).useDelimiter(" ");
         if(!scanner.hasNext())
@@ -51,5 +54,9 @@ public class MoveMessage extends Message {
                 this.moveNumber == message.getMoveNumber() &&
                 this.pid.equals(message.getPid()) &&
                 this.moveType == message.getMoveType());
+    }
+
+    public String toString(){
+        return message;
     }
 }

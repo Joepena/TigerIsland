@@ -47,9 +47,9 @@ public class BuildTotoroMessage extends MoveMessage{
                 );
     }
 
-    public String toString(){
-        return("tileLocation:  " + tileLocation.toString() + "\nbuildLocation:  " + buildLocation.toString() + "\ntile:  " + tile.toString());
-    }
+//    public String toString(){
+//        return("tileLocation:  " + tileLocation.toString() + "\nbuildLocation:  " + buildLocation.toString() + "\ntile:  " + tile.toString());
+//    }
 
 
 

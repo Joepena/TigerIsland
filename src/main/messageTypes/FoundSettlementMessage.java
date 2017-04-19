@@ -44,8 +44,8 @@ public class FoundSettlementMessage extends MoveMessage {
                 this.tile.equals(message.getTile()));
     }
 
-    public String toString(){
-        return("tileLocation:  " + tileLocation.toString() + "\nbuildLocation:  " + buildLocation.toString() + "\ntile:  " + tile.toString());
-    }
+//    public String toString(){
+//        return("tileLocation:  " + tileLocation.toString() + "\nbuildLocation:  " + buildLocation.toString() + "\ntile:  " + tile.toString());
+//    }
 
 }
